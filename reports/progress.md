@@ -13,7 +13,7 @@
 
 ## Current status
 
-- Phase: 3 — ingestion, retrieval, and supersession graph
+- Phase: 5 — pipeline and evaluation foundations
 - Status: complete
 - Last updated: 2026-10-19
 
@@ -231,6 +231,92 @@ The generated sample requested by the specification is available at:
 - No input is needed for the retriever implementation.
 - I will request Groq credentials before a live reformulation or corpus-audit
   call; offline tests will continue to use fixtures.
+
+## Phase 4 — Benchmark, retriever agent, synthesizer, and baselines
+
+### Completed
+
+- Added deterministic benchmark generation with exactly 180 labeled questions:
+  24 each for T1–T6, 20 T0 controls, and 16 T7 unanswerable cases.
+- Added fixed 40-question dev and 140-question test splits, 36 multi-hop
+  markers, paraphrase groups, and a not-yet-verified hand-review flag.
+- Added conflict-seeking reformulation support with a deterministic offline
+  path and a live structured provider path limited to two reformulations.
+- Added graph-neighbor expansion to the retriever while retaining the original
+  query's ranking priority.
+- Added passage-only synthesizer drafts with inline chunk citations.
+- Added B0 naive RAG, B1 recency RAG, and B2 self-consistency baselines.
+- Generated and committed `data/benchmark/questions.jsonl`.
+
+### Tests run
+
+| Command | Result |
+|---|---|
+| `make test` | Passed: 23 tests at phase gate |
+| `PYTHONPATH=src .venv/bin/python -m bench.generate_questions` | Passed: 180 questions |
+| `make compile` | Passed |
+
+### Problems and deviations
+
+- The benchmark is template-generated and has not yet received the planned
+  second-LLM audit or human review. All 30 hand-verification flags remain
+  false until reviewed.
+- The default local dense retriever is still the deterministic hash fallback;
+  the BGE model is reserved for the live evaluation environment.
+
+### Required input
+
+- No input is needed for local agent work.
+- The 30-question verification file will be prepared when the benchmark UI
+  or review report is added.
+
+## Phase 5 — Critic, resolver, pipeline, and evaluation foundations
+
+### Completed
+
+- Added claim decomposition, lexical grounding, unsupported-claim detection,
+  topic-clustered contradiction checks, staleness-aware conflict typing, and a
+  recorded self-critique pass.
+- Added deterministic T1–T6 conflict detection with T0 false-positive control
+  and T7 not-in-corpus handling.
+- Added transparent trust scoring for recency, authority, specificity,
+  corroboration, and metadata confidence.
+- Added resolver modes for supersession, contextual answers, abstention,
+  no-conflict answers, and not-in-corpus answers.
+- Added trace-producing TruthGuard pipeline with a two-loop revision cap.
+- Added an optional `compile_langgraph()` implementation; the manual path is
+  the offline fallback when LangGraph is not installed.
+- Added metric calculators for answer accuracy, conflict P/R/F1, type and
+  resolution accuracy, provenance, unsupported claims, blended answers,
+  abstention, false conflicts, and bootstrap CIs.
+- Added resumable evaluation and ablation runners with persistent JSONL output.
+- Verified the full taxonomy fixtures through the offline pipeline.
+
+### Tests run
+
+| Command | Result |
+|---|---|
+| `make test` | Passed: 34 tests |
+| `make compile` | Passed |
+| Offline pipeline taxonomy smoke | Passed: T1 resolved, T2 conditional, T3 resolved, T4 resolved, T5 conditional, T6 abstained, T0 no conflict, T7 not in corpus |
+| `git diff --check` | Passed |
+
+### Problems and deviations
+
+- No live LLM call has been made. Provider prompts, Groq quota behavior, and
+  the second-provider lineage separation still need a live smoke check.
+- LangGraph is pinned but not installed in the current lightweight test
+  virtualenv; the manual pipeline is what has actually been tested.
+- Evaluation reports currently contain framework outputs, not final live
+  benchmark numbers. Do not claim benchmark performance until live or audited
+  cached results are run.
+
+### Required input
+
+- Before live generation/evaluation, provide `GROQ_API_KEY` in the local `.env`.
+- If critic lineage separation is to be exercised live, also provide the
+  Google AI Studio and Mistral keys; otherwise their configured fallbacks will
+  remain unavailable and the run will stop clearly when all budgets are gone.
 
 ## Open issues
 

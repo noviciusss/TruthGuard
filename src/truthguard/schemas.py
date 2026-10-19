@@ -142,6 +142,20 @@ class BenchmarkQuestion(TGModel):
     as_of_date: date | None = None
     split: Literal["dev", "test"] = "dev"
     hand_verified: bool = False
+    multi_hop: bool = False
+    paraphrase_group: str | None = None
+
+
+class ReformulationResponse(TGModel):
+    queries: list[str] = Field(default_factory=list, max_length=3)
+
+
+class CriticReport(TGModel):
+    claims: list[Claim] = Field(default_factory=list)
+    conflicts: list[Conflict] = Field(default_factory=list)
+    unsupported_claim_ids: list[str] = Field(default_factory=list)
+    self_critique_ran: bool = False
+    self_critique_changes: list[str] = Field(default_factory=list)
 
 
 class LLMUsage(TGModel):
