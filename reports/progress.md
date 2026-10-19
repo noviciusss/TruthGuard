@@ -573,6 +573,35 @@ The implementation is complete, but the requested live lineage claim is not
 yet evidenced. A Gemini key or Mistral fallback key is required before live
 critic verification and before updating the final live metrics with this mode.
 
+## Task 5 — Human review sheet
+
+### Completed
+
+- Exported `reports/review_sheet.csv` from the frozen test split.
+- Stratified sample contains exactly 30 questions: 4 each of T1–T6, 3 T0,
+  and 3 T7.
+- Included document IDs and titles, gold labels, winners, exact corpus
+  passages, and blank reviewer fields.
+- Added `scripts/compute_agreement.py`; it reports per-column agreement,
+  answered/blank counts, and overall agreement. Blank fields are reported as
+  pending rather than counted as disagreement.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| Review sheet export | Passed: 30 rows with required 4/4/4/4/4/4/3/3 strata |
+| Agreement script on blank sheet | Passed: all three columns and overall reported pending |
+
+### Required input
+
+- A human must fill the three reviewer columns and notes in
+  `reports/review_sheet.csv`, then run:
+
+```bash
+.venv/bin/python scripts/compute_agreement.py
+```
+
 ## Optional Phase 7 — pitch and video materials
 
 Not started, per the user's request to keep this optional and last. If needed,
