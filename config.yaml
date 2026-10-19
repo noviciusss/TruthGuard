@@ -40,7 +40,7 @@ providers:
       generation: openai/gpt-oss-120b
       fallback: openai/gpt-oss-20b
   gemini:
-    api_key_env: GOOGLE_API_KEY
+    api_key_env: GEMINI_API_KEY
     base_url: https://generativelanguage.googleapis.com/v1beta/openai
     rpm_limit: 10
     rpd_limit: 250
@@ -67,6 +67,10 @@ role_chains:
   critic: [gemini, mistral, groq, openrouter]
   judge: [mistral, groq, openrouter]
   generation: [groq, mistral, openrouter]
+
+critic:
+  llm_enabled: true
+  max_calls: 3
 
 evaluation:
   max_revision_loops: 2

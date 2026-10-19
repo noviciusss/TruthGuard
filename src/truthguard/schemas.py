@@ -156,6 +156,44 @@ class CriticReport(TGModel):
     unsupported_claim_ids: list[str] = Field(default_factory=list)
     self_critique_ran: bool = False
     self_critique_changes: list[str] = Field(default_factory=list)
+    mode: Literal["deterministic", "llm"] = "deterministic"
+    llm_calls: int = Field(default=0, ge=0, le=3)
+
+
+class EvidenceRef(TGModel):
+    chunk_id: str = Field(min_length=1)
+    rationale: str = ""
+
+
+class LLMAtomicClaim(TGModel):
+    claim_id: str = Field(min_length=1)
+    text: str = Field(min_length=1)
+    verdict: ClaimVerdict
+    supporting_evidence: list[EvidenceRef] = Field(default_factory=list)
+    contradicting_evidence: list[EvidenceRef] = Field(default_factory=list)
+    rationale: str = ""
+
+
+class CriticClaimsResponse(TGModel):
+    claims: list[LLMAtomicClaim] = Field(default_factory=list)
+
+
+class LLMConflictFinding(TGModel):
+    conflict_id: str = Field(min_length=1)
+    type: Literal["T1", "T2", "T3", "T4", "T5", "T6"]
+    position_evidence: dict[str, list[EvidenceRef]] = Field(default_factory=dict)
+    rationale: str = ""
+    confidence: float = Field(ge=0.0, le=1.0)
+
+
+class CriticConflictResponse(TGModel):
+    conflicts: list[LLMConflictFinding] = Field(default_factory=list)
+
+
+class CriticSelfReviewResponse(TGModel):
+    keep_conflict_ids: list[str] = Field(default_factory=list)
+    dropped_conflict_ids: list[str] = Field(default_factory=list)
+    changes: list[str] = Field(default_factory=list)
 
 
 class LLMUsage(TGModel):

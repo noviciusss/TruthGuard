@@ -542,6 +542,37 @@ basic implementation blocker; it is evidence/completeness work:
 4. Run Docker verification on the user's machine.
 5. Decide whether the optional pitch/video phase is needed.
 
+## Task 1 — Real lineage-separated LLM critic
+
+### Completed implementation
+
+- Added structured schemas for Critic Call A, B, and C.
+- Added Gemini-first critic routing with Mistral fallback configuration;
+  synthesizer remains Groq-configured.
+- Added Call A for atomic claims and all-passage verdicts.
+- Added Call B for clustered pairwise contradiction, staleness, and T1–T6
+  typing using deterministic graph/metadata annotations.
+- Added Call C self-critique that can drop false-positive conflicts; it is
+  skipped when Call B finds no conflicts.
+- Kept span matching, graph lookups, winner selection, and trust-score math in
+  deterministic code.
+- Added `--no-llm-critic` to `bench.run_eval` for the deterministic ablation.
+- LLM critic mode disables revision loops so it never exceeds three critic
+  calls per question.
+
+### Tests and limitations
+
+| Check | Result |
+|---|---|
+| `make test` | Passed: 39 tests |
+| LLM critic mocked three-call flow | Passed: mode=llm, three calls, T1 output, trust breakdown |
+| `--no-llm-critic` mocked guard | Passed: no LLM call, deterministic mode |
+| Live Gemini/Mistral critic | Not run: `GEMINI_API_KEY` and `MISTRAL_API_KEY` are empty |
+
+The implementation is complete, but the requested live lineage claim is not
+yet evidenced. A Gemini key or Mistral fallback key is required before live
+critic verification and before updating the final live metrics with this mode.
+
 ## Optional Phase 7 — pitch and video materials
 
 Not started, per the user's request to keep this optional and last. If needed,

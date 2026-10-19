@@ -54,10 +54,15 @@ used.
 - Conflict-seeking query expansion.
 - Supersession graph with partial section amendments.
 - Claim verification and conflict typing.
+- Lineage-separated LLM critic path: Gemini Flash first, Mistral fallback,
+  with three bounded structured calls and deterministic annotations.
 - Trust scoring.
 - Resolution and calibrated abstention.
 - B0/B1/B2 baselines.
 - Resumable evaluation.
+
+Use `--no-llm-critic` with `bench.run_eval` to explicitly run the old
+deterministic critic for the ablation comparison.
 
 ### User interfaces
 

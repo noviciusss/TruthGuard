@@ -116,7 +116,8 @@ class TruthGuardPipeline:
         )
 
         revision_loops = 0
-        while report.unsupported_claim_ids and revision_loops < self.max_revision_loops:
+        allowed_revision_loops = 0 if self.critic.llm_enabled else self.max_revision_loops
+        while report.unsupported_claim_ids and revision_loops < allowed_revision_loops:
             revision_loops += 1
             start = datetime.now(timezone.utc)
             revised = self.synthesizer.draft(question, context)
@@ -140,6 +141,7 @@ def build_default_pipeline(
     *,
     corpus_dir: str | Path | None = None,
     router: LLMRouter | None = None,
+    no_llm_critic: bool = False,
 ) -> TruthGuardPipeline:
     config = load_config()
     corpus_dir = Path(corpus_dir or ROOT / config["project"].get("data_dir", "data") / "corpus")
@@ -152,7 +154,11 @@ def build_default_pipeline(
     return TruthGuardPipeline(
         RetrieverAgent(index, graph, router=router),
         SynthesizerAgent(router),
-        CriticAgent(graph),
+        CriticAgent(
+            graph,
+            router=router,
+            use_llm=not no_llm_critic and bool(config.get("critic", {}).get("llm_enabled", True)),
+        ),
         ResolverAgent(float(config.get("trust_weights", {}).get("resolution_gap_threshold", 0.15))),
         max_revision_loops=int(config.get("evaluation", {}).get("max_revision_loops", 2)),
     )

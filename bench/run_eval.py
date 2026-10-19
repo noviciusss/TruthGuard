@@ -43,6 +43,7 @@ def run_evaluation(
     system: str = "truthguard",
     split: str = "dev",
     limit: int | None = None,
+    no_llm_critic: bool = False,
 ) -> list[dict[str, Any]]:
     questions = [question for question in load_questions(questions_path) if question.split == split]
     if limit is not None:
@@ -61,7 +62,7 @@ def run_evaluation(
                     and "error" not in record
                 ):
                     completed.add(record["qid"])
-    pipeline = build_default_pipeline()
+    pipeline = build_default_pipeline(no_llm_critic=no_llm_critic)
     records: list[dict[str, Any]] = []
     with output_path.open("a", encoding="utf-8") as handle:
         for question in questions:
@@ -92,8 +93,20 @@ def main() -> None:
     parser.add_argument("--system", choices=["b0", "b1", "b2", "truthguard"], default="truthguard")
     parser.add_argument("--split", choices=["dev", "test"], default="dev")
     parser.add_argument("--limit", type=int)
+    parser.add_argument(
+        "--no-llm-critic",
+        action="store_true",
+        help="Use the deterministic critic instead of the lineage-separated LLM critic.",
+    )
     args = parser.parse_args()
-    records = run_evaluation(args.questions, args.output, system=args.system, split=args.split, limit=args.limit)
+    records = run_evaluation(
+        args.questions,
+        args.output,
+        system=args.system,
+        split=args.split,
+        limit=args.limit,
+        no_llm_critic=args.no_llm_critic,
+    )
     print(f"Wrote {len(records)} new {args.system} records to {args.output}")
 
 

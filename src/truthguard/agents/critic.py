@@ -10,10 +10,19 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 from datetime import date
+from typing import Any
 
 from ..graph.supersession import SupersessionGraph
 from ..ingest.index import tokenize
 from ..schemas import Claim, Conflict, CriticReport, Position, Span
+from ..schemas import (
+    CriticClaimsResponse,
+    CriticConflictResponse,
+    CriticSelfReviewResponse,
+    EvidenceRef,
+    LLMAtomicClaim,
+)
+from ..llm import LLMRouter
 from .retriever import RetrievedContext
 from .trust import TrustScorer
 
@@ -62,10 +71,176 @@ class CriticAgent:
         scorer: TrustScorer | None = None,
         *,
         self_critique: bool = True,
+        router: LLMRouter | None = None,
+        use_llm: bool = True,
     ) -> None:
         self.graph = graph
         self.scorer = scorer or TrustScorer()
         self.self_critique = self_critique
+        self.router = router
+        self.use_llm = use_llm
+
+    @property
+    def llm_enabled(self) -> bool:
+        return bool(self.use_llm and self.router and not self.router.config.get("project", {}).get("offline", True))
+
+    @staticmethod
+    def _passage_annotations(context: RetrievedContext, graph: SupersessionGraph | None, as_of: date | None) -> list[dict[str, Any]]:
+        passages: list[dict[str, Any]] = []
+        for result in context.results:
+            meta = result.chunk.doc_meta
+            graph_facts: dict[str, Any] = {}
+            if graph is not None:
+                graph_facts = {
+                    "is_superseded": graph.is_superseded(result.chunk.doc_id, as_of, result.chunk.section_path or None),
+                    "graph_neighbors": graph.neighbors(result.chunk.doc_id),
+                }
+            passages.append(
+                {
+                    "chunk_id": result.chunk.chunk_id,
+                    "doc_id": result.chunk.doc_id,
+                    "section_path": result.chunk.section_path,
+                    "text": result.chunk.text,
+                    "metadata": {
+                        "title": meta.title if meta else result.chunk.doc_id,
+                        "doc_type": meta.doc_type if meta else None,
+                        "version": meta.version if meta else None,
+                        "effective_date": meta.effective_date.isoformat() if meta and meta.effective_date else None,
+                        "issued_date": meta.issued_date.isoformat() if meta and meta.issued_date else None,
+                        "authority_rank": meta.authority_rank if meta else None,
+                        "metadata_confidence": meta.metadata_confidence if meta else None,
+                        "supersedes": meta.supersedes if meta else [],
+                        "amends": meta.amends if meta else [],
+                    },
+                    "graph": graph_facts,
+                }
+            )
+        return passages
+
+    @staticmethod
+    def _passage_text(passages: list[dict[str, Any]]) -> str:
+        return "\n\n".join(
+            f"[{item['chunk_id']}] doc={item['doc_id']} section={item['section_path']}\n"
+            f"metadata={item['metadata']} graph={item['graph']}\n{item['text']}"
+            for item in passages
+        )
+
+    @staticmethod
+    def _known_spans(context: RetrievedContext) -> dict[str, Any]:
+        return {result.chunk.chunk_id: result.chunk for result in context.results}
+
+    @classmethod
+    def _span_from_ref(cls, reference: EvidenceRef, known: dict[str, Any]) -> Span | None:
+        chunk = known.get(reference.chunk_id)
+        if chunk is None:
+            return None
+        return Span(chunk_id=chunk.chunk_id, char_start=chunk.char_start, char_end=chunk.char_end)
+
+    def _llm_claims(self, context: RetrievedContext, draft_text: str, as_of: date | None) -> list[Claim]:
+        assert self.router is not None
+        passages = self._passage_annotations(context, self.graph, as_of)
+        prompt = (
+            'Return only JSON matching the CriticClaimsResponse schema. Perform atomic claim decomposition and '
+            'verify every claim against ALL supplied passages, not only cited passages. Verdict must be supported, '
+            'contradicted, or unsupported. Evidence references must use exact chunk_id values.\n\n'
+            f"QUESTION:\n{context.question}\n\nDRAFT:\n{draft_text}\n\nALL PASSAGES:\n{self._passage_text(passages)}"
+        )
+        response, _ = self.router.complete_json(
+            "critic",
+            [{"role": "system", "content": prompt}, {"role": "user", "content": "Return the JSON critic report."}],
+            CriticClaimsResponse,
+            stage="critic-call-a-claims",
+        )
+        known = self._known_spans(context)
+        claims: list[Claim] = []
+        for item in response.claims:
+            supporting = [span for ref in item.supporting_evidence if (span := self._span_from_ref(ref, known))]
+            contradicting = [span for ref in item.contradicting_evidence if (span := self._span_from_ref(ref, known))]
+            claims.append(
+                Claim(
+                    claim_id=item.claim_id,
+                    text=item.text,
+                    verdict=item.verdict,
+                    supporting_spans=supporting,
+                    contradicting_spans=contradicting,
+                )
+            )
+        return claims
+
+    def _llm_conflicts(self, context: RetrievedContext, as_of: date | None) -> list[Conflict]:
+        assert self.router is not None
+        passages = self._passage_annotations(context, self.graph, as_of)
+        clusters: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        for passage in passages:
+            clusters[_topic(passage["text"]) or "other"].append(passage)
+        cluster_text = "\n\n".join(
+            f"TOPIC={topic}\n{self._passage_text(items)}" for topic, items in clusters.items()
+        )
+        prompt = (
+            'Return only JSON matching the CriticConflictResponse schema. Compare passages pairwise within each '
+            'topic cluster. Detect genuine contradictions, including implicit contradictions. Use the supplied graph '
+            'and metadata annotations for staleness and supersession; do not invent dates or authority. Assign only '
+            'T1, T2, T3, T4, T5, or T6. Each conflict must include at least two document positions, represented '
+            'by exact chunk_id evidence references.\n\n'
+            f"QUESTION:\n{context.question}\n\nCLUSTERED PASSAGES:\n{cluster_text}"
+        )
+        response, _ = self.router.complete_json(
+            "critic",
+            [{"role": "system", "content": prompt}, {"role": "user", "content": "Return the JSON conflict scan."}],
+            CriticConflictResponse,
+            stage="critic-call-b-conflicts",
+        )
+        known = self._known_spans(context)
+        by_doc = {chunk.doc_id: chunk for chunk in known.values()}
+        conflicts: list[Conflict] = []
+        for finding in response.conflicts:
+            positions: list[Position] = []
+            for doc_id, refs in finding.position_evidence.items():
+                for ref in refs:
+                    chunk = known.get(ref.chunk_id)
+                    if chunk is None or chunk.doc_id != doc_id:
+                        continue
+                    position = self._position(next(result for result in context.results if result.chunk.chunk_id == ref.chunk_id))
+                    if all(existing.doc_id != position.doc_id for existing in positions):
+                        positions.append(position)
+                    break
+            if len(positions) < 2:
+                continue
+            mode = "abstain" if finding.type == "T6" else ("contextual" if finding.type in {"T2", "T5"} else "supersession")
+            winner = self._winner(positions)
+            conflict = Conflict(
+                conflict_id=finding.conflict_id,
+                type=finding.type,
+                positions=positions,
+                resolution_mode=mode,
+                winner_doc_id=None if mode != "supersession" else winner,
+                rationale=finding.rationale,
+                confidence=finding.confidence,
+            )
+            conflicts.append(self.scorer.apply(conflict))
+        return conflicts
+
+    def _llm_self_critique(self, context: RetrievedContext, conflicts: list[Conflict], as_of: date | None) -> tuple[list[Conflict], list[str]]:
+        if not conflicts:
+            return [], []
+        assert self.router is not None
+        prompt = (
+            'Return only JSON matching the CriticSelfReviewResponse schema. Attack each proposed conflict. Drop '
+            'false positives caused by different scopes, unrelated topics, or a valid supersession relationship. '
+            'Keep only conflict IDs that are genuine after reviewing the evidence.\n\n'
+            f"QUESTION:\n{context.question}\n\nPROPOSED CONFLICTS:\n"
+            + "\n".join(conflict.model_dump_json() for conflict in conflicts)
+        )
+        response, _ = self.router.complete_json(
+            "critic",
+            [{"role": "system", "content": prompt}, {"role": "user", "content": "Return the JSON self-critique."}],
+            CriticSelfReviewResponse,
+            stage="critic-call-c-self-critique",
+        )
+        keep = set(response.keep_conflict_ids)
+        if not keep:
+            return [], response.changes
+        return [conflict for conflict in conflicts if conflict.conflict_id in keep], response.changes
 
     @staticmethod
     def _claims(context: RetrievedContext, draft_text: str, citations: list[Span]) -> list[Claim]:
@@ -106,6 +281,10 @@ class CriticAgent:
         )
 
     def _winner(self, positions: list[Position]) -> str | None:
+        if self.graph is not None:
+            valid = self.graph.latest_valid([position.doc_id for position in positions])
+            if valid:
+                return valid[0]
         dated = [position for position in positions if position.doc_meta.effective_date]
         if not dated:
             return None
@@ -187,6 +366,20 @@ class CriticAgent:
         return conflicts
 
     def critique(self, context: RetrievedContext, draft_text: str, citations: list[Span], *, as_of: date | None = None) -> CriticReport:
+        if self.llm_enabled:
+            claims = self._llm_claims(context, draft_text, as_of)
+            proposed_conflicts = self._llm_conflicts(context, as_of)
+            conflicts, changes = self._llm_self_critique(context, proposed_conflicts, as_of)
+            unsupported = [claim.claim_id for claim in claims if claim.verdict == "unsupported"]
+            return CriticReport(
+                claims=claims,
+                conflicts=conflicts,
+                unsupported_claim_ids=unsupported,
+                self_critique_ran=bool(proposed_conflicts),
+                self_critique_changes=changes,
+                mode="llm",
+                llm_calls=3 if proposed_conflicts else 2,
+            )
         claims = self._claims(context, draft_text, citations)
         conflicts = self._find_conflicts(context, as_of)
         unsupported = [claim.claim_id for claim in claims if claim.verdict == "unsupported"]
@@ -196,4 +389,6 @@ class CriticAgent:
             unsupported_claim_ids=unsupported,
             self_critique_ran=self.self_critique,
             self_critique_changes=[],
+            mode="deterministic",
+            llm_calls=0,
         )
