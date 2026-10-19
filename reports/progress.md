@@ -602,6 +602,31 @@ critic verification and before updating the final live metrics with this mode.
 .venv/bin/python scripts/compute_agreement.py
 ```
 
+## Task 3 — Wild robustness questions (writing only)
+
+### Completed
+
+- Added `data/benchmark/wild.jsonl` with 20 manually phrased questions.
+- Questions include indirect wording, multi-hop cases, mixed-topic cases,
+  scope cases, unresolvable conflicts, a no-conflict control, and unanswerable
+  questions.
+- Gold labels were assigned from the corpus and conflict manifest, with source
+  passage references included in each record.
+- No evaluator or provider was run on this file, as required.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| JSONL parse and uniqueness | Passed: 20 unique records |
+| Generator phrasing check | Passed: no `(case variant ...)` phrasing |
+| Gold status/type/source field check | Passed |
+
+### Remaining
+
+- Evaluation is intentionally deferred until the LLM critic smoke test passes
+  after Gemini or Mistral credentials are added.
+
 ## Optional Phase 7 — pitch and video materials
 
 Not started, per the user's request to keep this optional and last. If needed,
