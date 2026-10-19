@@ -210,27 +210,38 @@ class LLMRouter:
         return records
 
     def budget_status(self) -> dict[str, dict[str, int]]:
-        """Return today's and current-minute request counts by provider."""
+        """Return configured and observed provider request/token windows."""
 
         now = time.time()
         day_start = now - (now % 86400)
         minute_start = now - (now % 60)
+        second_start = now - 1.0
         result: dict[str, dict[str, int]] = {}
         with self._connect() as connection:
             for provider, settings in self.config.get("providers", {}).items():
-                day_count = connection.execute(
-                    "SELECT COUNT(*) FROM call_log WHERE provider = ? AND created_at >= ? AND cached = 0",
+                rows = connection.execute(
+                    """
+                    SELECT created_at, usage_json
+                    FROM call_log
+                    WHERE provider = ? AND created_at >= ? AND cached = 0
+                    """,
                     (provider, day_start),
-                ).fetchone()[0]
-                minute_count = connection.execute(
-                    "SELECT COUNT(*) FROM call_log WHERE provider = ? AND created_at >= ? AND cached = 0",
-                    (provider, minute_start),
-                ).fetchone()[0]
+                ).fetchall()
+                minute_rows = [row for row in rows if row["created_at"] >= minute_start]
+                second_rows = [row for row in minute_rows if row["created_at"] >= second_start]
+                tokens_this_minute = sum(
+                    int(json.loads(row["usage_json"]).get("total_tokens", 0))
+                    for row in minute_rows
+                )
                 result[provider] = {
-                    "requests_today": int(day_count),
+                    "requests_today": len(rows),
                     "daily_limit": int(settings.get("rpd_limit", 0)),
-                    "requests_this_minute": int(minute_count),
+                    "requests_this_minute": len(minute_rows),
                     "rpm_limit": int(settings.get("rpm_limit", 0)),
+                    "requests_this_second": len(second_rows),
+                    "rps_limit": int(settings.get("rps_limit", 0)),
+                    "tokens_this_minute": tokens_this_minute,
+                    "tpm_limit": int(settings.get("tpm_limit", 0)),
                 }
         return result
 
@@ -239,6 +250,10 @@ class LLMRouter:
         status = self.budget_status().get(provider, {})
         if status.get("rpm_limit", 0) and status["requests_this_minute"] >= status["rpm_limit"]:
             raise BudgetExceeded(f"{provider} RPM limit reached")
+        if status.get("rps_limit", 0) and status["requests_this_second"] >= status["rps_limit"]:
+            raise BudgetExceeded(f"{provider} RPS limit reached")
+        if status.get("tpm_limit", 0) and status["tokens_this_minute"] >= status["tpm_limit"]:
+            raise BudgetExceeded(f"{provider} TPM limit reached")
         if status.get("daily_limit", 0) and status["requests_today"] >= status["daily_limit"]:
             raise BudgetExceeded(f"{provider} daily request limit reached")
 
@@ -249,6 +264,11 @@ class LLMRouter:
             status = self.budget_status().get(provider, {})
             if status.get("daily_limit", 0) and status["requests_today"] >= status["daily_limit"]:
                 raise BudgetExceeded(f"{provider} daily request limit reached")
+            if status.get("tpm_limit", 0) and status["tokens_this_minute"] >= status["tpm_limit"]:
+                raise BudgetExceeded(f"{provider} TPM limit reached")
+            if status.get("rps_limit", 0) and status["requests_this_second"] >= status["rps_limit"]:
+                time.sleep(max(0.05, 1.0 - (time.time() % 1.0) + 0.05))
+                continue
             if not status.get("rpm_limit", 0) or status["requests_this_minute"] < status["rpm_limit"]:
                 return
             wait_seconds = max(1.0, 60.0 - (time.time() % 60.0) + 0.1)

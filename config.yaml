@@ -42,18 +42,23 @@ providers:
   gemini:
     api_key_env: GEMINI_API_KEY
     base_url: https://generativelanguage.googleapis.com/v1beta/openai
-    rpm_limit: 10
-    rpd_limit: 250
+    # Dashboard limits for the configured Gemini 3.8 Flash model.
+    rpm_limit: 5
+    tpm_limit: 250000
+    rpd_limit: 20
     models:
       critic: gemini-3.8-flash
   mistral:
     api_key_env: MISTRAL_API_KEY
     base_url: https://api.mistral.ai/v1
-    rpm_limit: 5
-    rpd_limit: 500
+    # Dashboard limits for mistral-small-2603. No daily request limit was shown.
+    rps_limit: 1
+    tpm_limit: 20000
+    rpm_limit: 60
+    rpd_limit: 0
     models:
-      judge: mistral-small-latest
-      generation: mistral-small-latest
+      judge: mistral-small-2603
+      generation: mistral-small-2603
   openrouter:
     api_key_env: OPENROUTER_API_KEY
     base_url: https://openrouter.ai/api/v1

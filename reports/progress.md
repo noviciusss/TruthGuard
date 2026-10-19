@@ -585,6 +585,26 @@ Smoke evidence is isolated at `/tmp/omnirush/critic-smoke-v3.json` and
 successful calls, 17 failed calls, and four completed questions. No live
 test-set metrics were generated from this run.
 
+### Provider limit update
+
+- Updated Gemini 3.8 Flash to the supplied dashboard limits: 5 RPM, 250,000
+  TPM, and 20 RPD.
+- Updated the Mistral fallback model from the alias `mistral-small-latest` to
+  the supplied `mistral-small-2603` model: 20,000 TPM and 1 request per second.
+- Removed the previous unverified Mistral 500 RPD cap; the supplied dashboard
+  did not show a daily request limit for that model.
+- Extended router budget accounting with rolling one-second request counts and
+  rolling one-minute token counts. The Mistral one-request-per-second limit is
+  now enforced rather than approximated as a five-RPM limit.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| `make test` | Passed: 40 tests |
+| `make smoke` | Passed: offline configuration loaded |
+| `make compile` | Passed |
+
 ## Task 5 — Human review sheet
 
 ### Completed

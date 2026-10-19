@@ -12,6 +12,22 @@ class TinyPayload(BaseModel):
     answer: str
 
 
+def test_provider_limits_match_supplied_dashboards() -> None:
+    config = load_config()
+
+    gemini = config["providers"]["gemini"]
+    assert gemini["models"]["critic"] == "gemini-3.8-flash"
+    assert gemini["rpm_limit"] == 5
+    assert gemini["tpm_limit"] == 250000
+    assert gemini["rpd_limit"] == 20
+
+    mistral = config["providers"]["mistral"]
+    assert mistral["models"]["generation"] == "mistral-small-2603"
+    assert mistral["rps_limit"] == 1
+    assert mistral["tpm_limit"] == 20000
+    assert mistral["rpd_limit"] == 0
+
+
 def test_offline_fixture_is_validated_cached_and_accounted(tmp_path) -> None:
     config = deepcopy(load_config())
     config["project"]["offline"] = True
