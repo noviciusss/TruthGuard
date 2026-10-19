@@ -13,7 +13,7 @@
 
 ## Current status
 
-- Phase: 0 — foundation
+- Phase: 1 — schemas and provider router
 - Status: complete
 - Last updated: 2026-10-19
 
@@ -59,8 +59,56 @@
 
 ### Next step
 
-Implement Pydantic schemas and the offline-first provider router, then run the
-second phase test gate.
+Build the synthetic Aurelia Health fact sheet and deterministic corpus
+generator, then run the corpus validation gate.
+
+## Phase 1 — Schemas and provider router
+
+### Completed
+
+- Added Pydantic v2 schemas for document metadata, chunks, spans, claims,
+  conflicts including T0 and T7, trust scores, agent trace, final answers,
+  benchmark questions, and LLM accounting.
+- Added strict structured-output validation with useful field bounds.
+- Added an HTTP-based multi-provider router with Groq-first role chains,
+  configured lineage-separated critic/judge fallbacks, and no provider SDK
+  lock-in.
+- Added SQLite response caching keyed by provider, model, messages, and
+  parameters.
+- Added persisted call logs, RPM/RPD counters, budget status, fallback
+  handling, and one schema-repair retry.
+- Added offline fixture mode so tests and deterministic development do not
+  require API keys or network access.
+
+### Files changed
+
+- `src/truthguard/schemas.py`
+- `src/truthguard/llm.py`
+- `tests/test_schemas.py`
+- `tests/test_llm.py`
+
+### Tests run
+
+| Command | Result |
+|---|---|
+| `make test` | Passed: 10 tests |
+| `make smoke` | Passed: configuration loaded in offline mode |
+| `make compile` | Passed |
+
+### Problems and deviations
+
+- Live providers have not been called. Their exact free-tier limits and model
+  availability must be checked in the provider consoles before bulk work.
+- The router uses OpenAI-compatible HTTP endpoints rather than provider SDKs;
+  this is intentional to reduce dependency churn and simplify mocks.
+- The full runtime dependency set is not installed yet; only the packages
+  required for the current offline phase are installed in `.venv`.
+
+### Required input
+
+- No input is needed for the next phase.
+- A Groq API key will be requested before the first live corpus-generation
+  smoke test.
 
 ## Open issues
 
