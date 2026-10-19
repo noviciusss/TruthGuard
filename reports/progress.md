@@ -13,7 +13,7 @@
 
 ## Current status
 
-- Phase: 2 — synthetic corpus
+- Phase: 3 — ingestion, retrieval, and supersession graph
 - Status: complete
 - Last updated: 2026-10-19
 
@@ -57,10 +57,10 @@
 - No input is required to continue foundation implementation.
 - A Groq API key will be needed only before live provider calls.
 
-### Next step
+### Historical next step
 
-Implement metadata parsing, section-aware chunking, hybrid retrieval, and the
-supersession graph over the generated corpus.
+Implement the retriever agent, synthesizer, and baseline answer flows over the
+indexed corpus.
 
 ## Phase 1 — Schemas and provider router
 
@@ -173,6 +173,64 @@ The generated sample requested by the specification is available at:
 - No input is needed to implement ingestion and graph logic.
 - Before the first live corpus audit, I will ask for a filled `GROQ_API_KEY`
   in your local `.env` and confirm the provider's current free-tier limits.
+
+## Phase 3 — Ingestion, retrieval, and supersession graph
+
+### Completed
+
+- Added metadata parsing for front matter, body effective dates, supersession
+  references, amendment references, fuzzy document IDs, filename fallbacks,
+  authority rank, and metadata confidence.
+- Preserved unknown dates as unknown; filename hints are used only as the
+  documented fallback.
+- Added Markdown loader and section-aware chunking with exact character
+  offsets and document metadata attached to every chunk.
+- Added hybrid retrieval with BM25, deterministic dense fallback embeddings,
+  reciprocal rank fusion, result score breakdowns, and JSON save/load.
+- Added a networkx supersession graph with document-level and partial
+  section-level edges, latest-valid selection, chains, neighbors, cycle
+  detection, as-of handling, and missing-date behavior.
+- Regenerated the corpus so amendment metadata is present in both headers and
+  body text for inference tests.
+
+### Files changed
+
+- `src/truthguard/ingest/metadata.py`
+- `src/truthguard/ingest/loader.py`
+- `src/truthguard/ingest/chunker.py`
+- `src/truthguard/ingest/index.py`
+- `src/truthguard/graph/supersession.py`
+- `bench/generate_corpus.py`
+- `data/corpus/*.md`
+- `data/corpus/corpus_manifest.json`
+- `tests/test_ingest_graph.py`
+
+### Tests run
+
+| Command | Result |
+|---|---|
+| `make test` | Passed: 18 tests |
+| `PYTHONPATH=src .venv/bin/python -m bench.generate_corpus` | Passed: 35 documents, 40% metadata corruption |
+| Retrieval smoke query | Passed: 35 docs, 182 chunks; both stale and amendment waiting-period sources appeared in top 8 results |
+| `make compile` | Passed |
+
+### Problems and deviations
+
+- Dense retrieval currently defaults to a deterministic hash embedder so tests
+  do not download `bge-small-en-v1.5`. The optional sentence-transformers
+  backend remains in the pinned runtime requirements and will be wired for
+  live evaluation after the core pipeline is stable.
+- The generated corpus now includes body effective-date statements, so a
+  missing header date can be recovered. This is intentional metadata-inference
+  test data, not accidental clean metadata.
+- Metadata inference and graph logic are implemented, but the full benchmark
+  question set and LLM audit are still pending.
+
+### Required input
+
+- No input is needed for the retriever implementation.
+- I will request Groq credentials before a live reformulation or corpus-audit
+  call; offline tests will continue to use fixtures.
 
 ## Open issues
 

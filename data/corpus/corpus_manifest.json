@@ -93,7 +93,7 @@
   "document_count": 35,
   "documents": [
     {
-      "char_count": 903,
+      "char_count": 955,
       "doc_id": "POL-2024-V1",
       "doc_type": "policy",
       "expected_metadata": {
@@ -126,7 +126,7 @@
       "title": "Aurelia Health Standard Policy Wording v1"
     },
     {
-      "char_count": 993,
+      "char_count": 1084,
       "doc_id": "POL-2025-V2",
       "doc_type": "policy",
       "expected_metadata": {
@@ -161,7 +161,7 @@
       "title": "Aurelia Health Standard Policy Wording v2"
     },
     {
-      "char_count": 961,
+      "char_count": 1052,
       "doc_id": "POL-2026-V3",
       "doc_type": "policy",
       "expected_metadata": {
@@ -196,7 +196,7 @@
       "title": "Aurelia Health Standard Policy Wording v3"
     },
     {
-      "char_count": 503,
+      "char_count": 628,
       "doc_id": "AMD-2025-03",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -233,7 +233,7 @@
       "title": "Amendment AH/2025/03 \u2014 Hospitalization Waiting Period"
     },
     {
-      "char_count": 471,
+      "char_count": 596,
       "doc_id": "AMD-2025-04",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -270,7 +270,7 @@
       "title": "Amendment AH/2025/04 \u2014 Claim Submission"
     },
     {
-      "char_count": 489,
+      "char_count": 614,
       "doc_id": "AMD-2025-05",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -307,7 +307,7 @@
       "title": "Amendment AH/2025/05 \u2014 Pre-existing Conditions"
     },
     {
-      "char_count": 449,
+      "char_count": 572,
       "doc_id": "AMD-2025-07",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -344,7 +344,7 @@
       "title": "Amendment AH/2025/07 \u2014 Maternity"
     },
     {
-      "char_count": 592,
+      "char_count": 713,
       "doc_id": "AMD-2025-09",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -381,7 +381,7 @@
       "title": "Amendment AH/2025/09 \u2014 Network Hospitals"
     },
     {
-      "char_count": 481,
+      "char_count": 604,
       "doc_id": "AMD-2026-01",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -418,7 +418,7 @@
       "title": "Amendment AH/2026/01 \u2014 Telemedicine"
     },
     {
-      "char_count": 470,
+      "char_count": 593,
       "doc_id": "AMD-2026-02",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -455,7 +455,7 @@
       "title": "Amendment AH/2026/02 \u2014 Grievances"
     },
     {
-      "char_count": 478,
+      "char_count": 599,
       "doc_id": "AMD-2026-03",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -492,7 +492,7 @@
       "title": "Amendment AH/2026/03 \u2014 Ambulance"
     },
     {
-      "char_count": 542,
+      "char_count": 665,
       "doc_id": "AMD-2026-04",
       "doc_type": "amendment",
       "expected_metadata": {
@@ -529,7 +529,7 @@
       "title": "Amendment AH/2026/04 \u2014 Exclusions"
     },
     {
-      "char_count": 463,
+      "char_count": 515,
       "doc_id": "CIR-2024-01",
       "doc_type": "circular",
       "expected_metadata": {
@@ -561,7 +561,7 @@
       "title": "Circular AH/2024/01 \u2014 Member Administration"
     },
     {
-      "char_count": 493,
+      "char_count": 545,
       "doc_id": "CIR-2024-02",
       "doc_type": "circular",
       "expected_metadata": {
@@ -593,7 +593,7 @@
       "title": "Circular AH/2024/02 \u2014 Co-payment Examples"
     },
     {
-      "char_count": 476,
+      "char_count": 528,
       "doc_id": "CIR-2024-03",
       "doc_type": "circular",
       "expected_metadata": {
@@ -625,7 +625,7 @@
       "title": "Circular AH/2024/03 \u2014 Room Rent Schedule"
     },
     {
-      "char_count": 617,
+      "char_count": 742,
       "doc_id": "CIR-2025-06",
       "doc_type": "circular",
       "expected_metadata": {
@@ -662,7 +662,7 @@
       "title": "Circular AH/2025/06 \u2014 Emergency Admission Exception"
     },
     {
-      "char_count": 490,
+      "char_count": 542,
       "doc_id": "CIR-2025-08-A",
       "doc_type": "circular",
       "expected_metadata": {
@@ -694,7 +694,7 @@
       "title": "Circular AH/2025/08-A \u2014 Annual Limit"
     },
     {
-      "char_count": 496,
+      "char_count": 548,
       "doc_id": "CIR-2025-08-B",
       "doc_type": "circular",
       "expected_metadata": {
@@ -726,7 +726,7 @@
       "title": "Circular AH/2025/08-B \u2014 Annual Limit"
     },
     {
-      "char_count": 456,
+      "char_count": 508,
       "doc_id": "CIR-2025-10",
       "doc_type": "circular",
       "expected_metadata": {
@@ -758,7 +758,7 @@
       "title": "Circular AH/2025/10 \u2014 Renewal Operations"
     },
     {
-      "char_count": 478,
+      "char_count": 530,
       "doc_id": "CIR-2026-01",
       "doc_type": "circular",
       "expected_metadata": {
@@ -790,7 +790,7 @@
       "title": "Circular AH/2026/01 \u2014 Digital Care"
     },
     {
-      "char_count": 492,
+      "char_count": 544,
       "doc_id": "CIR-2026-02",
       "doc_type": "circular",
       "expected_metadata": {
@@ -822,7 +822,7 @@
       "title": "Circular AH/2026/02 \u2014 Ambulance Claims"
     },
     {
-      "char_count": 535,
+      "char_count": 587,
       "doc_id": "FAQ-2024-01",
       "doc_type": "faq",
       "expected_metadata": {
@@ -855,7 +855,7 @@
       "title": "Aurelia Health FAQ \u2014 Waiting Periods"
     },
     {
-      "char_count": 497,
+      "char_count": 549,
       "doc_id": "FAQ-2024-02",
       "doc_type": "faq",
       "expected_metadata": {
@@ -888,7 +888,7 @@
       "title": "Aurelia Health FAQ \u2014 Definitions"
     },
     {
-      "char_count": 590,
+      "char_count": 642,
       "doc_id": "FAQ-2025-01",
       "doc_type": "faq",
       "expected_metadata": {
@@ -921,7 +921,7 @@
       "title": "Aurelia Health FAQ \u2014 Plan Comparisons"
     },
     {
-      "char_count": 696,
+      "char_count": 748,
       "doc_id": "FAQ-2025-06",
       "doc_type": "faq",
       "expected_metadata": {
@@ -953,7 +953,7 @@
       "title": "Aurelia Health FAQ \u2014 Current Benefits"
     },
     {
-      "char_count": 397,
+      "char_count": 449,
       "doc_id": "FAQ-2026-01",
       "doc_type": "faq",
       "expected_metadata": {
@@ -985,7 +985,7 @@
       "title": "Aurelia Health FAQ \u2014 Renewal"
     },
     {
-      "char_count": 723,
+      "char_count": 775,
       "doc_id": "FAQ-2026-02",
       "doc_type": "faq",
       "expected_metadata": {
@@ -1017,7 +1017,7 @@
       "title": "Aurelia Health FAQ \u2014 Network and Digital Care"
     },
     {
-      "char_count": 683,
+      "char_count": 735,
       "doc_id": "MAN-2024-CLAIMS",
       "doc_type": "manual",
       "expected_metadata": {
@@ -1050,7 +1050,7 @@
       "title": "Claims Processing Manual 2024"
     },
     {
-      "char_count": 432,
+      "char_count": 484,
       "doc_id": "MAN-2025-CLAIMS",
       "doc_type": "manual",
       "expected_metadata": {
@@ -1082,7 +1082,7 @@
       "title": "Claims Processing Manual 2025"
     },
     {
-      "char_count": 781,
+      "char_count": 833,
       "doc_id": "MAN-2025-CASHLESS",
       "doc_type": "manual",
       "expected_metadata": {
@@ -1114,7 +1114,7 @@
       "title": "Cashless Hospital Operations Manual"
     },
     {
-      "char_count": 486,
+      "char_count": 538,
       "doc_id": "MAN-2026-GRIEVANCE",
       "doc_type": "manual",
       "expected_metadata": {
@@ -1146,7 +1146,7 @@
       "title": "Member Grievance Operations Manual"
     },
     {
-      "char_count": 576,
+      "char_count": 628,
       "doc_id": "NOTICE-2024-01",
       "doc_type": "notice",
       "expected_metadata": {
@@ -1178,7 +1178,7 @@
       "title": "Regulatory Notice AH/2024/01 \u2014 Coverage Disclosures"
     },
     {
-      "char_count": 607,
+      "char_count": 659,
       "doc_id": "NOTICE-2025-02",
       "doc_type": "notice",
       "expected_metadata": {
@@ -1210,7 +1210,7 @@
       "title": "Regulatory Notice AH/2025/02 \u2014 Emergency Cashless"
     },
     {
-      "char_count": 497,
+      "char_count": 549,
       "doc_id": "NOTICE-2025-11",
       "doc_type": "notice",
       "expected_metadata": {
@@ -1242,7 +1242,7 @@
       "title": "Regulatory Notice AH/2025/11 \u2014 Annual Limit Filing"
     },
     {
-      "char_count": 506,
+      "char_count": 558,
       "doc_id": "NOTICE-2026-01",
       "doc_type": "notice",
       "expected_metadata": {

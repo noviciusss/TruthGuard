@@ -5,10 +5,13 @@ Type: manual
 Version: 2024
 Effective: 2024-01-10
 Issued: 2024-01-10
-Supersedes: 
+Supersedes:
+Amends:
 ---
 
 # Claims Processing Manual 2024
+
+This document is effective from 2024-01-10.
 
 ## Claims
 Submit reimbursement claims within 30 days after discharge.

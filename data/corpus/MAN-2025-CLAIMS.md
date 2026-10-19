@@ -5,10 +5,13 @@ Type: manual
 Version: 2025
 Effective: 2025-05-15
 Issued: 2025-05-15
-Supersedes: 
+Supersedes:
+Amends:
 ---
 
 # Claims Processing Manual 2025
+
+This document is effective from 2025-05-15.
 
 ## Claims
 Submit reimbursement claims within 60 days after discharge.

@@ -5,10 +5,13 @@ Type: manual
 Version: 2026
 Effective: 
 Issued: 2026-02-15
-Supersedes: 
+Supersedes:
+Amends:
 ---
 
 # Member Grievance Operations Manual
+
+This document is effective from 2026-02-15.
 
 ## Grievances
 Acknowledge within 3 business days and resolve within 30 days.

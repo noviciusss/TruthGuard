@@ -5,10 +5,13 @@ Type: manual
 Version: 2025
 Effective: 2025-06-15
 Issued: 2025-06-15
-Supersedes: 
+Supersedes:
+Amends:
 ---
 
 # Cashless Hospital Operations Manual
+
+This document is effective from 2025-06-15.
 
 ## Operations
 Planned admissions require pre-authorization. Emergency admissions may be notified within 24 hours.

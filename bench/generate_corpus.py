@@ -130,7 +130,8 @@ def _frontmatter(meta: DocMeta, *, corrupt_kind: str | None = None) -> str:
             f"Version: {version}",
             f"Effective: {effective}",
             f"Issued: {meta.issued_date.isoformat() if meta.issued_date else ''}",
-            f"Supersedes: {supersedes}",
+            f"Supersedes: {supersedes}".rstrip(),
+            f"Amends: {', '.join(f'{doc_id}#{section}' for doc_id, section in meta.amends)}".rstrip(),
             "---",
             "",
         ]
@@ -158,6 +159,19 @@ def render_document(plan: DocumentPlan, facts: dict[str, dict[str, Any]], index:
         metadata_confidence=0.45 if metadata_corrupted else 1.0,
     )
     lines = [_frontmatter(meta, corrupt_kind=corrupt_kind), f"# {plan.title}", ""]
+    lines.append(f"This document is effective from {plan.effective_date}.")
+    if plan.supersedes:
+        lines.append(f"This document supersedes {', '.join(plan.supersedes)}.")
+    if plan.amends:
+        lines.append(
+            "This document amends "
+            + ", ".join(
+                f"{section if section.lower().startswith('section ') else 'Section ' + section} of {doc_id}"
+                for doc_id, section in plan.amends
+            )
+            + "."
+        )
+    lines.append("")
     for section, text in plan.sections:
         lines.extend([f"## {section}", text, ""])
     if plan.facts:
