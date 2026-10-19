@@ -405,6 +405,15 @@ the competition result.
   was exhausted. The test run remains resumable in the ignored local file
   `reports/live_eval_test.jsonl`.
 
+### Follow-up after new Groq account
+
+- The user supplied a new unused Groq account.
+- A schema-valid smoke call succeeded with Groq `openai/gpt-oss-120b`.
+- The remaining 52 test questions resumed from the existing output and all
+  completed successfully.
+- Final live TruthGuard test coverage is now 140/140 questions.
+- Consolidated results are recorded in `reports/results.md`.
+
 ### Live checks run
 
 | Check | Result |
@@ -413,7 +422,8 @@ the competition result.
 | Correct-schema Groq smoke | Passed: Groq `openai/gpt-oss-120b` |
 | Live T1 pipeline | Passed: resolved T1 with trace/citations |
 | Live dev evaluation | Passed: 40/40 successful answers |
-| Live test evaluation | Partial: 88 successful answers; 52 remain pending after daily TPD exhaustion |
+| Live test evaluation before account change | Partial: 88 successful answers; daily TPD exhaustion |
+| Live test evaluation after new account | Passed: remaining 52 resumed; 140/140 latest successful answers |
 | Offline full TruthGuard test split | Passed: 140/140 |
 | Offline B0/B1/B2 full test split | Passed: 140/140 each |
 | Final offline test suite | Passed: 37 tests |
@@ -437,6 +447,13 @@ Computed from all 40 live dev answers with 95% bootstrap intervals:
 
 These are live development metrics, not final test-set claims.
 
+### Final live TruthGuard test metrics
+
+The 140-question live test metrics are maintained in `reports/results.md`.
+Highlights: answer accuracy `0.8286`, conflict F1 `0.8374`, conflict type
+accuracy `0.6071`, resolution-mode accuracy `0.7643`, provenance correctness
+`1.0`, blended-answer rate `0.0`, and abstention recall `1.0`.
+
 ### Offline full test comparison
 
 The complete 140-question offline run completed for every system. These values
@@ -451,14 +468,16 @@ exercise the deterministic fallback and are not live model results:
 
 ### Problems and deviations
 
-- Groq reported: `tokens per day (TPD): Limit 200000`, with approximately
-  `199000+` tokens used. The remaining 52 live test questions cannot be
-  honestly marked complete until the quota resets or another provider key is
-  configured.
+- Groq reported: `tokens per day (TPD): Limit 200000` during the first account
+  run. A new user-supplied account was used to complete the remaining 52 test
+  questions.
 - Groq also exposed an 8,000-token/minute model limit. The router now waits
   and retries bounded 429 responses.
 - Only Groq is configured. Gemini, Mistral, and OpenRouter fallbacks are
   unavailable, so they could not absorb the daily limit.
+- Live B0/B1/B2 baseline runs were not started after the account change because
+  the remaining daily token budget should not be spent without a fallback
+  provider; the complete offline comparison is in `reports/results.md`.
 - The live critic remains deterministic in the current implementation; the
   second-model critic lineage is not yet exercised live.
 - Core tests, API, and UI work offline. The optional ML retrieval stack
@@ -475,8 +494,8 @@ exercise the deterministic fallback and are not live model results:
 
 ### Required input / next action
 
-- Either wait for the Groq daily token quota to reset and tell me to resume the
-  test run, or provide a Mistral/OpenRouter key for fallback evaluation.
+- Provide a Mistral/OpenRouter key if you want live B0/B1/B2 comparisons
+  without consuming another Groq daily budget.
 - If final architecture compliance is required, provide a Gemini key so the
   live critic lineage can be exercised after the test quota issue is resolved.
 - Docker verification still requires you to run the Docker commands locally.
