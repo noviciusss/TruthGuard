@@ -1,0 +1,29 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+
+# Generated/runtime data
+data/cache/
+data/corpus/*.md
+data/corpus/*.txt
+data/corpus/*.json
+data/corpus/*.jsonl
+data/benchmark/*.jsonl
+data/indices/
+reports/*.png
+reports/*.html
+
+# Local model/cache material
+.cache/
+models/
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/

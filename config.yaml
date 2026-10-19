@@ -1,0 +1,74 @@
+project:
+  name: TruthGuard
+  domain: Aurelia Health
+  offline: true
+  data_dir: data
+  cache_dir: data/cache
+  database_path: data/cache/truthguard.sqlite3
+
+retrieval:
+  initial_k: 20
+  final_k: 8
+  reformulation_count: 2
+  use_dense: true
+  embedding_model: BAAI/bge-small-en-v1.5
+
+authority_rank:
+  policy: 4
+  amendment: 3
+  notice: 3
+  circular: 2
+  manual: 1
+  faq: 0
+
+trust_weights:
+  recency: 0.25
+  authority: 0.25
+  specificity: 0.20
+  corroboration: 0.15
+  metadata_confidence: 0.15
+  resolution_gap_threshold: 0.15
+
+providers:
+  groq:
+    api_key_env: GROQ_API_KEY
+    base_url: https://api.groq.com/openai/v1
+    rpm_limit: 30
+    rpd_limit: 1000
+    models:
+      synthesizer: openai/gpt-oss-120b
+      generation: openai/gpt-oss-120b
+      fallback: openai/gpt-oss-20b
+  gemini:
+    api_key_env: GOOGLE_API_KEY
+    base_url: https://generativelanguage.googleapis.com/v1beta/openai
+    rpm_limit: 10
+    rpd_limit: 250
+    models:
+      critic: gemini-2.0-flash
+  mistral:
+    api_key_env: MISTRAL_API_KEY
+    base_url: https://api.mistral.ai/v1
+    rpm_limit: 5
+    rpd_limit: 500
+    models:
+      judge: mistral-small-latest
+      generation: mistral-small-latest
+  openrouter:
+    api_key_env: OPENROUTER_API_KEY
+    base_url: https://openrouter.ai/api/v1
+    rpm_limit: 20
+    rpd_limit: 50
+    models:
+      fallback: openrouter/auto:free
+
+role_chains:
+  synthesizer: [groq, mistral, openrouter]
+  critic: [gemini, mistral, groq, openrouter]
+  judge: [mistral, groq, openrouter]
+  generation: [groq, mistral, openrouter]
+
+evaluation:
+  max_revision_loops: 2
+  max_calls_per_question: 6
+  bootstrap_samples: 1000

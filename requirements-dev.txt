@@ -1,0 +1,2 @@
+# Test/development tools. Runtime pins live in requirements.txt.
+pytest==8.3.4
