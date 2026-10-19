@@ -24,3 +24,8 @@ models/
 .DS_Store
 .idea/
 .vscode/
+
+# Local spec files
+TRUTHGUARD_SPEC*
+*truthguard*.md
+truthguard.md
