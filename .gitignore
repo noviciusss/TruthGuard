@@ -10,11 +10,6 @@ __pycache__/
 
 # Generated/runtime data
 data/cache/
-data/corpus/*.md
-data/corpus/*.txt
-data/corpus/*.json
-data/corpus/*.jsonl
-data/benchmark/*.jsonl
 data/indices/
 reports/*.png
 reports/*.html

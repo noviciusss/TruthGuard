@@ -13,7 +13,7 @@
 
 ## Current status
 
-- Phase: 1 — schemas and provider router
+- Phase: 2 — synthetic corpus
 - Status: complete
 - Last updated: 2026-10-19
 
@@ -59,8 +59,8 @@
 
 ### Next step
 
-Build the synthetic Aurelia Health fact sheet and deterministic corpus
-generator, then run the corpus validation gate.
+Implement metadata parsing, section-aware chunking, hybrid retrieval, and the
+supersession graph over the generated corpus.
 
 ## Phase 1 — Schemas and provider router
 
@@ -109,6 +109,70 @@ generator, then run the corpus validation gate.
 - No input is needed for the next phase.
 - A Groq API key will be requested before the first live corpus-generation
   smoke test.
+
+## Phase 2 — Synthetic factsheet and corpus generator
+
+### Completed
+
+- Added the hand-written Aurelia Health ground-truth factsheet with 14
+  versioned facts, dates, scopes, and source notes.
+- Added a deterministic 35-document generator covering policies, amendments,
+  circulars, FAQs, manuals, and notices.
+- Added deliberate T0–T7 manifest entries, including temporal,
+  scope, numeric, definitional, implicit, unresolvable, control, and
+  unanswerable cases.
+- Added deterministic metadata corruption to 14/35 documents (40%), while
+  retaining the expected metadata in the manifest for later inference tests.
+- Generated and committed the corpus documents and `corpus_manifest.json`.
+- Added fact-use validation so each fact is represented between two and five
+  times.
+- Added reproducibility and content tests.
+
+### Review sample
+
+The generated sample requested by the specification is available at:
+
+- `data/corpus/POL-2024-V1.md` — stale 30-day wording with missing header
+  effective date.
+- `data/corpus/AMD-2025-03.md` — 45-day amendment to Section 4.1.
+- `data/corpus/CIR-2025-08-A.md` and `CIR-2025-08-B.md` — same-date,
+  same-authority 500000 versus 600000 annual limits for T6 abstention.
+- `data/corpus/corpus_manifest.json` — gold conflict manifest and metadata
+  corruption statistics.
+
+### Files changed
+
+- `data/factsheet/aurelia_facts.yaml`
+- `bench/generate_corpus.py`
+- `data/corpus/*.md`
+- `data/corpus/corpus_manifest.json`
+- `tests/test_corpus.py`
+
+### Tests run
+
+| Command | Result |
+|---|---|
+| `make test` | Passed: 13 tests |
+| `PYTHONPATH=src .venv/bin/python -m bench.generate_corpus` | Passed: 35 documents, 40% metadata corruption |
+| `make compile` | Passed |
+| `git diff --check` | Passed |
+
+### Problems and deviations
+
+- The corpus is currently template-generated and deterministic. The required
+  second-LLM audit is explicitly recorded as pending and will be added after
+  the benchmark/evaluation path can consume it without spending calls during
+  local tests.
+- YAML date scalars are normalized during loading because PyYAML parses ISO
+  dates as `date` objects.
+- The generated corpus is synthetic and contains no private or real health
+  information.
+
+### Required input
+
+- No input is needed to implement ingestion and graph logic.
+- Before the first live corpus audit, I will ask for a filled `GROQ_API_KEY`
+  in your local `.env` and confirm the provider's current free-tier limits.
 
 ## Open issues
 

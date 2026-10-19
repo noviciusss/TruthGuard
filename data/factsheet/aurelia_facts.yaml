@@ -1,0 +1,139 @@
+# Hand-written ground truth for the synthetic Aurelia Health corpus.
+# Values are intentionally versioned so generated conflicts have known labels.
+domain: Aurelia Health
+facts:
+  - fact_id: waiting_period
+    topic: hospitalization waiting period
+    scope: standard plan, non-accidental hospitalization
+    versions:
+      - effective_date: 2024-01-01
+        value: 30 days
+        source_note: Original policy wording
+      - effective_date: 2025-03-01
+        value: 45 days
+        source_note: Amendment AMD-2025-03
+
+  - fact_id: copay
+    topic: co-payment
+    scope: plan and age dependent
+    versions:
+      - effective_date: 2024-01-01
+        value: 10% for standard plan members
+        source_note: Policy schedule
+      - effective_date: 2024-01-01
+        value: 20% for members aged 60 and above
+        source_note: Senior member schedule
+
+  - fact_id: claim_deadline
+    topic: claim submission deadline
+    scope: reimbursement claims
+    versions:
+      - effective_date: 2024-01-01
+        value: 30 days after discharge
+        source_note: Original claim process
+      - effective_date: 2025-04-15
+        value: 60 days after discharge
+        source_note: Amendment AMD-2025-04
+
+  - fact_id: pre_existing_lookback
+    topic: pre-existing condition lookback
+    scope: conditions diagnosed or treated before policy start
+    versions:
+      - effective_date: 2024-01-01
+        value: 36 months
+        source_note: Original definition
+      - effective_date: 2025-05-01
+        value: 48 months
+        source_note: Amendment AMD-2025-05
+
+  - fact_id: preauthorization
+    topic: pre-authorization
+    scope: planned and emergency admissions
+    versions:
+      - effective_date: 2024-01-01
+        value: All planned admissions require pre-authorization
+        source_note: Policy rule
+      - effective_date: 2025-06-01
+        value: Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours
+        source_note: Emergency circular exception
+
+  - fact_id: room_rent
+    topic: room rent sub-limit
+    scope: plan tier
+    versions:
+      - effective_date: 2024-01-01
+        value: 1% of sum insured per day for standard plan
+        source_note: Standard plan schedule
+      - effective_date: 2024-01-01
+        value: 2% of sum insured per day for premium plan
+        source_note: Premium plan schedule
+
+  - fact_id: renewal_grace
+    topic: renewal grace period
+    scope: all active plans
+    versions:
+      - effective_date: 2024-01-01
+        value: 30 days after renewal due date
+        source_note: Renewal policy
+
+  - fact_id: grievance_timeline
+    topic: grievance response timeline
+    scope: member grievances
+    versions:
+      - effective_date: 2024-01-01
+        value: Acknowledgement within 3 business days and resolution within 30 days
+        source_note: Grievance standard
+
+  - fact_id: network_cashless
+    topic: network hospital cashless eligibility
+    scope: planned treatment at an Aurelia network hospital
+    versions:
+      - effective_date: 2024-01-01
+        value: Cashless treatment is available when the hospital is in the active Aurelia network and approval is obtained
+        source_note: Network policy
+
+  - fact_id: ambulance_limit
+    topic: road ambulance benefit
+    scope: covered hospitalization
+    versions:
+      - effective_date: 2024-01-01
+        value: Up to 10000 currency units per hospitalization
+        source_note: Benefit schedule
+
+  - fact_id: annual_limit
+    topic: annual hospitalization limit
+    scope: Aurelia Standard plan
+    versions:
+      - effective_date: 2025-08-01
+        value: 500000 currency units per policy year
+        source_note: Circular AH/2025/08-A
+      - effective_date: 2025-08-01
+        value: 600000 currency units per policy year
+        source_note: Circular AH/2025/08-B; same date and authority creates T6
+
+  - fact_id: telemedicine
+    topic: telemedicine consultation benefit
+    scope: active members
+    versions:
+      - effective_date: 2025-01-01
+        value: Four telemedicine consultations per policy year
+        source_note: Digital care notice
+
+  - fact_id: maternity
+    topic: maternity waiting period
+    scope: maternity benefit on eligible plans
+    versions:
+      - effective_date: 2024-01-01
+        value: 24 months
+        source_note: Maternity schedule
+      - effective_date: 2025-01-01
+        value: 18 months for Premium plan
+        source_note: Premium plan amendment
+
+  - fact_id: exclusions
+    topic: excluded cosmetic treatment
+    scope: treatment primarily for cosmetic enhancement
+    versions:
+      - effective_date: 2024-01-01
+        value: Cosmetic treatment is excluded unless medically necessary after an accident
+        source_note: Exclusions section
