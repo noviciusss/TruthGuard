@@ -140,9 +140,15 @@ class CriticAgent:
         assert self.router is not None
         passages = self._passage_annotations(context, self.graph, as_of)
         prompt = (
-            'Return only JSON matching the CriticClaimsResponse schema. Perform atomic claim decomposition and '
-            'verify every claim against ALL supplied passages, not only cited passages. Verdict must be supported, '
-            'contradicted, or unsupported. Evidence references must use exact chunk_id values.\n\n'
+            'Return ONLY one JSON object with exactly this top-level shape: '
+            '{"claims":[{"claim_id":"claim-1","text":"...","verdict":"supported|contradicted|unsupported",'
+            '"supporting_evidence":[{"chunk_id":"EXACT_CHUNK_ID","rationale":"..."}],'
+            '"contradicting_evidence":[],"rationale":"..."}]}. '
+            'Use exactly these keys: claims, claim_id, text, verdict, supporting_evidence, '
+            'contradicting_evidence, rationale. Do not use wrapper keys or alternate names such as '
+            'raw_claims, evaluated_claims, claim, claim_text, evidence, or support. Do not return markdown. '
+            'Perform atomic claim decomposition and verify every claim against ALL supplied passages, not only cited '
+            'passages. Evidence references must use exact chunk_id values.\n\n'
             f"QUESTION:\n{context.question}\n\nDRAFT:\n{draft_text}\n\nALL PASSAGES:\n{self._passage_text(passages)}"
         )
         response, _ = self.router.complete_json(
@@ -177,11 +183,16 @@ class CriticAgent:
             f"TOPIC={topic}\n{self._passage_text(items)}" for topic, items in clusters.items()
         )
         prompt = (
-            'Return only JSON matching the CriticConflictResponse schema. Compare passages pairwise within each '
-            'topic cluster. Detect genuine contradictions, including implicit contradictions. Use the supplied graph '
-            'and metadata annotations for staleness and supersession; do not invent dates or authority. Assign only '
-            'T1, T2, T3, T4, T5, or T6. Each conflict must include at least two document positions, represented '
-            'by exact chunk_id evidence references.\n\n'
+            'Return ONLY one JSON object with exactly this top-level shape: '
+            '{"conflicts":[{"conflict_id":"t1-example","type":"T1|T2|T3|T4|T5|T6",'
+            '"position_evidence":{"DOC-ID":[{"chunk_id":"EXACT_CHUNK_ID","rationale":"..."}]},'
+            '"rationale":"...","confidence":0.0}]}. Use exactly these keys: conflicts, conflict_id, type, '
+            'position_evidence, rationale, confidence. Do not use wrapper keys or alternate names such as '
+            'findings, positions, evidence, conflict_type, or score. Do not return markdown. Compare passages '
+            'pairwise within each topic cluster. Detect genuine contradictions, including implicit contradictions. '
+            'Use the supplied graph and metadata annotations for staleness and supersession; do not invent dates or '
+            'authority. Assign only T1, T2, T3, T4, T5, or T6. Each conflict must include at least two document '
+            'positions, represented by exact chunk_id evidence references.\n\n'
             f"QUESTION:\n{context.question}\n\nCLUSTERED PASSAGES:\n{cluster_text}"
         )
         response, _ = self.router.complete_json(
@@ -225,9 +236,12 @@ class CriticAgent:
             return [], []
         assert self.router is not None
         prompt = (
-            'Return only JSON matching the CriticSelfReviewResponse schema. Attack each proposed conflict. Drop '
-            'false positives caused by different scopes, unrelated topics, or a valid supersession relationship. '
-            'Keep only conflict IDs that are genuine after reviewing the evidence.\n\n'
+            'Return ONLY one JSON object with exactly this top-level shape: '
+            '{"keep_conflict_ids":["t1-example"],"dropped_conflict_ids":[],"changes":[]}. '
+            'Use exactly these keys: keep_conflict_ids, dropped_conflict_ids, changes. Do not use wrapper keys or '
+            'alternate names such as conflicts, kept, dropped, review, or notes. Do not return markdown. Attack each '
+            'proposed conflict. Drop false positives caused by different scopes, unrelated topics, or a valid '
+            'supersession relationship. Keep only conflict IDs that are genuine after reviewing the evidence.\n\n'
             f"QUESTION:\n{context.question}\n\nPROPOSED CONFLICTS:\n"
             + "\n".join(conflict.model_dump_json() for conflict in conflicts)
         )

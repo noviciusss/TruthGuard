@@ -565,13 +565,25 @@ basic implementation blocker; it is evidence/completeness work:
 | Check | Result |
 |---|---|
 | `make test` | Passed: 39 tests |
+| `make compile` | Passed |
 | LLM critic mocked three-call flow | Passed: mode=llm, three calls, T1 output, trust breakdown |
 | `--no-llm-critic` mocked guard | Passed: no LLM call, deterministic mode |
-| Live Gemini/Mistral critic | Not run: `GEMINI_API_KEY` and `MISTRAL_API_KEY` are empty |
+| Five-question live smoke | Blocked: 4/5 questions completed; Gemini 503/timeouts and Mistral 429 caused fallback failures |
 
-The implementation is complete, but the requested live lineage claim is not
-yet evidenced. A Gemini key or Mistral fallback key is required before live
-critic verification and before updating the final live metrics with this mode.
+The implementation is complete and the local keys are now present, but the
+requested live lineage claim is not yet evidenced. The configured Gemini model
+was corrected from the retired `gemini-2.0-flash` to `gemini-3.8-flash`.
+The updated smoke reached Gemini successfully on some calls, but the provider
+also returned HTTP 503 high-demand responses and read timeouts. Mistral
+fallback calls returned HTTP 429 rate-limit responses. One of five questions
+therefore failed after Groq's JSON endpoint rejected the request and OpenRouter
+was unavailable. Bulk evaluation must wait for stable Gemini availability or a
+working Mistral fallback.
+
+Smoke evidence is isolated at `/tmp/omnirush/critic-smoke-v3.json` and
+`/tmp/omnirush/truthguard-critic-smoke-v3.sqlite3`; it recorded 36 calls, 19
+successful calls, 17 failed calls, and four completed questions. No live
+test-set metrics were generated from this run.
 
 ## Task 5 — Human review sheet
 

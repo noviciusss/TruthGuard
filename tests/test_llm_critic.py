@@ -84,6 +84,10 @@ def test_llm_critic_runs_three_structured_calls_and_returns_mode(tmp_path) -> No
     assert report.mode == "llm"
     assert report.llm_calls == 3
     assert len(calls) == 3
+    assert '"claims"' in calls[0]
+    assert "Do not use wrapper keys" in calls[0]
+    assert '"position_evidence"' in calls[1]
+    assert '"keep_conflict_ids"' in calls[2]
     assert report.claims[0].verdict == "supported"
     assert report.conflicts[0].type == "T1"
     assert report.conflicts[0].winner_doc_id == "DOC-NEW"
