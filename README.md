@@ -15,6 +15,10 @@ The repository is being built phase by phase. The current progress, checks,
 deviations, and required inputs are tracked in
 [`reports/progress.md`](reports/progress.md).
 
+For a plain-language explanation of the architecture, scripts, run commands,
+remaining work, and required owner inputs, see
+[`docs/PROJECT_GUIDE.md`](docs/PROJECT_GUIDE.md).
+
 ## Requirements
 
 - Python 3.11.2

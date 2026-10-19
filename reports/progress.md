@@ -13,8 +13,8 @@
 
 ## Current status
 
-- Phase: 8 — live execution and final verification
-- Status: partially complete; live provider daily quota exhausted
+- Phase: 9 — project guide and UI usability pass
+- Status: complete; local UI and API verified
 - Last updated: 2026-10-19
 
 ## Phase 0 — Foundation
@@ -499,6 +499,48 @@ exercise the deterministic fallback and are not live model results:
 - If final architecture compliance is required, provide a Gemini key so the
   live critic lineage can be exercised after the test quota issue is resolved.
 - Docker verification still requires you to run the Docker commands locally.
+
+## Phase 9 — project guide and UI usability pass
+
+### Completed
+
+- Added `docs/PROJECT_GUIDE.md`, a plain-language explanation of the completed
+  system, important files, scripts, commands, evidence, remaining work, and
+  required owner inputs.
+- Added a README link to the project guide.
+- Improved the Streamlit UI with a styled hero header, sidebar control panel,
+  status/claim/conflict/citation cards, clearer answer heading, and benchmark
+  tab loading from the actual `reports/results.md` file.
+- Kept the existing compare mode, claim evidence, trust breakdown, graph,
+  citations, and trace behavior.
+
+### Required input / next action
+
+- Open the running UI at `http://127.0.0.1:8501` and test the six example
+  questions.
+- If you want public deployment, choose the target platform after reviewing
+  the local UI.
+
+### UI and API verification
+
+| Check | Result |
+|---|---|
+| `http://127.0.0.1:8501/` | Passed: HTTP 200, Streamlit page served |
+| `http://127.0.0.1:8501/_stcore/health` | Passed: `200 ok` |
+| `http://127.0.0.1:8000/docs` | Passed: HTTP 200 |
+| Offline T6 API query | Passed: `abstained`, conflict `T6` |
+
+### Final review summary
+
+The local product is ready for demonstration. The remaining work is not a
+basic implementation blocker; it is evidence/completeness work:
+
+1. Hand-review 30 benchmark questions.
+2. Run the second-LLM corpus audit.
+3. Add Gemini/Mistral/OpenRouter keys if live lineage-separated critic or live
+   baseline evidence is needed.
+4. Run Docker verification on the user's machine.
+5. Decide whether the optional pitch/video phase is needed.
 
 ## Optional Phase 7 — pitch and video materials
 

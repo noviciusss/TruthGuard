@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import html
 import re
 from datetime import date
@@ -33,7 +32,55 @@ def _status_color(status: str) -> str:
     }.get(status, "#6c757d")
 
 
+def _inject_styles(st) -> None:
+    st.markdown(
+        """
+        <style>
+        .tg-hero {
+            padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #102a43 0%, #1f4e79 55%, #2f80ed 100%);
+            color: white;
+            margin-bottom: 1rem;
+        }
+        .tg-hero h1 { margin: 0; font-size: 2.1rem; }
+        .tg-hero p { margin: .35rem 0 0; color: #d9eaf7; }
+        .tg-card {
+            border: 1px solid #d9e2ec;
+            border-radius: .75rem;
+            padding: .75rem 1rem;
+            background: #f7fafc;
+            min-height: 5rem;
+        }
+        .tg-card-label { color: #627d98; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+        .tg-card-value { color: #102a43; font-size: 1.35rem; font-weight: 700; margin-top: .25rem; }
+        mark { background: #fff3bf; color: #102a43; border-radius: .2rem; padding: 0 .15rem; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _render_metric_cards(st, answer) -> None:
+    cards = [
+        ("Status", answer.status.replace("_", " ").title()),
+        ("Claims checked", str(len(answer.claims))),
+        ("Conflicts", str(len(answer.conflicts))),
+        ("Citations", str(len(answer.citations))),
+    ]
+    columns = st.columns(len(cards))
+    for column, (label, value) in zip(columns, cards):
+        with column:
+            st.markdown(
+                f"<div class='tg-card'><div class='tg-card-label'>{label}</div>"
+                f"<div class='tg-card-value'>{value}</div></div>",
+                unsafe_allow_html=True,
+            )
+
+
 def _render_answer(st, answer, pipeline: TruthGuardPipeline | None = None) -> None:
+    _render_metric_cards(st, answer)
+    st.markdown("### Answer")
     color = _status_color(answer.status)
     st.markdown(
         f"<div style='background:{color};color:white;padding:0.6rem;border-radius:0.35rem'>"
@@ -94,20 +141,38 @@ def _render_supersession_graph(st, answer, pipeline: TruthGuardPipeline) -> None
 
 
 def _render_benchmark(st) -> None:
-    results_path = ROOT / "reports/results.json"
+    results_path = ROOT / "reports/results.md"
     if not results_path.exists():
         st.info("Run the benchmark evaluation before opening this tab.")
         return
-    st.json(json.loads(results_path.read_text(encoding="utf-8")))
+    st.markdown(results_path.read_text(encoding="utf-8"))
 
 
 def main() -> None:
     import streamlit as st
 
     st.set_page_config(page_title="TruthGuard", page_icon="🛡️", layout="wide")
-    st.title("🛡️ TruthGuard")
-    st.caption("Adversarial verification for inconsistent document Q&A")
+    _inject_styles(st)
+    st.markdown(
+        "<div class='tg-hero'><h1>🛡️ TruthGuard</h1>"
+        "<p>Adversarial verification for inconsistent document Q&amp;A — expose conflict, preserve provenance, abstain safely.</p></div>",
+        unsafe_allow_html=True,
+    )
     pipeline: TruthGuardPipeline = build_default_pipeline()
+
+    with st.sidebar:
+        st.header("Control panel")
+        st.success("Offline demo ready")
+        st.caption("The current UI uses the local synthetic Aurelia Health corpus.")
+        st.divider()
+        st.subheader("What to inspect")
+        st.markdown(
+            "- **Ask**: run a question through TruthGuard.\n"
+            "- **Compare**: see naive RAG beside TruthGuard.\n"
+            "- **Benchmark**: read the recorded results."
+        )
+        st.divider()
+        st.caption("Tip: start with T1 or T6 to see resolution versus abstention.")
 
     ask_tab, compare_tab, benchmark_tab = st.tabs(["Ask", "Compare mode", "Benchmark"])
     with ask_tab:
