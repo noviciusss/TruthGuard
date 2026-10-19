@@ -13,7 +13,7 @@
 
 ## Current status
 
-- Phase: 5 — pipeline and evaluation foundations
+- Phase: 6 — API, Streamlit UI, and documentation
 - Status: complete
 - Last updated: 2026-10-19
 
@@ -318,9 +318,84 @@ The generated sample requested by the specification is available at:
   Google AI Studio and Mistral keys; otherwise their configured fallbacks will
   remain unavailable and the run will stop clearly when all budgets are gone.
 
+## Phase 6 — API, Streamlit UI, and documentation
+
+### Completed
+
+- Added FastAPI `/health` and `/query` endpoints with request validation and
+  typed `FinalAnswer` responses.
+- Added Streamlit Ask screen with taxonomy examples, optional as-of date,
+  status badge, highlighted inline provenance, claim verdicts, conflict
+  positions, trust-score breakdowns, citations, and agent trace.
+- Added compare mode for B0 Naive RAG versus TruthGuard.
+- Added supersession graph rendering with involved-document highlighting and
+  effective-date labels when `pyvis` is available.
+- Added benchmark tab and local run commands to the README and Makefile.
+- Added `requirements.lock` and kept provider credentials in `.env.example`
+  only.
+
+### Tests run
+
+| Command | Result |
+|---|---|
+| `make test` | Passed: 36 tests; one existing Starlette deprecation warning |
+| `make compile` | Passed |
+| `make smoke` | Passed |
+| FastAPI TestClient health/query smoke | Passed |
+| Streamlit server health smoke on `http://127.0.0.1:8502/_stcore/health` | Passed: `200 ok` |
+| `git diff --check` | Passed |
+
+### Problems and deviations
+
+- Docker is still unverified because Docker is unavailable in this execution
+  environment. The user should run the documented build when requested.
+- Live provider evaluation and the second-LLM corpus audit remain pending;
+  current tests intentionally stay offline.
+- The benchmark tab displays generated result JSON when available; final
+  polished result tables/charts and the optional pitch/video materials are
+  deferred to the final optional phase.
+
+### Required input
+
+- Before live evaluation: fill `GROQ_API_KEY` in `.env` and tell me when it is
+  ready. I will first run a tiny cached smoke request and check current free
+  limits before any bulk job.
+- If you want Docker verification now, run the Docker commands from the README
+  and share the output if anything fails.
+
+## Final local verification
+
+### Checks run
+
+| Command | Result |
+|---|---|
+| `PYTHONPATH=src .venv/bin/python -m bench.run_eval --questions data/benchmark/questions.jsonl --output /tmp/omnirush/truthguard-offline-smoke.jsonl --system truthguard --split dev --limit 5` | Passed: 5 records |
+| Same resumable command a second time | Passed: 0 duplicate records |
+| Offline dev evaluation, 40 questions | Passed: 40 records |
+
+The 40-question offline development smoke produced provisional framework
+metrics: answer accuracy 0.85, conflict F1 0.8923, type accuracy 0.725,
+resolution-mode accuracy 0.825, provenance correctness 1.0, blended-answer
+rate 0.0, and abstention recall 1.0. These are deterministic local smoke
+numbers, not the required final test-set results and must not be presented as
+the competition result.
+
+## Optional Phase 7 — pitch and video materials
+
+Not started, per the user's request to keep this optional and last. If needed,
+this phase will add only:
+
+- Five-minute pitch script using the required vocabulary.
+- Six-question demo script.
+- Results-table narrative and honest limitations.
+- Demo-video recording checklist and backup commands.
+
+No new product features will be added in this optional phase.
+
 ## Open issues
 
 - Confirm exact free-tier limits in the provider consoles before bulk runs.
 - Decide whether to verify Docker locally when the application image is ready.
 - Hand verification of 30 benchmark questions will be requested after the
   benchmark is generated.
+- Final live test-set metrics and LLM corpus audit are not yet available.

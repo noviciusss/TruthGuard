@@ -56,8 +56,25 @@ as their phases are implemented.
 
 ## Local run
 
-The API and Streamlit commands will be documented here as they become
-available. The optional Docker run will use the same local configuration:
+Start the API:
+
+```bash
+make api
+# http://127.0.0.1:8000/docs
+```
+
+Start the Streamlit demo in another terminal:
+
+```bash
+make ui
+# http://127.0.0.1:8501
+```
+
+The UI includes Ask, compare mode, claim verification, conflict positions,
+trust breakdowns, citations, and agent trace. It runs in offline mode unless
+you explicitly change `TRUTHGUARD_OFFLINE` and provide provider credentials.
+
+The optional Docker run uses the same local configuration:
 
 ```bash
 docker build -t truthguard .

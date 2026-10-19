@@ -1,13 +1,15 @@
 PYTHON ?= .venv/bin/python
 export PYTHONPATH := src
 
-.PHONY: help install test compile smoke
+.PHONY: help install test compile smoke api ui
 
 help:
 	@printf '%s\n' 'make install  Create the local virtualenv and install pinned dependencies' \
 		'make test     Run the offline test suite' \
 		'make compile  Compile-check Python sources' \
-		'make smoke    Run the configuration smoke check'
+		'make smoke    Run the configuration smoke check' \
+		'make api      Start the FastAPI server' \
+		'make ui       Start the Streamlit demo'
 
 install:
 	python3 -m venv .venv
@@ -25,3 +27,11 @@ compile:
 smoke:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
 	$(PYTHON) -m truthguard.config
+
+api:
+	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
+	$(PYTHON) -m uvicorn truthguard.api:app --host 127.0.0.1 --port 8000
+
+ui:
+	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
+	$(PYTHON) -m streamlit run app/streamlit_app.py --server.address=127.0.0.1 --server.port=8501
