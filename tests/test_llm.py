@@ -5,7 +5,7 @@ from copy import deepcopy
 from pydantic import BaseModel
 
 from truthguard.config import load_config
-from truthguard.llm import LLMRouter
+from truthguard.llm import LLMRouter, ProviderError
 
 
 class TinyPayload(BaseModel):
@@ -86,3 +86,26 @@ def test_router_repairs_one_invalid_live_response(tmp_path) -> None:
     assert result.answer == "repaired"
     assert metadata.repaired is True
     assert len(router.call_records()) == 2
+
+
+def test_router_retries_provider_rate_limit(tmp_path) -> None:
+    config = deepcopy(load_config())
+    config["project"]["offline"] = False
+    config["role_chains"]["synthesizer"] = ["groq"]
+    router = LLMRouter(config, database_path=tmp_path / "router.sqlite3")
+    attempts = {"count": 0}
+
+    def invoke(provider, model, messages, params):
+        attempts["count"] += 1
+        if attempts["count"] == 1:
+            raise ProviderError("rate limited", retry_after=0.001)
+        return {"choices": [{"message": {"content": '{"answer":"after retry"}'}}]}
+
+    router._invoke = invoke
+    result, _ = router.complete_json(
+        "synthesizer",
+        [{"role": "user", "content": "answer"}],
+        TinyPayload,
+    )
+    assert result.answer == "after retry"
+    assert attempts["count"] == 2

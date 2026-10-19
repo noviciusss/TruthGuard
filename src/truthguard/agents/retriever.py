@@ -58,7 +58,14 @@ class RetrieverAgent:
         response, _ = self.router.complete_json(
             "generation",
             [
-                {"role": "system", "content": "Return at most two short search reformulations as JSON."},
+                {
+                    "role": "system",
+                    "content": (
+                        'Return ONLY one JSON object with exactly this shape: '
+                        '{"queries":["short query 1","short query 2"]}. '
+                        "The queries value must be an array of at most two strings."
+                    ),
+                },
                 {"role": "user", "content": question},
             ],
             ReformulationResponse,

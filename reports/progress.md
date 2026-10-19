@@ -13,8 +13,8 @@
 
 ## Current status
 
-- Phase: 6 — API, Streamlit UI, and documentation
-- Status: complete
+- Phase: 8 — live execution and final verification
+- Status: partially complete; live provider daily quota exhausted
 - Last updated: 2026-10-19
 
 ## Phase 0 — Foundation
@@ -379,6 +379,107 @@ resolution-mode accuracy 0.825, provenance correctness 1.0, blended-answer
 rate 0.0, and abstention recall 1.0. These are deterministic local smoke
 numbers, not the required final test-set results and must not be presented as
 the competition result.
+
+## Phase 8 — Live execution after credentials were supplied
+
+### Completed
+
+- Confirmed `.env` exists without printing its values; `GROQ_API_KEY` is set.
+- Added automatic local `.env` loading with CRLF normalization. This fixed the
+  Windows-created `.env` path issue (`config.yaml\r`).
+- Ran a live Groq structured-output smoke request successfully with provider
+  `groq` and model `openai/gpt-oss-120b`.
+- Ran a live end-to-end T1 pipeline successfully. It returned `resolved`, a
+  T1 supersession conflict, citations, trust breakdown, and a four-step trace.
+- Verified the FastAPI server in-process over HTTP: `/health` returned 200 and
+  `/query` returned a resolved T1 answer.
+- Verified Streamlit startup health at `http://127.0.0.1:8502/_stcore/health`
+  with `200 ok` after the app finished indexing its corpus.
+- Added provider 429 retry/backoff and RPM-window waiting.
+- Added daily provider-budget hard stop so TPD exhaustion does not cause long
+  repeated waits.
+- Fixed resumable evaluation so failed/rate-limited records are retried rather
+  than treated as completed.
+- Completed all 40 live dev questions after retrying rate-limited records.
+- Collected 88 successful live test answers before the Groq daily token budget
+  was exhausted. The test run remains resumable in the ignored local file
+  `reports/live_eval_test.jsonl`.
+
+### Live checks run
+
+| Check | Result |
+|---|---|
+| `.env` presence/key-name check | Passed: key present; secret value not displayed |
+| Correct-schema Groq smoke | Passed: Groq `openai/gpt-oss-120b` |
+| Live T1 pipeline | Passed: resolved T1 with trace/citations |
+| Live dev evaluation | Passed: 40/40 successful answers |
+| Live test evaluation | Partial: 88 successful answers; 52 remain pending after daily TPD exhaustion |
+| Offline full TruthGuard test split | Passed: 140/140 |
+| Offline B0/B1/B2 full test split | Passed: 140/140 each |
+| Final offline test suite | Passed: 37 tests |
+| FastAPI in-process HTTP smoke | Passed: health 200; query 200 resolved T1 |
+| Streamlit final health smoke | Passed: `200 ok` |
+| `docker --version` | Not available in this environment |
+
+### Live dev metrics
+
+Computed from all 40 live dev answers with 95% bootstrap intervals:
+
+- Answer accuracy: `0.85` (`0.725–0.95`)
+- Conflict detection F1: `0.8923`
+- Conflict type accuracy: `0.725` (`0.575–0.85`)
+- Resolution-mode accuracy: `0.825` (`0.70–0.925`)
+- Provenance correctness: `1.0`
+- Unsupported-claim rate: `0.3271`
+- Blended-answer rate: `0.0`
+- Abstention recall: `1.0`
+- False-conflict rate: `0.025`
+
+These are live development metrics, not final test-set claims.
+
+### Offline full test comparison
+
+The complete 140-question offline run completed for every system. These values
+exercise the deterministic fallback and are not live model results:
+
+| System | Answer accuracy | Conflict F1 | Type accuracy | Mode accuracy |
+|---|---:|---:|---:|---:|
+| B0 Naive RAG | 0.7429 | 0.0000 | 0.0000 | 0.1286 |
+| B1 Recency RAG | 0.7429 | 0.0000 | 0.0000 | 0.1286 |
+| B2 Self-consistency | 0.7429 | 0.0000 | 0.0000 | 0.1286 |
+| TruthGuard | 0.8286 | 0.8374 | 0.6071 | 0.7643 |
+
+### Problems and deviations
+
+- Groq reported: `tokens per day (TPD): Limit 200000`, with approximately
+  `199000+` tokens used. The remaining 52 live test questions cannot be
+  honestly marked complete until the quota resets or another provider key is
+  configured.
+- Groq also exposed an 8,000-token/minute model limit. The router now waits
+  and retries bounded 429 responses.
+- Only Groq is configured. Gemini, Mistral, and OpenRouter fallbacks are
+  unavailable, so they could not absorb the daily limit.
+- The live critic remains deterministic in the current implementation; the
+  second-model critic lineage is not yet exercised live.
+- Core tests, API, and UI work offline. The optional ML retrieval stack
+  (`sentence-transformers`, BGE, FAISS, CPU Torch) is separated in
+  `requirements-ml.txt` and was not installed because its large dependency
+  transaction exceeded the sandbox install timeout.
+- `make install` was retried after separating ML and orchestration dependencies;
+  the environment's `/mnt/d` filesystem still timed out while installing the
+  remaining Streamlit/Pandas transaction. The already-installed environment
+  passes all checks; clean-machine installation should be verified on the
+  user's Linux/Docker host.
+- Docker remains unverified because Docker is not installed in this
+  environment.
+
+### Required input / next action
+
+- Either wait for the Groq daily token quota to reset and tell me to resume the
+  test run, or provide a Mistral/OpenRouter key for fallback evaluation.
+- If final architecture compliance is required, provide a Gemini key so the
+  live critic lineage can be exercised after the test quota issue is resolved.
+- Docker verification still requires you to run the Docker commands locally.
 
 ## Optional Phase 7 — pitch and video materials
 

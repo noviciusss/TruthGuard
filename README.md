@@ -30,6 +30,26 @@ cp .env.example .env
 make install
 ```
 
+Keep `TRUTHGUARD_OFFLINE=true` for local tests. Set
+`TRUTHGUARD_OFFLINE=false` only for live Groq generation/evaluation. The
+loader reads the project-local `.env` automatically, including files created
+on Windows with CRLF line endings.
+
+The core install intentionally stays light and uses a deterministic dense
+embedding fallback. To install the optional CPU-only BGE/FAISS retrieval stack
+(which downloads a large Torch wheel), run:
+
+```bash
+make install-ml
+```
+
+The application uses a tested manual state-machine fallback by default. To
+install and exercise the optional LangGraph adapter, run:
+
+```bash
+make install-orchestration
+```
+
 Groq is the primary provider for synthesis and bulk generation. Gemini,
 Mistral, and OpenRouter are configured as lineage-separated roles or fallbacks
 to respect the specification and reduce the chance that one free-tier limit

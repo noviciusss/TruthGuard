@@ -33,14 +33,26 @@ class SynthesizerAgent:
                 [
                     {
                         "role": "system",
-                        "content": "Answer only from the supplied passages. Keep conflicting positions visible and cite chunk IDs inline.",
+                        "content": (
+                            "Answer only from the supplied passages. Keep conflicting positions visible and cite "
+                            "chunk IDs inline. Return a JSON object with exactly answer_text (string) and "
+                            "citations (array)."
+                        ),
                     },
                     {"role": "user", "content": f"Question: {question}\n\nPassages:\n{source_text}"},
                 ],
                 DraftAnswer,
                 stage="synthesis",
             )
-            return response
+            known_spans = {result.chunk.chunk_id: result.chunk for result in context.results}
+            citations: list[Span] = []
+            for citation in response.citations:
+                if isinstance(citation, Span):
+                    citations.append(citation)
+                elif citation in known_spans:
+                    chunk = known_spans[citation]
+                    citations.append(Span(chunk_id=chunk.chunk_id, char_start=chunk.char_start, char_end=chunk.char_end))
+            return DraftAnswer(answer_text=response.answer_text, citations=citations)
 
         if not context.results:
             return DraftAnswer(answer_text="I could not find a relevant passage in the corpus.", citations=[])

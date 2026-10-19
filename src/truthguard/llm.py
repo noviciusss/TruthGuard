@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import time
 from collections.abc import Callable, Sequence
@@ -30,6 +31,10 @@ Transport = Callable[[str, str, dict[str, str], dict[str, Any]], dict[str, Any]]
 
 class ProviderError(RuntimeError):
     """A provider could not complete one request."""
+
+    def __init__(self, message: str, *, retry_after: float | None = None) -> None:
+        super().__init__(message)
+        self.retry_after = retry_after
 
 
 class BudgetExceeded(ProviderError):
@@ -237,6 +242,18 @@ class LLMRouter:
         if status.get("daily_limit", 0) and status["requests_today"] >= status["daily_limit"]:
             raise BudgetExceeded(f"{provider} daily request limit reached")
 
+    def _wait_for_budget(self, provider: str) -> None:
+        """Wait for a configured RPM window; fail immediately on daily exhaustion."""
+
+        while True:
+            status = self.budget_status().get(provider, {})
+            if status.get("daily_limit", 0) and status["requests_today"] >= status["daily_limit"]:
+                raise BudgetExceeded(f"{provider} daily request limit reached")
+            if not status.get("rpm_limit", 0) or status["requests_this_minute"] < status["rpm_limit"]:
+                return
+            wait_seconds = max(1.0, 60.0 - (time.time() % 60.0) + 0.1)
+            time.sleep(wait_seconds)
+
     def _provider_model(self, provider: str, role: str) -> str:
         settings = self.config.get("providers", {}).get(provider, {})
         models = settings.get("models", {})
@@ -277,8 +294,44 @@ class LLMRouter:
         else:
             with httpx.Client(timeout=90.0) as client:
                 response = client.post(settings["base_url"] + "/chat/completions", headers=headers, json=payload)
-        response.raise_for_status()
+        if response.is_error:
+            detail = response.text[:1000].replace("\n", " ")
+            retry_after: float | None = None
+            if response.status_code == 429:
+                if re.search(r"tokens? per day|requests? per day", detail, flags=re.IGNORECASE):
+                    raise BudgetExceeded(f"{provider} daily provider budget exhausted: {detail}")
+                header_value = response.headers.get("retry-after")
+                match = re.search(r"try again in ([0-9.]+)s", detail, flags=re.IGNORECASE)
+                try:
+                    retry_after = float(header_value) if header_value else (float(match.group(1)) if match else 5.0)
+                except ValueError:
+                    retry_after = 5.0
+            raise ProviderError(
+                f"{provider} HTTP {response.status_code}: {detail}",
+                retry_after=retry_after,
+            )
         return response.json()
+
+    def _invoke_with_retry(
+        self,
+        provider: str,
+        model: str,
+        messages: Sequence[dict[str, str]],
+        params: dict[str, Any],
+        *,
+        attempts: int = 3,
+    ) -> dict[str, Any]:
+        """Retry provider 429s with bounded exponential/backoff waiting."""
+
+        for attempt in range(attempts):
+            try:
+                return self._invoke(provider, model, messages, params)
+            except ProviderError as exc:
+                if exc.retry_after is None or attempt == attempts - 1:
+                    raise
+                delay = min(max(exc.retry_after, 0.5) * (2**attempt), 60.0)
+                time.sleep(delay)
+        raise AssertionError("unreachable")
 
     @staticmethod
     def _content_from_response(response: dict[str, Any]) -> Any:
@@ -356,7 +409,7 @@ class LLMRouter:
                 continue
             if not offline:
                 try:
-                    self._check_budget(provider)
+                    self._wait_for_budget(provider)
                 except BudgetExceeded as exc:
                     errors.append(str(exc))
                     continue
@@ -367,7 +420,7 @@ class LLMRouter:
             started = time.perf_counter()
             repaired = False
             try:
-                raw = offline_payload if offline else self._invoke(provider, model, messages, params)
+                raw = offline_payload if offline else self._invoke_with_retry(provider, model, messages, params)
                 payload = self._content_from_response(raw)
                 try:
                     parsed = response_model.model_validate(payload)
@@ -392,8 +445,8 @@ class LLMRouter:
                             "content": "Repair the previous response. Return only valid JSON matching the requested schema.",
                         }
                     ]
-                    self._check_budget(provider)
-                    raw = self._invoke(provider, model, repair_messages, params)
+                    self._wait_for_budget(provider)
+                    raw = self._invoke_with_retry(provider, model, repair_messages, params)
                     payload = self._content_from_response(raw)
                     parsed = response_model.model_validate(payload)
                 validated_payload = parsed.model_dump(mode="json")

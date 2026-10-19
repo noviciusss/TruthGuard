@@ -127,7 +127,7 @@ class FinalAnswer(TGModel):
 
 class DraftAnswer(TGModel):
     answer_text: str
-    citations: list[Span] = Field(default_factory=list)
+    citations: list[Span | str] = Field(default_factory=list)
 
 
 class BenchmarkQuestion(TGModel):

@@ -1,0 +1,3 @@
+# Optional LangGraph state-machine adapter. The tested manual pipeline remains
+# available so the core offline install does not require this dependency tree.
+langgraph==0.2.60

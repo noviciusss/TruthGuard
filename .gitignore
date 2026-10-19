@@ -13,6 +13,8 @@ data/cache/
 data/indices/
 reports/*.png
 reports/*.html
+reports/live_eval_*.jsonl
+reports/*_metrics.json
 
 # Local model/cache material
 .cache/

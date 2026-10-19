@@ -20,8 +20,9 @@ def test_config_path_is_inside_project() -> None:
 
 
 def test_provider_is_not_configured_without_key(monkeypatch) -> None:
-    monkeypatch.delenv("GROQ_API_KEY", raising=False)
-    assert provider_is_configured("groq") is False
+    monkeypatch.delenv("TEST_MISSING_PROVIDER_KEY", raising=False)
+    config = {"providers": {"groq": {"api_key_env": "TEST_MISSING_PROVIDER_KEY"}}}
+    assert provider_is_configured("groq", config) is False
 
 
 def test_env_override(monkeypatch) -> None:

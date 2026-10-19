@@ -12,6 +12,32 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def _load_local_env() -> None:
+    """Load a simple project ``.env`` without adding a runtime dependency.
+
+    This intentionally supports only the KEY=value format used by
+    ``.env.example``. Existing process environment variables always win, and
+    values are stripped of Windows line endings so a Windows-created file also
+    works inside Linux/Docker.
+    """
+
+    env_path = ROOT / ".env"
+    if not env_path.exists():
+        return
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        if line.startswith("export "):
+            line = line[7:].lstrip()
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+            value = value[1:-1]
+        os.environ.setdefault(key, value)
+
+
 def _as_bool(value: Any) -> bool:
     if isinstance(value, bool):
         return value
@@ -21,6 +47,7 @@ def _as_bool(value: Any) -> bool:
 def load_config(path: str | Path | None = None) -> dict[str, Any]:
     """Load YAML configuration and apply the small set of environment overrides."""
 
+    _load_local_env()
     config_path = Path(path or os.getenv("TRUTHGUARD_CONFIG", ROOT / "config.yaml"))
     if not config_path.is_absolute():
         config_path = ROOT / config_path

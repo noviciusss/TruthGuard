@@ -54,7 +54,12 @@ def run_evaluation(
         for line in output_path.read_text(encoding="utf-8").splitlines():
             if line.strip():
                 record = json.loads(line)
-                if record.get("system") == system and record.get("split") == split:
+                if (
+                    record.get("system") == system
+                    and record.get("split") == split
+                    and "answer" in record
+                    and "error" not in record
+                ):
                     completed.add(record["qid"])
     pipeline = build_default_pipeline()
     records: list[dict[str, Any]] = []
