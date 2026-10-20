@@ -52,7 +52,8 @@ def _markdown_section(label: str, question: str, answer) -> str:
                 evidence += ", …"
             lines.append(f"- `{claim.verdict}` {_short_text(claim.text, 220)} (evidence: `{evidence}`)")
     if answer.citations:
-        lines.extend(["", "### Citations", "", ", ".join(f"`{span.chunk_id}`" for span in answer.citations)])
+        citation_ids = sorted({span.chunk_id for span in answer.citations})
+        lines.extend(["", "### Citations", "", ", ".join(f"`{chunk_id}`" for chunk_id in citation_ids)])
     lines.extend(["", "---", ""])
     return "\n".join(lines)
 

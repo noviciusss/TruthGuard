@@ -29,7 +29,7 @@ Resolved using the highest-trust current position: ## Section 4.1 The non-accide
 
 ### Citations
 
-`FAQ-2024-01:c003`, `FAQ-2024-01:c002`, `AMD-2025-03:c002`, `AMD-2025-03:c003`, `FAQ-2025-06:c002`, `CIR-2025-08-A:c002`, `FAQ-2024-01:c004`, `CIR-2025-08-B:c002`, `POL-2024-V1:c004`, `POL-2024-V1:c002`
+`AMD-2025-03:c002`, `AMD-2025-03:c003`, `CIR-2025-08-A:c002`, `CIR-2025-08-B:c002`, `FAQ-2024-01:c002`, `FAQ-2024-01:c003`, `FAQ-2024-01:c004`, `FAQ-2025-06:c002`, `POL-2024-V1:c002`, `POL-2024-V1:c004`
 
 ---
 
@@ -61,7 +61,7 @@ Conditional answer: The positions apply under different conditions: ## Operation
 
 ### Citations
 
-`CIR-2024-02:c003`, `FAQ-2025-01:c004`, `FAQ-2025-01:c003`, `AMD-2025-05:c002`, `CIR-2024-02:c002`, `FAQ-2024-01:c003`, `CIR-2024-02:c001`, `FAQ-2025-06:c002`, `POL-2024-V1:c004`, `POL-2024-V1:c001`
+`AMD-2025-05:c002`, `CIR-2024-02:c001`, `CIR-2024-02:c002`, `CIR-2024-02:c003`, `FAQ-2024-01:c003`, `FAQ-2025-01:c003`, `FAQ-2025-01:c004`, `FAQ-2025-06:c002`, `POL-2024-V1:c001`, `POL-2024-V1:c004`
 
 ---
 
@@ -93,7 +93,7 @@ Resolved using the highest-trust current position: ## Operational rules - **clai
 
 ### Citations
 
-`AMD-2025-04:c003`, `MAN-2025-CLAIMS:c003`, `AMD-2025-04:c002`, `MAN-2024-CLAIMS:c004`, `POL-2025-V2:c003`, `MAN-2024-CLAIMS:c002`, `MAN-2025-CLAIMS:c002`, `POL-2024-V1:c003`, `POL-2024-V1:c004`, `POL-2024-V1:c002`
+`AMD-2025-04:c002`, `AMD-2025-04:c003`, `MAN-2024-CLAIMS:c002`, `MAN-2024-CLAIMS:c004`, `MAN-2025-CLAIMS:c002`, `MAN-2025-CLAIMS:c003`, `POL-2024-V1:c002`, `POL-2024-V1:c003`, `POL-2024-V1:c004`, `POL-2025-V2:c003`
 
 ---
 
@@ -125,7 +125,7 @@ Conditional answer: The positions apply under different conditions: ## Emergency
 
 ### Citations
 
-`NOTICE-2025-02:c002`, `CIR-2025-06:c002`, `CIR-2025-06:c003`, `NOTICE-2025-02:c003`, `AMD-2025-09:c002`, `MAN-2025-CASHLESS:c003`, `CIR-2025-06:c001`, `NOTICE-2025-02:c001`, `POL-2025-V2:c004`, `POL-2025-V2:c000`
+`AMD-2025-09:c002`, `CIR-2025-06:c001`, `CIR-2025-06:c002`, `CIR-2025-06:c003`, `MAN-2025-CASHLESS:c003`, `NOTICE-2025-02:c001`, `NOTICE-2025-02:c002`, `NOTICE-2025-02:c003`, `POL-2025-V2:c000`, `POL-2025-V2:c004`
 
 ---
 
@@ -152,7 +152,7 @@ I cannot safely resolve this conflict: The sources conflict and have no reliable
 
 ### Citations
 
-`CIR-2025-08-A:c002`, `CIR-2025-08-B:c002`, `NOTICE-2025-11:c002`, `CIR-2025-08-A:c003`, `CIR-2025-08-B:c003`, `NOTICE-2025-11:c003`, `FAQ-2024-01:c003`, `POL-2024-V1:c002`
+`CIR-2025-08-A:c002`, `CIR-2025-08-A:c003`, `CIR-2025-08-B:c002`, `CIR-2025-08-B:c003`, `FAQ-2024-01:c003`, `NOTICE-2025-11:c002`, `NOTICE-2025-11:c003`, `POL-2024-V1:c002`
 
 ---
 
@@ -178,6 +178,6 @@ This question is not answerable from the available corpus.
 
 ### Citations
 
-`CIR-2024-01:c002`, `AMD-2025-04:c002`, `AMD-2025-04:c003`, `MAN-2024-CLAIMS:c003`, `MAN-2025-CLAIMS:c003`, `FAQ-2024-01:c003`, `MAN-2024-CLAIMS:c004`, `AMD-2026-04:c002`, `POL-2024-V1:c000`, `POL-2024-V1:c001`
+`AMD-2025-04:c002`, `AMD-2025-04:c003`, `AMD-2026-04:c002`, `CIR-2024-01:c002`, `FAQ-2024-01:c003`, `MAN-2024-CLAIMS:c003`, `MAN-2024-CLAIMS:c004`, `MAN-2025-CLAIMS:c003`, `POL-2024-V1:c000`, `POL-2024-V1:c001`
 
 ---
