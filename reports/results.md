@@ -4,6 +4,13 @@ Updated: 2026-10-20
 
 ## Evaluation status
 
+**Latest offline correction:** see [fact-level conflict before/after](false_conflicts.md).
+With BGE retrieval held fixed, T0 false conflicts changed from **15/18 to 0/18
+on TEST**, and **2/2 to 0/2 on wild**. This did not improve every metric:
+TEST answer proxy accuracy fell `0.8286 → 0.8214`, and wild answer proxy
+accuracy fell `0.4500 → 0.4000`. Historical results below are preserved and must
+not be attributed to the new detector. No new live evaluation was run.
+
 The TruthGuard test split has been run live with Groq synthesis and the
 deterministic critic path for all 140 questions.
 The live B0/B1/B2 baseline runs were not completed because the Groq free-tier

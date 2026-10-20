@@ -848,3 +848,51 @@ The new request-budget test counts retry transport attempts, and evidence tests
 distinguish cache hits/fallbacks, avoid cross-role fallback inflation, and reject
 legacy output rather than mixing experimental modes. No new live API calls
 were made after the quota blocker was identified.
+
+## Current offline evidence work — Step 1
+
+No new live API calls were made. The previous before/after retrieval result is
+historical; the following comparison isolates the deterministic conflict fix
+with **BGE + FAISS retrieval held fixed**.
+
+### Cause and fix
+
+The critic previously counted unrelated numbers anywhere in a topic-containing
+chunk. It now extracts sentence/line-local observations and requires two
+different documents, the same fact key, genuinely different bound values, and
+positive evidence for the conflict type. Unknown dates are not a valid T6 tie.
+Exact fact positions replace whole mixed-fact chunks as conflict evidence.
+
+The structural threshold is two supporting documents plus verified type
+evidence. One rule set was selected on the 40 DEV questions; no TEST/wild
+threshold search or gold edits were performed. The DEV check showed no loss
+of conflict recall before holdout evaluation. A generic same-line sentence
+boundary regression was covered by a synthetic unit test, not by tuning to
+held-out question outcomes.
+
+### Measurements (no exclusions)
+
+| Split | Questions | T0 before → after | T0 rate before → after | Conflict F1 before → after | Answer proxy before → after |
+|---|---:|---|---|---|---|
+| DEV | 40 | 1/2 → 0/2 | 0.5000 → 0.0000 | 0.8923 → 0.9063 | 0.8500 → 0.8500 |
+| TEST | 140 | 15/18 → 0/18 | 0.8333 → 0.0000 | 0.8134 → 0.8763 | 0.8286 → 0.8214 |
+| wild | 20 | 2/2 → 0/2 | 1.0000 → 0.0000 | 0.4800 → 0.4762 | 0.4500 → 0.4000 |
+
+Costs are not hidden: TEST combined T6/T7 abstention recall fell from 1.0000 to
+0.9677. Wild conflict recall fell from 0.3750 to 0.3125. The conservative fix
+eliminates the observed control false positives but is **not** an overall wild
+robustness improvement. All 18 TEST T0 controls and both wild T0 controls were
+included. Two wild controls are too few to claim universal zero false positives.
+
+Evidence and reproduction: `reports/false_conflicts.md`,
+`reports/false_conflicts_before.json`, `reports/false_conflicts_dev_selection.json`,
+`reports/false_conflicts_after.json`, and `scripts/evaluate_false_conflicts.py`.
+
+### Verification
+
+- `TRUTHGUARD_OFFLINE=true make test`: **76 passed**, one existing dependency
+  deprecation warning (includes 18 new independent audit tests).
+- `make compile`: passed.
+- `git diff --check`: passed.
+- DEV-only and complete offline before/after evaluation commands completed.
+- No LLM calls, question changes, corpus changes, or UI framework changes.

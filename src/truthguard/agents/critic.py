@@ -25,6 +25,7 @@ from ..schemas import (
 from ..llm import LLMRouter
 from .retriever import RetrievedContext
 from .trust import TrustScorer
+from .facts import observations, typed_pair
 
 
 STOPWORDS = {"the", "a", "an", "is", "are", "for", "of", "and", "or", "to", "with", "within", "from", "this", "that", "may", "be"}
@@ -311,61 +312,25 @@ class CriticAgent:
         grouped: dict[str, list] = defaultdict(list)
         question_topic = _topic(context.question)
         for result in context.results:
-            topic = question_topic if question_topic and _contains_topic(question_topic, result.chunk.text.lower()) else _topic(result.chunk.text)
-            if topic and question_topic is not None and topic == question_topic:
-                grouped[topic].append(result)
+            for observation in observations(result.chunk):
+                if question_topic is not None and observation.key == question_topic:
+                    grouped[observation.key].append(observation)
         conflicts: list[Conflict] = []
-        for topic, results in grouped.items():
-            by_doc = {}
-            for result in results:
-                by_doc.setdefault(result.chunk.doc_id, result)
-            results = list(by_doc.values())
-            if len(results) < 2:
+        for topic, evidence in grouped.items():
+            pair = None
+            for index, left in enumerate(evidence):
+                for right in evidence[index + 1:]:
+                    conflict_type = typed_pair(left, right, self.graph, as_of=as_of)
+                    if conflict_type:
+                        pair = (left, right, conflict_type)
+                        break
+                if pair:
+                    break
+            if pair is None:
                 continue
-            values = {value.lower() for result in results for value in NUMBER_RE.findall(result.chunk.text)}
-            has_emergency_exception = any("emergency" in result.chunk.text.lower() and "without" in result.chunk.text.lower() for result in results)
-            has_planned_rule = any("planned" in result.chunk.text.lower() and "require" in result.chunk.text.lower() for result in results)
-            if topic == "renewal" or topic in {"network", "grievance", "ambulance", "telemedicine", "exclusions"}:
-                if len(values) <= 1:
-                    continue
-            if topic == "preauthorization" and not (has_emergency_exception and has_planned_rule):
-                continue
-            if len(values) <= 1 and topic != "preauthorization":
-                continue
-            positions = [self._position(result) for result in results[:3]]
-            if topic == "preauthorization":
-                conflict_type = "T5"
-                mode = "contextual"
-            elif topic in {"copay", "room_rent"}:
-                conflict_type = "T2"
-                mode = "contextual"
-            elif topic == "lookback":
-                conflict_type = "T4"
-                mode = "supersession"
-            elif topic == "claim_deadline":
-                conflict_type = "T3"
-                mode = "supersession"
-            elif topic == "annual_limit":
-                same_date_authority = [
-                    result
-                    for result in results
-                    if result.chunk.doc_meta
-                    and result.chunk.doc_meta.effective_date == results[0].chunk.doc_meta.effective_date
-                    and result.chunk.doc_meta.authority_rank == results[0].chunk.doc_meta.authority_rank
-                ]
-                if len(same_date_authority) >= 2:
-                    positions = [self._position(result) for result in same_date_authority[:2]]
-                    conflict_type = "T6"
-                    mode = "abstain"
-                else:
-                    conflict_type = "T3"
-                    mode = "supersession"
-            elif topic == "waiting_period" and self.graph is not None:
-                conflict_type = "T1"
-                mode = "supersession"
-            else:
-                conflict_type = "T3"
-                mode = "supersession"
+            left, right, conflict_type = pair
+            positions = [left.position(), right.position()]
+            mode = "abstain" if conflict_type == "T6" else ("contextual" if conflict_type in {"T2", "T5"} else "supersession")
             winner = None if conflict_type in {"T2", "T5", "T6"} else self._winner(positions)
             conflict = Conflict(
                 conflict_id=f"{conflict_type.lower()}-{topic}",
@@ -373,7 +338,7 @@ class CriticAgent:
                 positions=positions,
                 resolution_mode=mode,  # type: ignore[arg-type]
                 winner_doc_id=winner,
-                rationale=f"Retrieved passages contain competing {topic} positions.",
+                rationale=f"Two documents state {topic}: {left.value} ({left.scope}) versus {right.value} ({right.scope}); type evidence verified.",
                 confidence=0.85 if conflict_type != "T6" else 0.95,
             )
             conflicts.append(self.scorer.apply(conflict))
