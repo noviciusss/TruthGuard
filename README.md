@@ -1,147 +1,171 @@
 # TruthGuard
 
-TruthGuard is an offline-first hackathon submission for adversarial verification of
-multi-agent document question answering over a deliberately inconsistent,
-synthetic Aurelia Health corpus.
+TruthGuard is an offline-first prototype for question answering over a
+deliberately inconsistent, **synthetic Aurelia Health** policy corpus. It
+retrieves competing evidence, checks draft claims, exposes conflicts and trust
+factors, and resolves, answers conditionally, or abstains.
 
-The system is designed to expose disagreement rather than silently blending
-contradictory sources. Its core flow is retrieval, drafting, claim-level
-verification, conflict typing, transparent trust scoring, and either
-resolution or calibrated abstention.
+The local interfaces are **Streamlit** and **FastAPI**. Start with the offline
+walkthrough; evaluation evidence and its limitations are summarized below.
 
-## Current status
+- [Project guide](docs/PROJECT_GUIDE.md): setup, components, and remaining work
+- [Architecture](docs/ARCHITECTURE.md): deterministic and LLM paths
+- [Demo script](docs/DEMO_SCRIPT.md): judge walkthrough
+- [Submission](SUBMISSION.md): pitch and evidence boundaries
 
-The core product and offline demo are complete. The project is demo-ready and
-has a complete 140-question live TruthGuard evaluation. Remaining submission
-evidence is explicitly separated: human review, independent corpus audit,
-live baseline comparison, live Gemini-critic validation, and Docker
-verification. See [`docs/PROJECT_GUIDE.md`](docs/PROJECT_GUIDE.md) for the
-full explanation and [`SUBMISSION.md`](SUBMISSION.md) for the judge-facing
-summary.
+## Setup on Linux
 
-For a plain-language explanation of the architecture, scripts, run commands,
-remaining work, and required owner inputs, see
-[`docs/PROJECT_GUIDE.md`](docs/PROJECT_GUIDE.md).
-
-## Requirements
-
-- Python 3.11.2
-- Git
-- Docker is optional and will be verified when requested
-- API keys are optional for offline tests and required only for live generation
-
-## Setup
+Use Python **3.11.2** (pinned in `.python-version`), its `venv` module, GNU Make,
+and Git. Locks target CPython 3.11.2 on Linux x86_64; other platforms have not
+been validated. Run commands from the repository root:
 
 ```bash
-cp .env.example .env
-# Fill provider keys only when live calls are needed.
+python3 --version  # expected: Python 3.11.2
 make install
+# Optional local configuration; do this only if .env does not already exist:
+test -e .env || cp .env.example .env
 ```
 
-Keep `TRUTHGUARD_OFFLINE=true` for local tests. Set
-`TRUTHGUARD_OFFLINE=false` only for live Groq generation/evaluation. The
-loader reads the project-local `.env` automatically, including files created
-on Windows with CRLF line endings.
+`make install` creates `.venv`, installs the pinned installer `pip==26.2.1`,
+installs **`requirements.lock`**, and runs `pip check`. The lock includes the
+runtime and pytest dependency closure, including Streamlit/PyVis transitives.
+The `.txt` files describe direct requirements; the `.lock` files are the install
+inputs. No global Python install is needed.
 
-The core install intentionally stays light and uses a deterministic dense
-embedding fallback. To install the optional CPU-only BGE/FAISS retrieval stack
-(which downloads a large Torch wheel), run:
+Installation requires access to package indexes or a pre-populated local
+wheelhouse. **Offline-first describes execution after setup**, not downloading
+dependencies. These are version locks, not artifact-hash locks; base-image tags
+and Debian package repositories are also not immutable snapshots.
+
+### Optional dependencies
 
 ```bash
-make install-ml
+make install-ml             # CPU Torch, sentence-transformers, BGE/FAISS stack
+make install-orchestration  # LangGraph adapter
 ```
 
-The application uses a tested manual state-machine fallback by default. To
-install and exercise the optional LangGraph adapter, run:
+Each target installs its optional lock **together with `requirements.lock`**,
+so shared dependency versions stay pinned. The ML lock uses the PyTorch CPU
+index and a large CPU Torch wheel; it does not install CUDA dependencies.
+Model weights for `BAAI/bge-small-en-v1.5` are a separate download and are not
+bundled or revision-locked. Offline execution defaults to the deterministic
+hash embedder without needing those weights. The manual state machine works
+without LangGraph.
 
-```bash
-make install-orchestration
-```
+## Offline checks
 
-Groq is the primary provider for synthesis and bulk generation. Gemini is the
-lineage-separated critic, with Mistral configured as a fallback. The provider
-router caches responses, persists call counts, and enforces request/token
-budgets. The complete offline path does not require any provider key.
-
-## Checks
-
-The single offline test command is:
+The single test command, after installing dependencies, is:
 
 ```bash
 make test
 ```
 
-Additional checks:
+It needs no provider credentials, network connection, or model download.
+Additional local checks are `make smoke` and `make compile`.
+
+## Run locally
+
+Force offline mode explicitly, including when an existing `.env` has live
+settings:
 
 ```bash
-make smoke
-make compile
-make demo
-make wild
+TRUTHGUARD_OFFLINE=true make ui
+# Open http://127.0.0.1:8501
 ```
 
-Tests and the judge demo do not require an API key, network access, or
-downloaded model files. Live evaluation is separate and quota-aware.
-
-## Local run
-
-Start the API:
+For the API, in a separate terminal:
 
 ```bash
-make api
-# http://127.0.0.1:8000/docs
+TRUTHGUARD_OFFLINE=true make api
+# Open http://127.0.0.1:8000/docs
 ```
 
-Start the Streamlit demo in another terminal:
+The UI exposes citations, claim verdicts, competing document positions, trust
+breakdowns, graph relationships, and an execution trace. A scripted walkthrough
+is available with `make demo` (writes `reports/demo_output.md`). This is a
+demonstration, not an independent benchmark result.
 
-```bash
-make ui
-# http://127.0.0.1:8501
-```
+Provider mode requires credentials in `.env` and `TRUTHGUARD_OFFLINE=false`.
+See `config.yaml` for role chains. Live synthesis and an LLM critic are distinct
+from the offline deterministic path; enabling live mode does not establish
+which provider actually succeeded. Keep `.env`, API keys, caches, and raw
+provider output out of version control.
 
-The UI includes Ask, compare mode, claim verification, conflict positions,
-trust breakdowns, citations, and agent trace. It runs in offline mode unless
-you explicitly change `TRUTHGUARD_OFFLINE` and provide provider credentials.
+## Container build and local deployment
 
-For a repeatable six-question judge walkthrough without starting the UI:
+The Dockerfile uses Python 3.11.2, installs Make/Git and the same core lock, and
+includes an offline test build step. It packages the synthetic inputs and
+Markdown evidence, without copying the local `.env`, provider database, model
+cache, or raw live-evaluation JSONL files. The default command starts Streamlit.
 
-```bash
-make demo
-# writes reports/demo_output.md
-```
-
-The optional Docker run uses the same local configuration:
+On a Docker-capable machine:
 
 ```bash
 docker build -t truthguard .
-docker run --rm --env-file .env -p 8501:8501 truthguard
+docker run --rm --network none truthguard make test PYTHON=python
+docker run --rm -e TRUTHGUARD_OFFLINE=true -p 127.0.0.1:8501:8501 truthguard
 ```
 
-## Safety and data
+Open `http://127.0.0.1:8501`. To deploy the API locally instead:
 
-The corpus is fully synthetic. Do not put private health, customer, or
-production documents into the project or send them to free-tier providers.
-Never commit `.env`, API keys, model caches, or generated runtime databases.
+```bash
+docker run --rm -e TRUTHGUARD_OFFLINE=true -p 127.0.0.1:8000:8000 truthguard \
+  python -m uvicorn truthguard.api:app --host 0.0.0.0 --port 8000
+```
 
-## Explain TruthGuard in one minute
+These are local deployment instructions; no public service deployment is
+verified. Docker is unavailable in the packaging environment, so **the image
+build, build-time tests, and container startup have not been run**.
 
-Ordinary RAG retrieves passages and asks a model to blend them into one answer.
-That fails when the corpus contains old policies, amendments, exceptions, or
-same-authority disagreements. TruthGuard treats disagreement as a first-class
-object. It retrieves evidence, drafts a candidate answer, decomposes it into
-atomic claims, checks every claim against the retrieved passages, compares
-document positions, follows supersession links, scores source trust, and then
-chooses a resolved, conditional, abstained, or not-in-corpus response.
+## Evidence and limitations
 
-The differentiator is **auditable conflict handling**: the UI shows what
-disagreed, why one source won, or why the system refused to choose.
+- **Synthetic, templated benchmark:** 35 fictional documents and 180 generated
+  questions (40 development, 140 test). Questions and documents share a factsheet
+  and templates. This is not independent real-world validation.
+- **Historical deterministic results:** the recorded 140-question run used live
+  Groq synthesis with a deterministic critic. Reported answer-proxy accuracy
+  `0.8286` and conflict F1 `0.8374` are historical, not fresh measurements of
+  ongoing changes or evidence of LLM-critic quality. The offline B0/B1/B2 table
+  is not a completed live-model comparison.
+- **Wild before/after:** the existing 20-question offline comparison records
+  answer-proxy accuracy **0.35 → 0.45** for hash/BM25 versus BGE/FAISS/BM25
+  (conflict F1 `0.4348 → 0.4800`). These are historical measurements with the
+  deterministic critic and offline reformulations. A subsequent DEV-selected
+  fact-level conflict fix (BGE held fixed) reduced TEST T0 false positives from
+  **15/18 to 0/18**, and wild T0 false positives from **2/2 to 0/2**. It also
+  reduced wild answer proxy accuracy **0.45 → 0.40** and wild conflict recall
+  **0.3750 → 0.3125**. This is a conservative precision trade-off, not an overall
+  robustness gain. See [the before/after evidence](reports/false_conflicts.md).
+- **Provenance is document-level:** `provenance_correctness` checks overlap
+  with gold document IDs on conflict questions, and citation presence otherwise.
+  It does not measure semantic support, correct spans, or complete coverage of
+  competing evidence. Numeric/substring answer matching and the blended-answer
+  proxy also need human interpretation.
+- **Quota-limited fixed40 subset:** the frozen 40-question selection has six
+  questions each for T1–T6 and two each for T0/T7. An offline BGE deterministic
+  run completed 40/40. The live experiment completed only 7/40, with 18 failures
+  and 15 unreached questions. Successful calls used Groq Qwen for the critic
+  and Groq GPT-OSS for synthesis; they do not validate Gemini/Mistral lineage.
+  The partial live run is availability-biased and **not comparative results**.
+  Upstream retrieval/drafting also differed, preventing a critic-only ablation.
+- The [programmatic corpus audit](reports/corpus_audit_programmatic.md) ran
+  offline: 100/200 unique questions passed applicable mechanical checks and
+  100 remained unverifiable. Seven documents failed version recovery. A notice
+  has internally inconsistent annual limits, and whole-corpus T6 applicability
+  needs adjudication. No corpus or question gold was silently changed.
+- Human semantic label review, audit adjudication, a controlled LLM-critic
+  comparison, and clean-install/container runtime validation remain evidence
+  gaps. No live evaluations resume until the required offline gates are met.
 
-## Evidence status
+See [evaluation results](reports/results.md), [wild results](reports/wild_results.md),
+and [fixed40 status](reports/critic_subset_status.md) for historical details.
 
-The committed benchmark contains 180 synthetic questions: 40 development and
-140 test questions. The final live TruthGuard test run completed 140/140
-questions with answer accuracy `0.8286`, conflict F1 `0.8374`, provenance
-correctness `1.0`, blended-answer rate `0.0`, and abstention recall `1.0`.
-These figures were produced by the deterministic critic path, not the live
-Gemini critic. Offline baseline comparisons and limitations are documented in
-[`reports/results.md`](reports/results.md).
+### Packaging verification boundary
+
+Core and combined core+ML+orchestration lock resolution passed pip
+`--dry-run --ignore-installed` on Linux x86_64 / Python 3.11.2. This validates
+dependency resolution, not an actual clean installation or optional runtime.
+The existing virtualenv passes the offline suite but `pip check` reports
+missing `ipython`, `altair`, `gitpython`, `pandas`, `pydeck`, and `rich`;
+the new core lock explicitly includes them. The install targets have not been
+executed in a fresh virtualenv, and UI startup in that environment is unverified.

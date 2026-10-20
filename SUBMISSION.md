@@ -2,224 +2,142 @@
 
 ## One-line pitch
 
-TruthGuard is an auditable RAG system that detects contradictory documents,
-explains which source should be trusted, and abstains instead of silently
+TruthGuard is an auditable question-answering prototype that exposes competing
+document positions, explains trust factors, and can abstain instead of silently
 blending incompatible answers.
 
-## The problem
+## Problem and approach
 
-Most retrieval-augmented generation systems assume that retrieved passages are
-mutually compatible. In policy, legal, compliance, and operations corpora, that
-assumption is unsafe: an old policy can conflict with a later amendment, an
-exception can apply to a narrower scope, or two equally authoritative
-documents can remain irreconcilable.
+Versioned policy documents can disagree. A later amendment may replace a rule,
+an exception may apply only to a narrow scope, or two equally authoritative
+sources may remain unresolved. A fluent answer with citations can still hide
+those differences.
 
-A fluent answer can therefore be wrong while looking well supported.
-
-## The solution
-
-TruthGuard turns disagreement into an explicit reasoning step:
-
-1. Retrieve relevant passages with hybrid search.
-2. Search toward amendments, exceptions, and related graph neighbors.
-3. Draft an answer using only retrieved evidence.
-4. Decompose the draft into atomic claims.
-5. Verify each claim against all retrieved passages.
-6. Detect and classify conflicts as T0–T7.
-7. Follow supersession and amendment relationships.
-8. Calculate transparent trust factors.
-9. Resolve, answer conditionally, abstain, or report that the topic is absent.
-10. Show citations, conflict positions, trust scores, and the execution trace.
-
-## What makes it different
-
-### Conflict-aware rather than blend-oriented
-
-TruthGuard does not treat the top retrieved passage as automatically correct.
-It searches for competing positions and retains the disagreement in the final
-answer.
-
-### Claim-level provenance
-
-The system maps claims to exact corpus chunks and character spans, so a judge
-can inspect the evidence behind an answer.
-
-### Calibrated abstention
-
-For same-date, same-authority disagreements, TruthGuard does not invent a
-winner. It returns an abstention with the competing positions.
-
-### Lineage separation
-
-The intended live architecture uses Groq for synthesis and Gemini for the
-critic, with Mistral as a fallback. The complete benchmark metrics currently
-use the deterministic critic path; the live Gemini smoke is a separate
-validation item.
-
-## Architecture
+TruthGuard adds an explicit verification and resolution layer:
 
 ```text
-Question
-   ↓
-Hybrid BM25 + dense retrieval
-   ↓
-Conflict-seeking reformulations + graph neighbors
-   ↓
-Passage-only synthesizer
-   ↓
-Claim decomposition and evidence verification
-   ↓
-Pairwise conflict scan and T1–T6 typing
-   ↓
-Self-critique of proposed conflicts
-   ↓
-Trust scoring: recency, authority, specificity,
-               corroboration, metadata confidence
-   ↓
-Resolver
-   ↓
-Resolved / conditional / abstained / not-in-corpus answer
+Question → hybrid retrieval → conflict-seeking expansion + graph neighbors
+         → passage-grounded draft → claim and conflict checks
+         → inspectable trust factors → resolution / conditional answer
+                                    / abstention / missing-evidence response
 ```
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the detailed
-component-by-component explanation.
+The Streamlit UI exposes citations and spans, claim verdicts, competing
+positions, supersession relationships, trust arithmetic, and an execution
+trace. FastAPI exposes the local query pipeline. See the
+[architecture](docs/ARCHITECTURE.md) and [demo script](docs/DEMO_SCRIPT.md).
 
-## Dataset and benchmark
+## Deterministic verification versus LLM criticism
 
-- Fully synthetic Aurelia Health corpus.
-- 35 policy, amendment, circular, FAQ, manual, and notice documents.
-- 14 ground-truth facts.
-- 40% intentionally incomplete or corrupted header metadata.
-- 180 benchmark questions.
-- 40 development questions.
-- 140 frozen test questions.
-- T0 controls for no-conflict behavior.
-- T1–T6 conflict categories.
-- T7 not-in-corpus questions.
-- 20 manually written wild robustness questions.
+The offline critic uses policy-domain patterns, values, and graph annotations.
+It does not perform general LLM reasoning. The optional LLM path makes
+structured claim, conflict, and self-critique calls, followed by deterministic
+annotations. Provider identity must come from successful calls, not configured
+role names.
 
-The synthetic corpus avoids private health data while preserving the reasoning
-challenge of contradictory policy documents.
+Historical full-test figures used a **deterministic critic**, including the
+run with live Groq synthesis. The incomplete fixed40 live experiment used
+Groq Qwen criticism and Groq GPT-OSS synthesis. It does not establish a
+Gemini/Mistral critic result or validated cross-provider lineage separation.
 
-The wild set can be evaluated offline with `make wild`; its report is kept
-separate from the official frozen test result.
+## Dataset and historical evidence
 
-## Current results
+The corpus contains 35 **synthetic** Aurelia Health documents and 14 ground-truth
+facts. The 180-question benchmark (40 development / 140 test) is **templated**
+from shared facts and construction patterns. There are also 20 manually
+written wild robustness questions. This is a small controlled domain, not
+independent production or real-world validation.
 
-The final live TruthGuard test split completed all 140 questions:
+| Historical measurement | Interpretation |
+|---|---|
+| 140-question run: answer proxy `0.8286`, conflict F1 `0.8374` | Live Groq synthesis, deterministic critic; not LLM-critic validation |
+| Offline B0/B1/B2 comparison | Architecture/proxy comparison, not completed live-model baselines |
+| Wild hash/BM25 → BGE/FAISS/BM25: answer proxy **0.35 → 0.45**, conflict F1 `0.4348 → 0.4800` | Both offline with deterministic criticism and offline reformulations; robustness remains weak |
 
-| Metric | Result |
-|---|---:|
-| Answer accuracy | 0.8286 |
-| Conflict F1 | 0.8374 |
-| Conflict type accuracy | 0.6071 |
-| Resolution-mode accuracy | 0.7643 |
-| Provenance correctness | 1.0000 |
-| Blended-answer rate | 0.0000 |
-| Abstention recall | 1.0000 |
+These are historical retrieval measurements, not live-reformulation or
+LLM-critic gains. The subsequent DEV-selected fact-level detector (BGE held
+fixed) changed TEST T0 false positives **15/18 → 0/18**, wild T0 false positives
+**2/2 → 0/2**, and wild answer proxy accuracy **0.45 → 0.40**. Wild conflict
+recall fell **0.3750 → 0.3125**. The precision fix has real recall/accuracy costs.
+See [the full before/after evidence](reports/false_conflicts.md).
 
-These are architecture results on a synthetic benchmark, not production
-accuracy claims. They were generated using the deterministic critic path. The
-live Gemini critic is implemented and has a bounded smoke test, but provider
-availability has not yet been stable enough to replace the benchmark metrics
-with a Gemini-critic run.
+Metric limitations are material:
 
-The complete table, offline comparisons, latency, confidence intervals, and
-limitations are in [`reports/results.md`](reports/results.md).
+- Answer accuracy uses numeric/substring matching and T6/T7 status checks, not
+  independent human semantic judgments.
+- `provenance_correctness` is **document-level provenance**: gold document-ID
+  overlap on conflict questions and citation presence otherwise. It is **not
+  semantic support**, correct-span validation, or complete evidence coverage.
+- The blended-answer metric is a conflict/status proxy; zero does not prove
+  incompatible values were never blended.
+- Mock tests establish local call mechanics rather than live critic quality.
 
-Wild robustness results are in [`reports/wild_results.md`](reports/wild_results.md)
-when generated with `make wild`. The current offline result is intentionally
-reported as a weakness: answer accuracy is `0.3500` and conflict F1 is
-`0.4348` on indirect/mixed-topic wording. This shows where a stronger live
-critic or improved query planning is still needed.
+Full historical tables and definitions are in [results](reports/results.md)
+and [wild results](reports/wild_results.md).
 
-## Reproduce the demo
+## Quota-limited fixed40 subset
 
-### Offline judge demo
+The frozen 40-question selection includes six each T1–T6 and two each T0/T7.
+An offline BGE deterministic run completed 40/40. The live attempt completed
+only **7/40** successfully, with 18 failed records and 15 unreached questions.
+Rate limits, request sizing, and failed fallback attempts blocked completion.
+
+**This partial live run is not comparative results.** Successful questions
+are availability-biased, and upstream contexts/drafts differed from the offline
+baseline, so this is not a controlled critic-only ablation. It cannot support
+an aggregate live accuracy/F1 claim or a superiority claim. Reuse the frozen
+selection and hold contexts/drafts constant for a future controlled comparison.
+See [fixed40 status](reports/critic_subset_status.md).
+
+## Reproduce locally
+
+Use Linux x86_64 with Python **3.11.2**, `venv`, Make, and Git:
 
 ```bash
 make install
 make test
-make demo
+TRUTHGUARD_OFFLINE=true make demo
+TRUTHGUARD_OFFLINE=true make ui
 ```
 
-The demo writes `reports/demo_output.md` and covers supersession, scope,
-numeric change, exception handling, unresolvable conflict, and not-in-corpus
-behavior.
+Open `http://127.0.0.1:8501`. The scripted demo writes
+`reports/demo_output.md`. For FastAPI, run `TRUTHGUARD_OFFLINE=true make api`
+and open `http://127.0.0.1:8000/docs`.
 
-### Streamlit UI
+`make install` uses the pinned core runtime/test lock and pinned pip.
+`make install-ml` and `make install-orchestration` install optional closures
+alongside the core pins. Setup needs package-index access or locally supplied
+wheels; the installed core tests/demo do not need keys, network, or weights.
+The UI remains Streamlit. Exact setup and container deployment commands are
+in the [README](README.md).
 
-```bash
-make ui
-```
+## Packaging validation and outstanding work
 
-Open `http://127.0.0.1:8501`.
+- Core and combined core+ML+orchestration resolver dry-runs passed on
+  Python 3.11.2 / Linux x86_64. They validate dependency resolution only.
+- A clean lockfile installation, full UI dependency/runtime startup, and
+  optional-stack runtime validation have not been performed in this packaging
+  pass. The existing test virtualenv lacks six declared UI/PyVis dependencies;
+  these are now pinned in the core lock (details in the README).
+- Docker is unavailable here. The Dockerfile contains the core lock install
+  and an offline test build step, but image build, container tests, and startup
+  have not been run. No public deployment is verified.
+- Optional BGE weights are separately downloaded and not revision-locked;
+  version locks do not pin package hashes, base-image digests, or Debian snapshots.
+- The [offline audit](reports/corpus_audit_programmatic.md) leaves 100/200
+  unique questions unverifiable and finds seven version-recovery failures.
+  Internally inconsistent annual-limit text and global T6 applicability need
+  adjudication before changing gold. Mechanical presence checks are not
+  semantic validation.
+- Human review/audit adjudication, completed live baselines, and a controlled
+  LLM-critic comparison remain open. No new live results are claimed.
 
-### FastAPI API
+## Five-minute presentation
 
-```bash
-make api
-```
-
-Open `http://127.0.0.1:8000/docs`.
-
-### Offline evaluation
-
-```bash
-PYTHONPATH=src .venv/bin/python -m bench.run_eval \
-  --questions data/benchmark/questions.jsonl \
-  --output /tmp/truthguard-offline.jsonl \
-  --system truthguard \
-  --split test \
-  --no-llm-critic
-```
-
-## Live provider mode
-
-Set `TRUTHGUARD_OFFLINE=false` and provide keys in `.env`. Start with a small
-bounded run because free-tier quotas are enforced by the router:
-
-```bash
-PYTHONPATH=src .venv/bin/python -m bench.run_eval \
-  --questions data/benchmark/questions.jsonl \
-  --output reports/live_eval_dev.jsonl \
-  --system truthguard \
-  --split dev \
-  --limit 5
-```
-
-The router records provider, model, cache, latency, fallback, and budget data.
-Do not present a fallback provider as evidence for the intended Gemini critic
-lineage.
-
-## Known limitations
-
-1. The corpus is synthetic and intentionally small.
-2. The 30-question human review is prepared but still requires reviewer input.
-3. The independent second-LLM corpus audit remains pending.
-4. Live B0/B1/B2 baseline comparison remains pending.
-5. The Gemini critic has been implemented, but free-tier availability has been
-   intermittent during smoke validation.
-6. Docker is documented but has not been verified in the current environment.
-7. Optional BGE/FAISS retrieval is not part of the tested lightweight path.
-
-These limitations are recorded explicitly instead of being hidden behind a
-single aggregate score.
-
-## Five-minute presentation structure
-
-1. Show the same question in Naive RAG and TruthGuard.
-2. Point out that Naive RAG gives one fluent value without exposing the old
-   source or exception.
-3. Show TruthGuard's conflicting positions and exact citations.
-4. Show the supersession graph and trust breakdown.
-5. Demonstrate the T6 question and calibrated abstention.
-6. Demonstrate the T7 question and not-in-corpus behavior.
-7. End with benchmark metrics and honest limitations.
-
-## Repository status
-
-The local product is demo-ready. The project is submission-ready when the
-remaining evidence tasks in `docs/PROJECT_GUIDE.md` are either completed or
-explicitly marked as unavailable due to provider, Docker, or human-review
-constraints.
+1. Show the synthetic supersession example and competing citations.
+2. Show population scope and an emergency exception.
+3. Show same-authority abstention and not-in-corpus behavior.
+4. Inspect trust factors and trace.
+5. Close with the templated-data limitation, historical wild robustness gap,
+   and incomplete fixed40 experiment. Describe observed UI comparisons as
+   examples, not comparative live benchmark results.

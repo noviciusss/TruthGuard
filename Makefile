@@ -19,16 +19,19 @@ help:
 
 install:
 	python3 -m venv .venv
-	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install -r requirements.txt -r requirements-dev.txt
+	$(PYTHON) -m pip install pip==26.2.1
+	$(PYTHON) -m pip install -r requirements.lock
+	$(PYTHON) -m pip check
 
 install-ml:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
-	$(PYTHON) -m pip install -r requirements-ml.txt
+	$(PYTHON) -m pip install -r requirements.lock -r requirements-ml.lock
+	$(PYTHON) -m pip check
 
 install-orchestration:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
-	$(PYTHON) -m pip install -r requirements-orchestration.txt
+	$(PYTHON) -m pip install -r requirements.lock -r requirements-orchestration.lock
+	$(PYTHON) -m pip check
 
 test:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)

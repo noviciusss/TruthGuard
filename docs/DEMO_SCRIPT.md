@@ -1,98 +1,101 @@
 # TruthGuard Demo Script
 
-## Goal
+## Goal and preparation
 
-Demonstrate in five minutes that TruthGuard detects and explains document
-disagreement instead of returning a fluent blended answer.
-
-## Preparation
+Show how a local prototype exposes disagreement in a synthetic policy corpus.
+Use Python 3.11.2 and follow [setup](../README.md) first:
 
 ```bash
+make install
 make test
-make demo
-make ui
+TRUTHGUARD_OFFLINE=true make demo
+TRUTHGUARD_OFFLINE=true make ui
 ```
 
-Open `http://127.0.0.1:8501`. If the UI is unavailable, use
-`reports/demo_output.md` as the backup artifact.
+Open `http://127.0.0.1:8501`. Use
+[the scripted demo output](../reports/demo_output.md) as a backup. These are
+walkthrough instructions; packaging validation did not execute the installs,
+regenerate this artifact, or verify UI/container startup.
 
-## Opening statement
+## Opening
 
-> Ordinary RAG retrieves evidence and blends it. That is unsafe when one
-> document is stale, an exception has a narrower scope, or two official sources
-> disagree. TruthGuard makes the disagreement visible, explains source trust,
-> and abstains when there is no defensible winner.
+> Retrieved policy documents can disagree because an amendment changed a rule,
+> an exception has a narrower scope, or two official sources conflict.
+> TruthGuard aims to make that disagreement visible, show its evidence and
+> trust factors, and abstain when there is no defensible winner. This demo uses
+> fictional documents and a deterministic offline critic, not a live LLM critic.
 
-## Demo 1 — supersession
+## 1. Supersession
 
 Question: `What is the hospitalization waiting period for the Standard plan?`
 
-Show the old 30-day policy, the newer 45-day amendment, conflict type T1, the
-supersession graph, and the resolved answer.
+Inspect the old 30-day policy, newer 45-day amendment, T1 classification,
+supersession relationship, and resolved answer.
 
-Say:
+> Here we can inspect both positions and the amendment relationship that
+> explains the chosen rule.
 
-> TruthGuard found the old and new positions, followed the amendment
-> relationship, and explained why the newer source wins.
-
-## Demo 2 — scope conflict
+## 2. Scope
 
 Question: `Is the co-payment different for a member aged 60 or above?`
 
-Show the 10% standard rule, the 20% senior-member rule, T2 classification, and
-the conditional answer.
+Inspect the 10% standard rule, 20% senior-member rule, T2 classification, and
+conditional answer.
 
-Say:
+> These values apply to different populations. A conditional answer preserves
+> the distinction instead of selecting a single percentage for everyone.
 
-> These values are not necessarily contradictory. The conflict is a population
-> scope difference, so TruthGuard answers conditionally.
-
-## Demo 3 — exception handling
+## 3. Exception
 
 Question: `Is prior authorization required for every hospital admission?`
 
-Show the planned-admission requirement, emergency exception, T5
-classification, and the 24-hour notification condition.
+Inspect the planned-admission requirement, emergency exception, T5
+classification, and 24-hour notification condition.
 
-Say:
+> The narrower exception is part of the answer. We want the evidence for both
+> the general rule and its exception to be visible.
 
-> The exception is part of the answer. A system that only retrieves the general
-> rule may incorrectly say authorization is always required.
-
-## Demo 4 — calibrated abstention
+## 4. Abstention
 
 Question: `What is the annual hospitalization limit for the Aurelia Standard plan?`
 
-Show the two same-authority circulars, their conflicting values, T6, and the
+Inspect the conflicting same-authority circulars, T6 classification, and
 abstained answer.
 
-Say:
+> The two circulars demonstrate a local tie, but the whole-corpus gold answer
+> remains under audit: a later notice contradicts itself and later policy
+> material may change applicability. Do not describe this as a validated
+> whole-corpus abstention result until the audit is adjudicated.
 
-> The evidence does not justify a winner. Abstention is the correct safety
-> behavior, not a failure to answer.
-
-## Demo 5 — not in corpus
+## 5. Not in corpus
 
 Question: `Does Aurelia cover hearing-aid batteries after a routine replacement?`
 
-Show the `not_in_corpus` status and the absence of an invented policy.
+Inspect the `not_in_corpus` status.
 
-Say:
+> Missing evidence and contradictory evidence are different situations. This
+> case is intended to demonstrate the first.
 
-> TruthGuard distinguishes “the corpus disagrees” from “the corpus does not
-> contain the answer.”
+## Close with evidence boundaries
 
-## Closing statement
+> This is an inspectable prototype, not proof of production accuracy. The
+> corpus is synthetic and the main benchmark is templated from shared facts.
+> Historical wild answer-proxy accuracy improved from 0.35 to 0.45 with
+> BGE/FAISS retrieval, but remained weak. The later fact-level conflict fix
+> removed observed T0 false positives, but wild accuracy fell from 0.45 to 0.40
+> and wild conflict recall fell. These are measured trade-offs, not a general
+> robustness improvement. All these runs used offline reformulations and
+> deterministic criticism. Document-level provenance checks document IDs or citation presence,
+> not semantic support. The quota-limited fixed40 LLM-critic experiment completed
+> only seven live answers, so the partial live run is not comparative results.
 
-> The key result is auditable uncertainty. TruthGuard shows the claims, exact
-> evidence, competing documents, trust factors, and final decision. Its
-> benchmark reports answer accuracy together with conflict F1, provenance,
-> false-conflict rate, and abstention recall.
+If asked about lineage, explain that the historical full test metrics used a
+deterministic critic even with live synthesis. The partial fixed40 run used
+Groq Qwen for criticism and Groq GPT-OSS for synthesis, not a validated Gemini
+or Mistral critic. Avoid claiming that a configured provider served a result.
 
-## Backup commands
-
-```bash
-TRUTHGUARD_OFFLINE=true make demo
-```
-
-The generated file is `reports/demo_output.md`.
+Point to [the submission evidence](../SUBMISSION.md),
+[wild results](../reports/wild_results.md), and
+[fixed40 status](../reports/critic_subset_status.md). If comparing the UI's
+Naive RAG and TruthGuard outputs, describe only the observed example; do not
+present it as a completed comparative live benchmark.

@@ -189,7 +189,8 @@ The generated sample requested by the specification is available at:
   reciprocal rank fusion, result score breakdowns, and JSON save/load.
 - Added a networkx supersession graph with document-level and partial
   section-level edges, latest-valid selection, chains, neighbors, cycle
-  detection, as-of handling, and missing-date behavior.
+   detection and missing-date behavior. Historical-query correctness is not
+   validated end to end and is not a supported submission claim.
 - Regenerated the corpus so amendment metadata is present in both headers and
   body text for inference tests.
 
@@ -324,7 +325,8 @@ The generated sample requested by the specification is available at:
 
 - Added FastAPI `/health` and `/query` endpoints with request validation and
   typed `FinalAnswer` responses.
-- Added Streamlit Ask screen with taxonomy examples, optional as-of date,
+- Added Streamlit Ask screen with taxonomy examples (the experimental date
+  control is not a validated submission capability),
   status badge, highlighted inline provenance, claim verdicts, conflict
   positions, trust-score breakdowns, citations, and agent trace.
 - Added compare mode for B0 Naive RAG versus TruthGuard.
@@ -952,3 +954,39 @@ absence; the programmatic audit leaves those unverifiable rather than inventing
 a pass. `TRUTHGUARD_OFFLINE=true .venv/bin/python -m pytest -q
 tests/test_programmatic_audit.py`: **18 passed** in the independent audit run;
 the combined suite has 76 passing tests.
+
+## Step 7 local packaging prepared in parallel — runtime verification pending
+
+This independent packaging work was prepared alongside the offline tasks; it
+does not bypass the audit decision gate or permit live work.
+
+- `make install`, `make install-ml`, and `make install-orchestration` now install
+  scoped transitive lockfiles and run `pip check`. Installer pip is pinned.
+- The core lock contains 74 pins; the ML and orchestration closures each add
+  19. Resolver dry-runs with `--ignore-installed` passed for core, core+ML,
+  core+orchestration, and all locks together on Linux x86_64/Python 3.11.2.
+  This is resolver validation, **not a clean installation**.
+- Docker installs the core lock and OS packages, selectively copies inputs to
+  avoid private state, and includes an offline test build step. **Docker is
+  unavailable: no image build, container tests, or container startup passed.**
+- Existing `.venv` tests pass, but `pip check` reports missing `ipython`,
+  `altair`, `gitpython`, `pandas`, `pydeck`, and `rich`; the new lock includes
+  them. Fresh UI startup with the lock remains unverified. No UI framework was
+  changed.
+- README, SUBMISSION and project/architecture/demo docs now label historical
+  retrieval measurements and the new false-conflict trade-offs separately,
+  describe document-level provenance, synthetic/templated data, fixed40 quota
+  limits, and the audit decision blockers. Unsupported historical-date feature
+  claims were removed from the guides/pitch.
+- Locks pin package versions for the stated target; they do not yet pin wheel
+  hashes, BGE model revision, Docker digest, or Debian repository snapshots.
+
+The implementation/evidence portions of Step 1 and the audit execution are
+saved. Step 2 remediation requires the decisions above. Steps 3–6 have not
+been performed; no live API calls were made in this work session.
+
+Final local checks: **76 tests passed**, compilation and whitespace checks
+passed, **37 local Markdown links resolved**, and corpus/benchmark files have
+no changes relative to `7ab4b48`. `pip check` failed with the six missing
+dependencies listed above; `docker --version` failed because Docker is absent.
+Neither result is described as a passing installation/deployment check.
