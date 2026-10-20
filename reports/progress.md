@@ -757,3 +757,25 @@ is no longer the only bottleneck.
 | BGE model load | Passed; 384-dimensional embeddings |
 | `make retrieval` | Passed; before/after JSON evidence written under `/tmp` |
 | Cached reformulation test | Passed; one transport call, second call cached |
+
+## Task 2 — provider routing and throttling
+
+### Completed
+
+- Changed the primary evaluation critic to Groq `qwen/qwen3.8-27b`, a model
+  family different from the Groq `openai/gpt-oss-120b` synthesizer.
+- Added `TRUTHGUARD_CRITIC_PROVIDER` and `TRUTHGUARD_CRITIC_CHAIN` overrides so
+  Gemini can be reserved for the six-question demo and spot checks while bulk
+  evaluation uses Groq Qwen with configured fallbacks.
+- Recorded the observed Qwen model rate-limit headers in
+  `reports/provider_limits.md`.
+- Added a 1.1-second minimum Mistral request-start interval in addition to the
+  rolling RPS/TPM accounting.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| Groq Qwen model-list check | Passed: `qwen/qwen3.8-27b` available |
+| Groq Qwen structured JSON smoke | Passed: HTTP 200; headers recorded |
+| Mistral throttle configuration | Passed: 1.1-second interval configured |

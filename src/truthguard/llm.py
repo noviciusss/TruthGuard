@@ -64,6 +64,7 @@ class LLMRouter:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
         self.transport = transport
         self.client = client
+        self._last_request_monotonic: dict[str, float] = {}
         self._initialize_database()
 
     def _resolve_path(self, path: str | Path) -> Path:
@@ -242,6 +243,7 @@ class LLMRouter:
                     "rps_limit": int(settings.get("rps_limit", 0)),
                     "tokens_this_minute": tokens_this_minute,
                     "tpm_limit": int(settings.get("tpm_limit", 0)),
+                    "min_interval_seconds": float(settings.get("min_interval_seconds", 0.0)),
                 }
         return result
 
@@ -269,6 +271,12 @@ class LLMRouter:
             if status.get("rps_limit", 0) and status["requests_this_second"] >= status["rps_limit"]:
                 time.sleep(max(0.05, 1.0 - (time.time() % 1.0) + 0.05))
                 continue
+            min_interval = float(status.get("min_interval_seconds", 0.0))
+            if min_interval:
+                elapsed = time.monotonic() - self._last_request_monotonic.get(provider, 0.0)
+                if elapsed < min_interval:
+                    time.sleep(min_interval - elapsed)
+                    continue
             if not status.get("rpm_limit", 0) or status["requests_this_minute"] < status["rpm_limit"]:
                 return
             wait_seconds = max(1.0, 60.0 - (time.time() % 60.0) + 0.1)
@@ -282,6 +290,12 @@ class LLMRouter:
         )
 
     def _provider_chain(self, role: str) -> list[str]:
+        override = os.getenv(f"TRUTHGUARD_{role.upper()}_PROVIDER")
+        if override:
+            return [override]
+        chain_override = os.getenv(f"TRUTHGUARD_{role.upper()}_CHAIN")
+        if chain_override:
+            return [provider.strip() for provider in chain_override.split(",") if provider.strip()]
         configured = self.config.get("role_chains", {}).get(role)
         if configured:
             return list(configured)
@@ -345,6 +359,8 @@ class LLMRouter:
 
         for attempt in range(attempts):
             try:
+                self._wait_for_budget(provider)
+                self._last_request_monotonic[provider] = time.monotonic()
                 return self._invoke(provider, model, messages, params)
             except ProviderError as exc:
                 if exc.retry_after is None or attempt == attempts - 1:

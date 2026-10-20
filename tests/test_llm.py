@@ -26,6 +26,11 @@ def test_provider_limits_match_supplied_dashboards() -> None:
     assert mistral["rps_limit"] == 1
     assert mistral["tpm_limit"] == 20000
     assert mistral["rpd_limit"] == 0
+    assert mistral["min_interval_seconds"] == 1.1
+
+    groq = config["providers"]["groq"]
+    assert groq["models"]["critic"] == "qwen/qwen3.8-27b"
+    assert groq["tpm_limit"] == 8000
 
 
 def test_offline_fixture_is_validated_cached_and_accounted(tmp_path) -> None:
