@@ -15,7 +15,7 @@
 
 - Phase: 9 — project guide and UI usability pass
 - Status: complete; local UI and API verified
-- Last updated: 2026-10-19
+- Last updated: 2026-10-20
 
 ## Phase 0 — Foundation
 
@@ -671,10 +671,53 @@ this phase will add only:
 
 No new product features will be added in this optional phase.
 
-## Open issues
+## Open issues and submission gates
 
-- Confirm exact free-tier limits in the provider consoles before bulk runs.
-- Decide whether to verify Docker locally when the application image is ready.
-- Hand verification of 30 benchmark questions will be requested after the
-  benchmark is generated.
-- Final live test-set metrics and LLM corpus audit are not yet available.
+- Complete the 30-question human review and run
+  `scripts/compute_agreement.py`.
+- Run the independent second-LLM corpus audit against the conflict manifest.
+- Run fair live B0/B1/B2 baselines if a provider quota is available.
+- Repeat the bounded Gemini critic smoke when provider availability is stable;
+  do not relabel the deterministic benchmark metrics as Gemini results.
+- Verify Docker on a Docker-capable machine.
+
+The local product, offline test suite, judge demo, API, and Streamlit UI are
+demo-ready. These remaining items are evidence and packaging gates rather than
+core implementation blockers.
+
+## Wild robustness evaluation
+
+### Completed
+
+- Added `scripts/evaluate_wild.py` and the `make wild` command.
+- Evaluated all 20 manually written wild questions offline.
+- Wrote the separate report to `reports/wild_results.md`.
+
+### Result and interpretation
+
+- Answer accuracy: `0.3500`
+- Conflict F1: `0.4348`
+- Resolution-mode accuracy: `0.3000`
+- Provenance correctness: `0.9000`
+- False-conflict rate: `0.1000`
+- Abstention recall: `0.7500`
+
+This is a useful warning rather than a headline achievement: the deterministic
+fallback is strong on the generated frozen benchmark but weaker on indirect
+and mixed-topic wild wording. The wild report should be presented as an honest
+robustness gap and a next improvement target, not combined with the official
+test score.
+
+The retriever also gained deterministic topic hints for indirect wording. The
+complete offline 140-question test rerun remained unchanged at answer accuracy
+`0.8286`, conflict F1 `0.8374`, provenance correctness `1.0`, and abstention
+recall `1.0`, so the change did not regress the frozen benchmark.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| `make test` | Passed: 42 tests |
+| `make demo` | Passed: six cases with expected statuses |
+| `make wild` | Passed: 20 questions scored and report written |
+| Offline 140-question rerun | Passed: metrics unchanged from recorded fallback baseline |

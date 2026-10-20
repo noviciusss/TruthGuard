@@ -144,6 +144,7 @@ class BenchmarkQuestion(TGModel):
     hand_verified: bool = False
     multi_hop: bool = False
     paraphrase_group: str | None = None
+    source_passages: list[str] = Field(default_factory=list)
 
 
 class ReformulationResponse(TGModel):

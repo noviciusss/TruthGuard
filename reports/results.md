@@ -1,10 +1,11 @@
 # TruthGuard Evaluation Results
 
-Updated: 2026-10-19
+Updated: 2026-10-20
 
 ## Evaluation status
 
-The TruthGuard test split has been run live with Groq for all 140 questions.
+The TruthGuard test split has been run live with Groq synthesis and the
+deterministic critic path for all 140 questions.
 The live B0/B1/B2 baseline runs were not completed because the Groq free-tier
 daily token budget was exhausted during the TruthGuard test run. The baseline
 comparison below is therefore the complete offline deterministic-fallback
@@ -13,7 +14,7 @@ comparison, not a live-model comparison.
 The corpus and benchmark remain fully synthetic. These results demonstrate
 relative architecture behavior and are not production accuracy claims.
 
-## Live TruthGuard test split
+## Live TruthGuard test split — deterministic critic path
 
 Split: 140 questions, generated from `data/benchmark/questions.jsonl`.
 
@@ -42,7 +43,7 @@ The run is resumable in the local ignored file `reports/live_eval_test.jsonl`.
 That file is intentionally not committed because it is generated runtime
 output and may contain provider response material.
 
-## Live development split
+## Live development split — deterministic critic path
 
 Split: 40 questions.
 
@@ -71,6 +72,26 @@ provider quota effects.
 | B1 Recency RAG | 0.7429 | 0.0000 | 0.0000 | 0.1286 |
 | B2 Self-consistency | 0.7429 | 0.0000 | 0.0000 | 0.1286 |
 | TruthGuard | 0.8286 | 0.8374 | 0.6071 | 0.7643 |
+
+## Wild robustness set
+
+The 20 manually written wild questions were evaluated separately with the
+offline deterministic critic. Current results are intentionally reported as a
+robustness gap rather than combined with the frozen test score:
+
+| Metric | Value |
+|---|---:|
+| Answer accuracy | 0.3500 |
+| Conflict F1 | 0.4348 |
+| Resolution-mode accuracy | 0.3000 |
+| Provenance correctness | 0.9000 |
+| False-conflict rate | 0.1000 |
+| Abstention recall | 0.7500 |
+
+The indirect and mixed-topic wording is harder for the deterministic fallback
+than the generated benchmark. The detailed breakdown is in
+`reports/wild_results.md`; stronger query planning or a stable live critic is
+needed before presenting this as a headline robustness result.
 
 ## Reproducibility and limitations
 

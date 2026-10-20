@@ -1,8 +1,20 @@
 # TruthGuard Project Guide
 
 This document explains what has been built, how the scripts fit together, how
-to run the project, what is still incomplete, and what is needed from the
-project owner.
+to run the project, how to explain the approach to a judge, what is complete,
+and what evidence still remains. It is the detailed companion to the shorter
+[`README.md`](../README.md) and [`SUBMISSION.md`](../SUBMISSION.md).
+
+## Status at a glance
+
+- **Core product:** complete.
+- **Offline tests and demo:** complete.
+- **Live TruthGuard test split:** complete, 140/140 questions.
+- **Judge-ready local UI:** complete.
+- **Live Gemini critic:** implemented, but not yet stable enough for benchmark
+  metrics because of free-tier availability and fallback quota issues.
+- **Human review, corpus audit, live baselines, and Docker verification:**
+  pending evidence tasks.
 
 ## 1. What TruthGuard does
 
@@ -55,7 +67,9 @@ used.
 - Supersession graph with partial section amendments.
 - Claim verification and conflict typing.
 - Lineage-separated LLM critic path: Gemini Flash first, Mistral fallback,
-  with three bounded structured calls and deterministic annotations.
+  with three bounded structured calls and deterministic annotations. The path
+  is implemented and tested with mocks; the complete reported benchmark uses
+  the deterministic critic because live Gemini availability was intermittent.
 - Trust scoring.
 - Resolution and calibrated abstention.
 - B0/B1/B2 baselines.
@@ -218,18 +232,37 @@ limits can stop a run.
    reset.
 5. Verify the Docker build on a machine with Docker.
 
+The product is already **demo-ready**. These are evidence and packaging gates,
+not blockers for explaining or showing the local application.
+
 ### Optional improvements
 
 - Install `requirements-ml.txt` and test BGE/FAISS retrieval.
 - Install `requirements-orchestration.txt` and run `compile_langgraph()`.
 - Add charts as image assets to the benchmark tab.
-- Prepare the optional pitch script and demo video checklist.
+- Add screenshots or a recorded demo after the local walkthrough is approved.
+
+The manually written wild set can now be evaluated reproducibly with:
+
+```bash
+make wild
+```
+
+This writes `reports/wild_results.md` and keeps the robustness result separate
+from the official frozen test score.
+
+The current offline wild result is intentionally not presented as a success
+metric: answer accuracy is `0.3500`, conflict F1 is `0.4348`, and abstention
+recall is `0.7500`. The gap indicates that indirect and mixed-topic questions
+need better query planning or a stronger live critic before they are used as a
+headline claim.
 
 ## 6. Current evidence
 
 The latest results are in `reports/results.md`.
 
-The live TruthGuard test split completed 140/140 questions with:
+The live TruthGuard test split completed 140/140 questions using the
+deterministic critic path with Groq synthesis:
 
 - Answer accuracy: 0.8286
 - Conflict F1: 0.8374
@@ -240,7 +273,8 @@ The live TruthGuard test split completed 140/140 questions with:
 - Abstention recall: 1.0
 
 These results are on a synthetic benchmark and should be presented as
-architecture evidence, not production accuracy.
+architecture evidence, not production accuracy. Do not describe them as
+Gemini-critic results.
 
 ## 7. What is needed from the owner
 
@@ -252,3 +286,58 @@ architecture evidence, not production accuracy.
    materials.
 5. **Deployment decision:** if local use is enough, stop at the local UI; if a
    public demo is required, choose a deployment target and provide access.
+
+## 8. How to explain the approach
+
+### The problem in plain language
+
+Ordinary RAG finds relevant text, but it usually assumes the text agrees. In a
+versioned policy corpus that can create a confident answer from incompatible
+documents.
+
+### TruthGuard's answer
+
+TruthGuard makes disagreement a first-class object. It does not stop after
+retrieving one passage. It searches for related amendments and exceptions,
+checks the draft claim by claim, compares document positions, and uses the
+supersession graph and trust factors before resolving.
+
+### The four user-visible outcomes
+
+1. **Resolved:** one current supported source wins.
+2. **Conditional:** different values apply to different scopes or conditions.
+3. **Abstained:** sources conflict and no defensible winner exists.
+4. **Not in corpus:** the evidence base does not answer the question.
+
+### The strongest demo sentence
+
+> TruthGuard does not just answer from retrieved text; it tells me when the
+> retrieved text disagrees, why one source wins, and when it is safer not to
+> choose.
+
+### Recommended judge flow
+
+Run `make demo` or open the Streamlit UI and show, in order:
+
+1. T1 waiting-period supersession.
+2. T2 age-based co-payment scope.
+3. T5 planned-versus-emergency exception.
+4. T6 same-authority abstention.
+5. T7 not-in-corpus behavior.
+
+The full speaking notes are in [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md), and the
+component explanation is in [`ARCHITECTURE.md`](ARCHITECTURE.md).
+
+## 9. Submission checklist
+
+- [x] Offline test suite passes.
+- [x] Reproducible offline judge demo exists.
+- [x] Streamlit and FastAPI interfaces exist.
+- [x] 140-question live TruthGuard test split is recorded.
+- [x] Results distinguish deterministic, offline, and live paths.
+- [x] Submission summary and architecture explanation exist.
+- [ ] Human review fields are completed.
+- [ ] Independent corpus audit is completed.
+- [ ] Live B0/B1/B2 comparison is completed.
+- [ ] Gemini critic smoke is stable enough for a reported live critic result.
+- [ ] Docker is verified on a Docker-capable machine.

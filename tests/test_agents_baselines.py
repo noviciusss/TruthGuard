@@ -32,6 +32,16 @@ def test_retriever_expands_queries_and_surfaces_related_documents() -> None:
     assert context.neighbor_doc_ids
 
 
+def test_retriever_handles_indirect_wild_wording() -> None:
+    retriever, _ = make_agents()
+    context = retriever.retrieve(
+        "A reimbursement was not filed immediately after discharge. Is the window measured in weeks or months?",
+        expand=True,
+    )
+    document_ids = {result.chunk.doc_id for result in context.results}
+    assert document_ids & {"AMD-2025-04", "MAN-2025-CLAIMS", "POL-2024-V1"}
+
+
 def test_synthesizer_is_passage_grounded_in_offline_mode() -> None:
     retriever, synthesizer = make_agents()
     context = retriever.retrieve("What is the hospitalization waiting period?")

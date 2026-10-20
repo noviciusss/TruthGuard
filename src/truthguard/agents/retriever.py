@@ -47,10 +47,32 @@ class RetrieverAgent:
 
     @staticmethod
     def _deterministic_reformulations(question: str) -> list[str]:
-        return [
-            f"what else could govern this question: {question}",
-            f"amendment exception circular or notice about: {question}",
-        ]
+        lowered = question.lower()
+        hints: list[str] = []
+        if any(term in lowered for term in ("hospital", "stay", "ordinary", "accident", "waiting")):
+            hints.append("hospitalization waiting period non-accidental 30 45 days amendment")
+        if any(term in lowered for term in ("age", "senior", "share", "percentage", "bill")):
+            hints.append("co-payment standard member age 60 10% 20%")
+        if any(term in lowered for term in ("room", "allowance", "tier")):
+            hints.append("room rent sub-limit sum insured Standard Premium 1% 2%")
+        if any(term in lowered for term in ("reimbursement", "filed", "filing", "discharge", "deadline", "window")):
+            hints.append("claim submission deadline reimbursement discharge 30 60 days")
+        if any(term in lowered for term in ("look-back", "lookback", "pre-existing", "condition", "three years", "four")):
+            hints.append("pre-existing condition lookback 36 48 months amendment")
+        if any(term in lowered for term in ("approval", "approval number", "scheduled", "planned", "emergency", "network")):
+            hints.append("pre-authorization planned emergency admission notification 24 hours")
+        if any(term in lowered for term in ("annual", "limit", "circular")):
+            hints.append("annual hospitalization limit Standard 500000 600000 circular")
+        if any(term in lowered for term in ("renewal", "grace", "late")):
+            hints.append("renewal grace period 30 days circular")
+        if not hints:
+            hints = [
+                f"what else could govern this question: {question}",
+                f"amendment exception circular or notice about: {question}",
+            ]
+        while len(hints) < 2:
+            hints.append(f"amendment exception circular or notice about: {question}")
+        return hints[:2]
 
     def _reformulations(self, question: str) -> list[str]:
         if self.router is None or self.router.config.get("project", {}).get("offline", True):

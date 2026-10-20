@@ -1,7 +1,7 @@
 PYTHON ?= .venv/bin/python
 export PYTHONPATH := src
 
-.PHONY: help install install-ml install-orchestration test compile smoke api ui
+.PHONY: help install install-ml install-orchestration test compile smoke demo wild api ui
 
 help:
 	@printf '%s\n' 'make install  Create the local virtualenv and install pinned dependencies' \
@@ -10,6 +10,8 @@ help:
 		'make test     Run the offline test suite' \
 		'make compile  Compile-check Python sources' \
 		'make smoke    Run the configuration smoke check' \
+		'make demo     Generate the reproducible six-question judge demo' \
+		'make wild     Evaluate the 20-question wild robustness set offline' \
 		'make api      Start the FastAPI server' \
 		'make ui       Start the Streamlit demo'
 
@@ -37,6 +39,14 @@ compile:
 smoke:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
 	$(PYTHON) -m truthguard.config
+
+demo:
+	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
+	TRUTHGUARD_OFFLINE=true $(PYTHON) scripts/run_demo.py
+
+wild:
+	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
+	TRUTHGUARD_OFFLINE=true PYTHONPATH=.:src $(PYTHON) scripts/evaluate_wild.py
 
 api:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
