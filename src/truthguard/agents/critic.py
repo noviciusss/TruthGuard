@@ -379,8 +379,9 @@ class CriticAgent:
             conflicts.append(self.scorer.apply(conflict))
         return conflicts
 
-    def critique(self, context: RetrievedContext, draft_text: str, citations: list[Span], *, as_of: date | None = None) -> CriticReport:
-        if self.llm_enabled:
+    def _critique_llm(self, context: RetrievedContext, draft_text: str, as_of: date | None) -> CriticReport:
+        assert self.router is not None
+        with self.router.critic_request_budget(3):
             claims = self._llm_claims(context, draft_text, as_of)
             proposed_conflicts = self._llm_conflicts(context, as_of)
             conflicts, changes = self._llm_self_critique(context, proposed_conflicts, as_of)
@@ -394,6 +395,10 @@ class CriticAgent:
                 mode="llm",
                 llm_calls=3 if proposed_conflicts else 2,
             )
+
+    def critique(self, context: RetrievedContext, draft_text: str, citations: list[Span], *, as_of: date | None = None) -> CriticReport:
+        if self.llm_enabled:
+            return self._critique_llm(context, draft_text, as_of)
         claims = self._claims(context, draft_text, citations)
         conflicts = self._find_conflicts(context, as_of)
         unsupported = [claim.claim_id for claim in claims if claim.verdict == "unsupported"]

@@ -779,3 +779,72 @@ is no longer the only bottleneck.
 | Groq Qwen model-list check | Passed: `qwen/qwen3.8-27b` available |
 | Groq Qwen structured JSON smoke | Passed: HTTP 200; headers recorded |
 | Mistral throttle configuration | Passed: 1.1-second interval configured |
+
+## Evidence-quality correction and Task 3 quota stop
+
+### Retrieval correction
+
+The initial Task 1 log called any-gold-source hit@8 “recall@8.” The evaluator
+now also computes actual macro document recall@8: hash **0.8243**, BGE/FAISS
+**0.8784**, on 37 eligible dev questions. Both any-source hit rates remain
+37/37. This is document retrieval, not semantic supporting-passage recall.
+The before/after experiment used offline reformulations. The live cached
+topic-plus-two-paraphrases call is implemented and mock-tested but its combined
+effect with BGE has not been measured. Task 1 is therefore **partial against
+the full requested live-reformulation experiment**, not fully verified.
+
+BGE wild document overlap is **1.0000**, correcting an earlier unmeasured
+copied 0.9000. Ten BGE wild conflict questions had **missing conflicts**, not
+wrong detected types. Thirteen had wrong modes. Both T0 controls were false
+positives: T0-only false-conflict rate **100%**, versus the legacy all-question
+average of 10%. Source coverage does not prove both sides or exact supporting
+passages were retrieved. No test labels, prompts, or selections were changed
+based on test outcomes.
+
+### Task 2 status: partial
+
+Qwen model availability and a successful structured smoke were verified, and
+Mistral spacing was added. However, the console-level daily Qwen limit is not
+verified. The live run exposed a separate **1000 output-token/minute** Qwen
+limit not captured by the 8000-token header. Local Groq counters still aggregate
+models. Mistral continued returning 429 despite 1.1-second spacing. See
+`reports/provider_limits.md`; quota routing is not yet validated for bulk work.
+
+### Task 3: stopped, not complete
+
+- Created the fixed 40-question test subset with seed `20261020`: 6 T1–T6
+  each, 2 T0, 2 T7. Selection is unchanged and now committed.
+- Completed the offline deterministic BGE run, 40/40.
+- Attempted the live Qwen run: **7 successful answers, 18 failures, 15 not
+  reached** before the shell timeout. Do not compare the successful-only live
+  sample to the complete deterministic baseline.
+- The initial runner incorrectly continued on rate limits. It now stops on a
+  propagated quota error and rejects incompatible resume identities.
+- Added a unit-tested hard cap of three actual critic requests, including
+  retry/repair/fallback attempts. The earlier live run had no such cap and
+  cannot be claimed compliant retroactively.
+- Per-attempt retry logging and a controlled same-context/same-draft critic
+  comparison remain incomplete. See `reports/critic_subset_status.md`.
+
+### Stop reason and next action
+
+No further live run, live wild evaluation, baseline, or corpus audit will be
+started until the user confirms available Qwen/Mistral quota/access. Required
+information: Qwen RPD/TPD/input-output TPM limits and remaining budget from the
+existing Groq console, plus the Mistral account's current rate-limit status.
+No secret values are needed. Tasks 4–8 remain uncompleted; no UI framework was
+changed and no question gold labels were edited.
+
+### Local verification after stopping live work
+
+| Check | Result |
+|---|---|
+| `make test` | Passed: 50 tests; one existing Starlette deprecation warning |
+| `make compile` | Passed |
+| `git diff --check` | Passed |
+| `make retrieval` | Reran both backends; document recall and hit-rate definitions corrected |
+
+The new request-budget test counts retry transport attempts, and evidence tests
+distinguish cache hits/fallbacks, avoid cross-role fallback inflation, and reject
+legacy output rather than mixing experimental modes. No new live API calls
+were made after the quota blocker was identified.

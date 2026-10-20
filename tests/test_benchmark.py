@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
 
 from bench.generate_questions import build_questions, validate_questions, write_questions
+from scripts.create_eval_subset import TARGET_COUNTS, create_subset
 
 
 def test_benchmark_distribution_and_split() -> None:
@@ -31,3 +33,12 @@ def test_wild_questions_validate_with_source_passages() -> None:
     records = [json.loads(line) for line in wild_path.read_text().splitlines()]
     assert len(records) == 20
     assert all(record["source_passages"] is not None for record in records)
+
+
+def test_fixed_eval_subset_is_stratified_and_test_only(tmp_path) -> None:
+    source = Path(__file__).resolve().parents[1] / "data/benchmark/questions.jsonl"
+    output = tmp_path / "subset.jsonl"
+    selected = create_subset(source, output)
+    assert len(selected) == 40
+    assert Counter(record["type"] for record in selected) == TARGET_COUNTS
+    assert all(record["split"] == "test" for record in selected)

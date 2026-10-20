@@ -11,7 +11,7 @@ retrieval:
   final_k: 8
   reformulation_count: 2
   use_dense: true
-  dense_backend: hash
+  dense_backend: bge
   embedding_model: BAAI/bge-small-en-v1.5
 
 authority_rank:

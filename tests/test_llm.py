@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from copy import deepcopy
 
+import pytest
 from pydantic import BaseModel
 
 from truthguard.config import load_config
-from truthguard.llm import LLMRouter, ProviderError
+from truthguard.llm import AllProvidersUnavailable, LLMRouter, ProviderError
 
 
 class TinyPayload(BaseModel):
@@ -130,3 +131,24 @@ def test_router_retries_provider_rate_limit(tmp_path) -> None:
     )
     assert result.answer == "after retry"
     assert attempts["count"] == 2
+
+
+def test_critic_budget_counts_retries_as_actual_requests(tmp_path, monkeypatch) -> None:
+    config = deepcopy(load_config())
+    config["project"]["offline"] = False
+    config["role_chains"]["critic"] = ["groq"]
+    attempts = []
+
+    def transport(*args):
+        attempts.append(args)
+        if len(attempts) < 3:
+            raise ProviderError("rate limited", retry_after=0.001)
+        return {"answer": "valid"}
+
+    monkeypatch.setattr("truthguard.llm.time.sleep", lambda seconds: None)
+    router = LLMRouter(config, database_path=tmp_path / "bounded.sqlite3", transport=transport)
+    with router.critic_request_budget(3):
+        router.complete_json("critic", [{"role": "user", "content": "first stage"}], TinyPayload)
+        with pytest.raises(AllProvidersUnavailable, match="request budget exhausted"):
+            router.complete_json("critic", [{"role": "user", "content": "second stage"}], TinyPayload)
+    assert len(attempts) == 3

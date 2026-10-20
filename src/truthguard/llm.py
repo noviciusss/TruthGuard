@@ -14,6 +14,7 @@ import re
 import sqlite3
 import time
 from collections.abc import Callable, Sequence
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, TypeVar
@@ -65,6 +66,7 @@ class LLMRouter:
         self.transport = transport
         self.client = client
         self._last_request_monotonic: dict[str, float] = {}
+        self._critic_requests_remaining: int | None = None
         self._initialize_database()
 
     def _resolve_path(self, path: str | Path) -> Path:
@@ -354,12 +356,18 @@ class LLMRouter:
         params: dict[str, Any],
         *,
         attempts: int = 3,
+        role: str | None = None,
     ) -> dict[str, Any]:
         """Retry provider 429s with bounded exponential/backoff waiting."""
 
         for attempt in range(attempts):
             try:
+                if role == "critic" and self._critic_requests_remaining is not None:
+                    if self._critic_requests_remaining <= 0:
+                        raise BudgetExceeded("Per-question critic request budget exhausted (maximum three actual requests)")
                 self._wait_for_budget(provider)
+                if role == "critic" and self._critic_requests_remaining is not None:
+                    self._critic_requests_remaining -= 1
                 self._last_request_monotonic[provider] = time.monotonic()
                 return self._invoke(provider, model, messages, params)
             except ProviderError as exc:
@@ -368,6 +376,16 @@ class LLMRouter:
                 delay = min(max(exc.retry_after, 0.5) * (2**attempt), 60.0)
                 time.sleep(delay)
         raise AssertionError("unreachable")
+
+    @contextmanager
+    def critic_request_budget(self, limit: int = 3):
+        """Bound actual critic transport attempts, including repairs and retries."""
+        previous = self._critic_requests_remaining
+        self._critic_requests_remaining = limit if previous is None else min(limit, previous)
+        try:
+            yield
+        finally:
+            self._critic_requests_remaining = previous
 
     @staticmethod
     def _content_from_response(response: dict[str, Any]) -> Any:
@@ -456,7 +474,7 @@ class LLMRouter:
             started = time.perf_counter()
             repaired = False
             try:
-                raw = offline_payload if offline else self._invoke_with_retry(provider, model, messages, params)
+                raw = offline_payload if offline else self._invoke_with_retry(provider, model, messages, params, role=role)
                 payload = self._content_from_response(raw)
                 try:
                     parsed = response_model.model_validate(payload)
@@ -482,7 +500,7 @@ class LLMRouter:
                         }
                     ]
                     self._wait_for_budget(provider)
-                    raw = self._invoke_with_retry(provider, model, repair_messages, params)
+                    raw = self._invoke_with_retry(provider, model, repair_messages, params, role=role)
                     payload = self._content_from_response(raw)
                     parsed = response_model.model_validate(payload)
                 validated_payload = parsed.model_dump(mode="json")

@@ -1,7 +1,7 @@
 PYTHON ?= .venv/bin/python
 export PYTHONPATH := src
 
-.PHONY: help install install-ml install-orchestration test compile smoke demo wild retrieval api ui
+.PHONY: help install install-ml install-orchestration test compile smoke demo wild retrieval subset api ui
 
 help:
 	@printf '%s\n' 'make install  Create the local virtualenv and install pinned dependencies' \
@@ -13,6 +13,7 @@ help:
 		'make demo     Generate the reproducible six-question judge demo' \
 		'make wild     Evaluate the 20-question wild robustness set offline' \
 		'make retrieval Compare hash and BGE/FAISS retrieval on dev and wild sets' \
+		'make subset   Regenerate the committed fixed 40-question test subset' \
 		'make api      Start the FastAPI server' \
 		'make ui       Start the Streamlit demo'
 
@@ -53,6 +54,9 @@ retrieval:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
 	TRUTHGUARD_OFFLINE=true PYTHONPATH=.:src $(PYTHON) scripts/evaluate_retrieval.py --backend hash --output /tmp/truthguard-retrieval-hash.json
 	TRUTHGUARD_OFFLINE=true TRUTHGUARD_ALLOW_BGE_OFFLINE=true PYTHONPATH=.:src $(PYTHON) scripts/evaluate_retrieval.py --backend bge --output /tmp/truthguard-retrieval-bge.json
+
+subset:
+	$(PYTHON) scripts/create_eval_subset.py
 
 api:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)

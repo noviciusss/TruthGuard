@@ -95,29 +95,59 @@ needed before presenting this as a headline robustness result.
 
 ## Retrieval robustness: before and after BGE + FAISS
 
-The development retrieval measurement uses 37 questions with gold source
-documents. Recall@8 means that at least one gold source document appeared in
-the top eight retrieved results. Wild evaluation uses the same offline
-deterministic critic for both rows.
+The development measurement uses 37 questions with gold source documents.
+Document recall@8 is the mean fraction of gold document IDs retrieved in the
+top eight chunks. Any-source hit@8 is a weaker check: at least one gold document
+appeared. Neither measures supporting-passage recall. Wild evaluation uses
+the same offline deterministic critic and offline reformulations for both rows.
+The cached live topic-plus-two-paraphrases call is implemented but **not used
+in this before/after comparison**; its effect is still unmeasured.
 
-| Retrieval backend | Dev recall@8 | Wild answer accuracy | Wild conflict F1 | Wild mode accuracy | Wild false-conflict rate | Wild abstention recall |
-|---|---:|---:|---:|---:|---:|---:|
-| Hash embedder + BM25 | 1.0000 (37/37) | 0.3500 | 0.4348 | 0.3000 | 0.1000 | 0.7500 |
-| BGE small + FAISS + BM25 | 1.0000 (37/37) | 0.4500 | 0.4800 | 0.3500 | 0.1000 | 0.7500 |
+| Retrieval backend | Dev document recall@8 | Dev any-source hit@8 | Wild answer accuracy | Wild conflict F1 | Wild mode accuracy | Wild false conflicts / all questions | Wild abstention recall |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Hash embedder + BM25 | 0.8243 | 1.0000 (37/37) | 0.3500 | 0.4348 | 0.3000 | 0.1000 | 0.7500 |
+| BGE small + FAISS + BM25 | 0.8784 | 1.0000 (37/37) | 0.4500 | 0.4800 | 0.3500 | 0.1000 | 0.7500 |
 
-BGE + FAISS did not improve dev recall because the hash baseline already
-retrieved at least one gold source for every eligible dev question. It improved
-wild answer accuracy by 0.10 and conflict F1 by 0.0452, but the wild set
-remains weak. The detailed per-question failure categories are in
-`reports/wild_results.md`.
+BGE + FAISS improved dev document recall by 0.0541; the weaker any-source
+hit rate was already saturated. Wild answer accuracy improved by 0.10 and
+conflict F1 by 0.0452, but the wild set remains weak. The historical metric
+`false_conflict` averages false conflicts over all questions; both wild T0
+controls were falsely flagged, so the T0-only false-conflict rate is **2/2
+(100%)**, not 10%. See `reports/wild_results.md` for per-question failures.
 
 ### Wild failure diagnosis
 
 For the hash baseline, the retrieval misses were `wild-006` and `wild-011`.
-After BGE + FAISS there were no top-eight retrieval misses. Remaining errors
-were primarily wrong mode or wrong conflict type rather than pure retrieval
-failure. This points to conflict reasoning and answer-mode calibration as the
-next robustness target.
+After BGE + FAISS every source-labeled wild question retrieved at least one
+gold document in the top eight. This does not establish that all competing
+sources or supporting passages were retrieved. Ten conflict questions had no
+detected conflict (not a wrong detected type); thirteen had the wrong mode.
+The categories overlap. Improving conflict detection and mode selection is
+still necessary; incomplete evidence retrieval has not been ruled out.
+
+## Fixed 40-question test subset — incomplete live critic experiment
+
+Subset: `data/benchmark/eval_subset_40.jsonl`, seed `20261020`, 6 each T1–T6,
+2 T0, and 2 T7. These questions were selected once without inspecting outcomes;
+the file is now committed. No prompts or gold labels were tuned on this subset.
+
+The deterministic end-to-end BGE run completed 40/40. Its descriptive metrics
+are conflict F1 `0.8824`, blended-answer proxy `0.0000`, T6/T7 combined abstention
+recall `1.0000`, answer proxy accuracy `0.8500`. Both T0 controls were falsely
+flagged: T0-only false-conflict rate `2/2 = 1.0000` (the legacy all-question
+average is `0.0500`). Critic provider/model: **none, deterministic**.
+
+The live Qwen experiment completed only 7/40 questions before rate-limit and
+oversized-request failures. Eighteen questions recorded failures, and fifteen
+were not reached before the shell timeout. **Do not compare these seven
+successful answers to the 40-question deterministic aggregate.** Upstream
+reformulation/synthesis also differ between the offline and live runs, so this
+is not yet a controlled critic-only comparison.
+
+Actual successful critic: `groq / qwen/qwen3.8-27b`. Actual successful
+reformulation/synthesis: `groq / openai/gpt-oss-120b`. Mistral fallback attempts
+failed and are not labeled as successful primary-model answers. The partial
+call audit and remaining gaps are in `reports/critic_subset_status.md`.
 
 ## Reproducibility and limitations
 
