@@ -896,3 +896,59 @@ Evidence and reproduction: `reports/false_conflicts.md`,
 - `git diff --check`: passed.
 - DEV-only and complete offline before/after evaluation commands completed.
 - No LLM calls, question changes, corpus changes, or UI framework changes.
+
+## Current Step 2 — programmatic audit, findings require a decision
+
+Implemented `scripts/audit_corpus_programmatic.py` and generated
+`reports/corpus_audit_programmatic.md` plus per-question JSON evidence. The
+audit code/artifacts were committed separately as `5a6469d`. No provider call
+is used, including for absence checks or metadata recovery.
+
+| Dataset | Rows | Mechanical question passes | Question failures | Unverifiable |
+|---|---:|---:|---:|---:|
+| Main benchmark | 180 | 92 | 0 | 88 |
+| Wild | 20 | 8 | 0 | 12 |
+| Fixed test subset (overlaps main) | 40 | 20 | 0 | 20 |
+
+These are bounded mechanical checks, **not 100% gold validation**. Among 200
+unique main+wild questions, 100 pass the applicable mechanical checks and 100
+remain unverifiable. Composed answers cannot always be located as one literal
+string. A lexical T7 no-hit does not prove semantic absence. A T6 pair tie does
+not establish whole-corpus irresolvability. Explicit section references are
+restricted to actual named sections; document-only citations are checked at
+document-body level, not falsely represented as provided section citations.
+
+### Concrete findings
+
+- All seven missing effective dates are recovered, but **7/35 documents fail
+  version recovery**: POL-2025-V2, AMD-2025-07, AMD-2026-04, CIR-2025-08-A,
+  FAQ-2024-01, FAQ-2026-02, NOTICE-2024-01 retain corrupted `0.0` versions.
+- Every T0 question passes the bounded same-fact renewal-duration scan; it is
+  not a proof of completeness across all possible synonyms.
+- All 26 unique T6 questions have a pair with matching known dates/authority,
+  but later material prevents automatic whole-corpus abstention validation.
+- `NOTICE-2025-11` contradicts itself: Filing says **500000**, Operational rules
+  say **600000**. `POL-2026-V3` also states 600000. We cannot silently choose
+  the intended value or change the frozen questions' scope.
+
+### Change log and stop
+
+**No corpus or question files were changed or dropped.** Correcting the notice,
+T6 scope/status, or unsupported version-recovery rules requires adjudication.
+The exact affected question IDs and source lines are in the audit artifacts.
+Steps 3–6 are not run; no ablation, limiter rewrite, or new live result is claimed.
+
+Required decisions before proceeding:
+
+1. Should T6 questions explicitly concern only the two August circulars, or
+   should their gold answers be re-adjudicated against the complete corpus?
+2. What is the intended annual limit in `NOTICE-2025-11`: 500000 or 600000?
+3. For corrupted versions with no independent body evidence, approve marking
+   them unknown, or provide/approve independent version evidence. Do not use
+   manifest gold as runtime recovery data.
+
+Human review is also needed for composed-answer entailment and semantic T7
+absence; the programmatic audit leaves those unverifiable rather than inventing
+a pass. `TRUTHGUARD_OFFLINE=true .venv/bin/python -m pytest -q
+tests/test_programmatic_audit.py`: **18 passed** in the independent audit run;
+the combined suite has 76 passing tests.

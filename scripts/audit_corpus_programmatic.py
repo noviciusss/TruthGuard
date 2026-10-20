@@ -389,7 +389,7 @@ def markdown(report: dict) -> str:
               "Approval is needed for any answer/claim/status change. Missing full strings must not be relabeled as literal passes.", "",
               "2. **T6 global applicability:** decide whether questions are deliberately restricted to the two August circulars or ask for a current whole-corpus answer. "
               "Inspect all `other_positions` in JSON, particularly later/higher-authority material if present. "
-              "Possible safe proposals, requiring owner approval: explicitly scope the question/as-of date, or semantically revise gold after adjudication. "
+               "Possible safe proposals, requiring owner approval: explicitly restrict the question to the cited documents, or semantically revise gold after adjudication. "
               "Do not infer a winner automatically from the pair tie or a later date alone.", "",
               "3. **Metadata:** failed version recovery means the current loader retained a physical value that differs from the manifest. "
               "A safe future fix would flag an unsupported version as unknown or recover it only from an independently documented rule/body cue, with tests. "
