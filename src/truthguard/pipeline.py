@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timezone
+import os
 from pathlib import Path
 from typing import Any, TypedDict
 
@@ -13,7 +14,7 @@ from .agents.synthesizer import SynthesizerAgent
 from .config import ROOT, load_config
 from .graph.supersession import SupersessionGraph
 from .ingest.chunker import chunk_document
-from .ingest.index import HybridIndex
+from .ingest.index import BGEEmbedder, HashEmbedder, HybridIndex
 from .ingest.loader import load_documents
 from .llm import LLMRouter
 from .schemas import AgentStep, FinalAnswer
@@ -147,7 +148,19 @@ def build_default_pipeline(
     corpus_dir = Path(corpus_dir or ROOT / config["project"].get("data_dir", "data") / "corpus")
     documents = load_documents(corpus_dir, authority_ranks=config.get("authority_rank"))
     chunks = [chunk for document in documents for chunk in chunk_document(document)]
-    index = HybridIndex()
+    retrieval_config = config.get("retrieval", {})
+    backend = os.getenv("TRUTHGUARD_RETRIEVAL_BACKEND", retrieval_config.get("dense_backend", "hash")).lower()
+    if backend == "bge" and config["project"].get("offline", True) and os.getenv("TRUTHGUARD_ALLOW_BGE_OFFLINE") != "true":
+        backend = "hash"
+    if backend == "bge":
+        index = HybridIndex(
+            embedder=BGEEmbedder(retrieval_config.get("embedding_model", "BAAI/bge-small-en-v1.5")),
+            use_faiss=True,
+        )
+    elif backend == "hash":
+        index = HybridIndex(embedder=HashEmbedder())
+    else:
+        raise ValueError(f"Unknown retrieval backend: {backend}")
     index.build(chunks)
     graph = SupersessionGraph.from_documents(document.meta for document in documents)
     router = router or LLMRouter(config)

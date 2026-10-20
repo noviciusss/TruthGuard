@@ -93,6 +93,32 @@ than the generated benchmark. The detailed breakdown is in
 `reports/wild_results.md`; stronger query planning or a stable live critic is
 needed before presenting this as a headline robustness result.
 
+## Retrieval robustness: before and after BGE + FAISS
+
+The development retrieval measurement uses 37 questions with gold source
+documents. Recall@8 means that at least one gold source document appeared in
+the top eight retrieved results. Wild evaluation uses the same offline
+deterministic critic for both rows.
+
+| Retrieval backend | Dev recall@8 | Wild answer accuracy | Wild conflict F1 | Wild mode accuracy | Wild false-conflict rate | Wild abstention recall |
+|---|---:|---:|---:|---:|---:|---:|
+| Hash embedder + BM25 | 1.0000 (37/37) | 0.3500 | 0.4348 | 0.3000 | 0.1000 | 0.7500 |
+| BGE small + FAISS + BM25 | 1.0000 (37/37) | 0.4500 | 0.4800 | 0.3500 | 0.1000 | 0.7500 |
+
+BGE + FAISS did not improve dev recall because the hash baseline already
+retrieved at least one gold source for every eligible dev question. It improved
+wild answer accuracy by 0.10 and conflict F1 by 0.0452, but the wild set
+remains weak. The detailed per-question failure categories are in
+`reports/wild_results.md`.
+
+### Wild failure diagnosis
+
+For the hash baseline, the retrieval misses were `wild-006` and `wild-011`.
+After BGE + FAISS there were no top-eight retrieval misses. Remaining errors
+were primarily wrong mode or wrong conflict type rather than pure retrieval
+failure. This points to conflict reasoning and answer-mode calibration as the
+next robustness target.
+
 ## Reproducibility and limitations
 
 - All test/dev questions are synthetic and generated from the Aurelia Health

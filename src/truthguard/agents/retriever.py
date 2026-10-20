@@ -19,6 +19,7 @@ class RetrievedContext:
     results: list[SearchResult]
     reformulations: list[str]
     neighbor_doc_ids: list[str]
+    topic: str = ""
 
     @property
     def chunks(self):
@@ -74,9 +75,9 @@ class RetrieverAgent:
             hints.append(f"amendment exception circular or notice about: {question}")
         return hints[:2]
 
-    def _reformulations(self, question: str) -> list[str]:
+    def _reformulations(self, question: str) -> tuple[str, list[str]]:
         if self.router is None or self.router.config.get("project", {}).get("offline", True):
-            return self._deterministic_reformulations(question)
+            return "", self._deterministic_reformulations(question)
         response, _ = self.router.complete_json(
             "generation",
             [
@@ -84,8 +85,9 @@ class RetrieverAgent:
                     "role": "system",
                     "content": (
                         'Return ONLY one JSON object with exactly this shape: '
-                        '{"queries":["short query 1","short query 2"]}. '
-                        "The queries value must be an array of at most two strings."
+                        '{"topic":"short topic label","queries":["short query 1","short query 2"]}. '
+                        "The topic must be a concise noun phrase. The queries value must contain exactly two "
+                        "short paraphrases that seek amendments, exceptions, or competing sources."
                     ),
                 },
                 {"role": "user", "content": question},
@@ -93,7 +95,7 @@ class RetrieverAgent:
             ReformulationResponse,
             stage="retrieval-expansion",
         )
-        return [query for query in response.queries if query.strip()][:2]
+        return response.topic.strip(), [query for query in response.queries if query.strip()][:2]
 
     def retrieve(
         self,
@@ -103,8 +105,10 @@ class RetrieverAgent:
         expand: bool = True,
     ) -> RetrievedContext:
         queries = [question]
+        topic = ""
         if expand and self.expansion_enabled:
-            queries.extend(self._reformulations(question))
+            topic, reformulations = self._reformulations(question)
+            queries.extend(reformulations)
         by_chunk: dict[str, SearchResult] = {}
         for query_index, query in enumerate(queries):
             for result in self.index.search(query, initial_k=self.initial_k, final_k=self.final_k):
@@ -168,4 +172,5 @@ class RetrieverAgent:
             results=results,
             reformulations=queries[1:],
             neighbor_doc_ids=neighbor_doc_ids,
+            topic=topic,
         )

@@ -148,6 +148,7 @@ class BenchmarkQuestion(TGModel):
 
 
 class ReformulationResponse(TGModel):
+    topic: str = ""
     queries: list[str] = Field(default_factory=list, max_length=3)
 
 

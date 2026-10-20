@@ -1,7 +1,7 @@
 PYTHON ?= .venv/bin/python
 export PYTHONPATH := src
 
-.PHONY: help install install-ml install-orchestration test compile smoke demo wild api ui
+.PHONY: help install install-ml install-orchestration test compile smoke demo wild retrieval api ui
 
 help:
 	@printf '%s\n' 'make install  Create the local virtualenv and install pinned dependencies' \
@@ -12,6 +12,7 @@ help:
 		'make smoke    Run the configuration smoke check' \
 		'make demo     Generate the reproducible six-question judge demo' \
 		'make wild     Evaluate the 20-question wild robustness set offline' \
+		'make retrieval Compare hash and BGE/FAISS retrieval on dev and wild sets' \
 		'make api      Start the FastAPI server' \
 		'make ui       Start the Streamlit demo'
 
@@ -47,6 +48,11 @@ demo:
 wild:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
 	TRUTHGUARD_OFFLINE=true PYTHONPATH=.:src $(PYTHON) scripts/evaluate_wild.py
+
+retrieval:
+	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)
+	TRUTHGUARD_OFFLINE=true PYTHONPATH=.:src $(PYTHON) scripts/evaluate_retrieval.py --backend hash --output /tmp/truthguard-retrieval-hash.json
+	TRUTHGUARD_OFFLINE=true TRUTHGUARD_ALLOW_BGE_OFFLINE=true PYTHONPATH=.:src $(PYTHON) scripts/evaluate_retrieval.py --backend bge --output /tmp/truthguard-retrieval-bge.json
 
 api:
 	@test -x "$(PYTHON)" || (printf '%s\n' 'Missing .venv. Run: make install' >&2; exit 1)

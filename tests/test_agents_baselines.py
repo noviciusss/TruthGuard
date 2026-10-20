@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from copy import deepcopy
 
 from truthguard.agents.retriever import RetrieverAgent
 from truthguard.agents.synthesizer import SynthesizerAgent
@@ -9,6 +10,8 @@ from truthguard.graph.supersession import SupersessionGraph
 from truthguard.ingest.chunker import chunk_document
 from truthguard.ingest.index import HybridIndex
 from truthguard.ingest.loader import load_documents
+from truthguard.config import load_config
+from truthguard.llm import LLMRouter
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,6 +43,31 @@ def test_retriever_handles_indirect_wild_wording() -> None:
     )
     document_ids = {result.chunk.doc_id for result in context.results}
     assert document_ids & {"AMD-2025-04", "MAN-2025-CLAIMS", "POL-2024-V1"}
+
+
+def test_live_reformulation_is_one_cached_call_with_topic(tmp_path) -> None:
+    documents = load_documents(ROOT / "data/corpus")
+    chunks = [chunk for document in documents for chunk in chunk_document(document)]
+    index = HybridIndex()
+    index.build(chunks)
+    config = deepcopy(load_config())
+    config["project"]["offline"] = False
+    config["role_chains"]["generation"] = ["groq"]
+    calls = []
+
+    def transport(provider, model, headers, payload):
+        calls.append(payload)
+        return {"choices": [{"message": {"content": '{"topic":"claim deadline","queries":["reimbursement deadline after discharge","amendment claim filing window"]}'}}]}
+
+    router = LLMRouter(config, database_path=tmp_path / "reformulation.sqlite3", transport=transport)
+    retriever = RetrieverAgent(index, router=router)
+    first = retriever.retrieve("When can a reimbursement claim be filed?", expand=True)
+    second = retriever.retrieve("When can a reimbursement claim be filed?", expand=True)
+
+    assert len(calls) == 1
+    assert first.topic == "claim deadline"
+    assert first.reformulations == second.reformulations
+    assert router.call_records()[1].cached is True
 
 
 def test_synthesizer_is_passage_grounded_in_offline_mode() -> None:

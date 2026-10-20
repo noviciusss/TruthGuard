@@ -721,3 +721,39 @@ recall `1.0`, so the change did not regress the frozen benchmark.
 | `make demo` | Passed: six cases with expected statuses |
 | `make wild` | Passed: 20 questions scored and report written |
 | Offline 140-question rerun | Passed: metrics unchanged from recorded fallback baseline |
+
+## Task 1 — BGE/FAISS retrieval and cached reformulation
+
+### Completed
+
+- Completed `make install-ml`; the first install attempt exceeded the sandbox
+  timeout during package installation, and a retry completed with the pinned
+  ML dependencies already present.
+- Added optional BGE embeddings using `BAAI/bge-small-en-v1.5`.
+- Added FAISS inner-product dense search while retaining BM25 and RRF.
+- Added one structured query-reformulation call per live question returning a
+  topic and two paraphrases. The existing SQLite router cache makes repeated
+  questions reuse that call.
+- Added a fixed offline retrieval comparison script:
+  `scripts/evaluate_retrieval.py` and `make retrieval`.
+
+### Measurements
+
+| Backend | Dev recall@8 | Wild answer accuracy | Wild conflict F1 | Wild mode accuracy |
+|---|---:|---:|---:|---:|
+| Hash + BM25 | 1.0000 (37/37) | 0.3500 | 0.4348 | 0.3000 |
+| BGE + FAISS + BM25 | 1.0000 (37/37) | 0.4500 | 0.4800 | 0.3500 |
+
+BGE removed the two hash retrieval misses in the wild set, but did not improve
+dev recall because the hash path already had 37/37 source coverage. The
+remaining wild failures are mostly wrong mode or conflict type, so retrieval
+is no longer the only bottleneck.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| `make install-ml` | Passed on retry; pinned BGE/FAISS stack installed |
+| BGE model load | Passed; 384-dimensional embeddings |
+| `make retrieval` | Passed; before/after JSON evidence written under `/tmp` |
+| Cached reformulation test | Passed; one transport call, second call cached |

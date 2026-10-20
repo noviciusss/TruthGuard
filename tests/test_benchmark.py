@@ -24,3 +24,10 @@ def test_benchmark_jsonl_is_reproducible(tmp_path) -> None:
     assert len(records) == 180
     assert all(record["hand_verified"] is False for record in records)
     assert {record["type"] for record in records} == {"T0", "T1", "T2", "T3", "T4", "T5", "T6", "T7"}
+
+
+def test_wild_questions_validate_with_source_passages() -> None:
+    wild_path = Path(__file__).resolve().parents[1] / "data/benchmark/wild.jsonl"
+    records = [json.loads(line) for line in wild_path.read_text().splitlines()]
+    assert len(records) == 20
+    assert all(record["source_passages"] is not None for record in records)
