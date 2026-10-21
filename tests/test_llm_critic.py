@@ -10,6 +10,7 @@ from truthguard.ingest.index import SearchResult
 from truthguard.llm import LLMRouter
 from truthguard.schemas import Chunk, DocMeta
 from truthguard.agents.retriever import RetrievedContext
+from test_llm import FakeClock
 
 
 def _meta(doc_id: str, effective: date) -> DocMeta:
@@ -67,27 +68,29 @@ def test_llm_critic_runs_three_structured_calls_and_returns_mode(tmp_path) -> No
         calls.append(content)
         if "atomic claim decomposition" in content:
             return {
-                "choices": [{"message": {"content": '{"claims":[{"claim_id":"claim-1","text":"The hospitalization waiting period is 45 days.","verdict":"supported","supporting_evidence":[{"chunk_id":"DOC-NEW:c1"}],"contradicting_evidence":[],"rationale":"New passage supports the claim."}]}'}}]
+                "choices": [{"message": {"content": '{"c":[{"i":"c1","v":"s","s":["p2"],"x":[],"r":"New passage supports the claim."}]}'}}]
             }
-        if "pairwise within each topic cluster" in content:
+        if "Compare passages pairwise" in content:
             return {
-                "choices": [{"message": {"content": '{"conflicts":[{"conflict_id":"t1-waiting","type":"T1","position_evidence":{"DOC-OLD":[{"chunk_id":"DOC-OLD:c1"}],"DOC-NEW":[{"chunk_id":"DOC-NEW:c1"}]},"rationale":"The later document changes the value.","confidence":0.95}]}'}}]
+                "choices": [{"message": {"content": '{"f":[{"i":"f1","t":"T1","p":["p1","p2"],"r":"The later document changes the value.","c":0.95}]}'}}]
             }
         return {
-            "choices": [{"message": {"content": '{"keep_conflict_ids":["t1-waiting"],"dropped_conflict_ids":[],"changes":[]}'}}]
+            "choices": [{"message": {"content": '{"k":["f1"],"d":[],"r":""}'}}]
         }
 
-    router = LLMRouter(config, database_path=tmp_path / "critic.sqlite3", transport=transport)
+    clock = FakeClock()
+    router = LLMRouter(config, database_path=tmp_path / "critic.sqlite3", transport=transport,
+                       clock=clock, sleep=clock.sleep)
     graph = SupersessionGraph.from_documents([_meta("DOC-OLD", date(2024, 1, 1)), _meta("DOC-NEW", date(2025, 1, 1))])
     report = CriticAgent(graph, router=router).critique(_context(), "The hospitalization waiting period is 45 days.", [])
 
     assert report.mode == "llm"
     assert report.llm_calls == 3
     assert len(calls) == 3
-    assert '"claims"' in calls[0]
-    assert "Do not use wrapper keys" in calls[0]
-    assert '"position_evidence"' in calls[1]
-    assert '"keep_conflict_ids"' in calls[2]
+    assert '"c"' in calls[0]
+    assert "Never generate claim text" in calls[0]
+    assert '"p":["p1","p2"]' in calls[1]
+    assert '"k"' in calls[2]
     assert report.claims[0].verdict == "supported"
     assert report.conflicts[0].type == "T1"
     assert report.conflicts[0].winner_doc_id == "DOC-NEW"

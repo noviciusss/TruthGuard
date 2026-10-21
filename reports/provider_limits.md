@@ -39,6 +39,12 @@ despite serialized 1.1-second spacing. No further live evaluation, baseline,
 or audit calls are authorized by this run's evidence until these quota issues
 are resolved.
 
+The local configuration now records `output_tpm_limit: 1000` for
+`qwen/qwen3.8-27b`. This is a conservative guard based on the observed
+provider error, not a claim that the account's daily quota has been verified.
+Critic requests are capped at 350 output tokens and reserve input/output tokens
+per provider and model before transport.
+
 ## Gemini
 
 The configured Gemini 3.8 Flash dashboard limits are:

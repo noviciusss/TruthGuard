@@ -139,123 +139,23 @@ class CriticAgent:
 
     def _llm_claims(self, context: RetrievedContext, draft_text: str, as_of: date | None) -> list[Claim]:
         assert self.router is not None
-        passages = self._passage_annotations(context, self.graph, as_of)
-        prompt = (
-            'Return ONLY one JSON object with exactly this top-level shape: '
-            '{"claims":[{"claim_id":"claim-1","text":"...","verdict":"supported|contradicted|unsupported",'
-            '"supporting_evidence":[{"chunk_id":"EXACT_CHUNK_ID","rationale":"..."}],'
-            '"contradicting_evidence":[],"rationale":"..."}]}. '
-            'Use exactly these keys: claims, claim_id, text, verdict, supporting_evidence, '
-            'contradicting_evidence, rationale. Do not use wrapper keys or alternate names such as '
-            'raw_claims, evaluated_claims, claim, claim_text, evidence, or support. Do not return markdown. '
-            'Perform atomic claim decomposition and verify every claim against ALL supplied passages, not only cited '
-            'passages. Evidence references must use exact chunk_id values.\n\n'
-            f"QUESTION:\n{context.question}\n\nDRAFT:\n{draft_text}\n\nALL PASSAGES:\n{self._passage_text(passages)}"
-        )
-        response, _ = self.router.complete_json(
-            "critic",
-            [{"role": "system", "content": prompt}, {"role": "user", "content": "Return the JSON critic report."}],
-            CriticClaimsResponse,
-            stage="critic-call-a-claims",
-        )
-        known = self._known_spans(context)
-        claims: list[Claim] = []
-        for item in response.claims:
-            supporting = [span for ref in item.supporting_evidence if (span := self._span_from_ref(ref, known))]
-            contradicting = [span for ref in item.contradicting_evidence if (span := self._span_from_ref(ref, known))]
-            claims.append(
-                Claim(
-                    claim_id=item.claim_id,
-                    text=item.text,
-                    verdict=item.verdict,
-                    supporting_spans=supporting,
-                    contradicting_spans=contradicting,
-                )
-            )
-        return claims
+        from ..compact_critic import claims
+
+        return claims(self, context, draft_text, as_of)
 
     def _llm_conflicts(self, context: RetrievedContext, as_of: date | None) -> list[Conflict]:
         assert self.router is not None
-        passages = self._passage_annotations(context, self.graph, as_of)
-        clusters: dict[str, list[dict[str, Any]]] = defaultdict(list)
-        for passage in passages:
-            clusters[_topic(passage["text"]) or "other"].append(passage)
-        cluster_text = "\n\n".join(
-            f"TOPIC={topic}\n{self._passage_text(items)}" for topic, items in clusters.items()
-        )
-        prompt = (
-            'Return ONLY one JSON object with exactly this top-level shape: '
-            '{"conflicts":[{"conflict_id":"t1-example","type":"T1|T2|T3|T4|T5|T6",'
-            '"position_evidence":{"DOC-ID":[{"chunk_id":"EXACT_CHUNK_ID","rationale":"..."}]},'
-            '"rationale":"...","confidence":0.0}]}. Use exactly these keys: conflicts, conflict_id, type, '
-            'position_evidence, rationale, confidence. Do not use wrapper keys or alternate names such as '
-            'findings, positions, evidence, conflict_type, or score. Do not return markdown. Compare passages '
-            'pairwise within each topic cluster. Detect genuine contradictions, including implicit contradictions. '
-            'Use the supplied graph and metadata annotations for staleness and supersession; do not invent dates or '
-            'authority. Assign only T1, T2, T3, T4, T5, or T6. Each conflict must include at least two document '
-            'positions, represented by exact chunk_id evidence references.\n\n'
-            f"QUESTION:\n{context.question}\n\nCLUSTERED PASSAGES:\n{cluster_text}"
-        )
-        response, _ = self.router.complete_json(
-            "critic",
-            [{"role": "system", "content": prompt}, {"role": "user", "content": "Return the JSON conflict scan."}],
-            CriticConflictResponse,
-            stage="critic-call-b-conflicts",
-        )
-        known = self._known_spans(context)
-        by_doc = {chunk.doc_id: chunk for chunk in known.values()}
-        conflicts: list[Conflict] = []
-        for finding in response.conflicts:
-            positions: list[Position] = []
-            for doc_id, refs in finding.position_evidence.items():
-                for ref in refs:
-                    chunk = known.get(ref.chunk_id)
-                    if chunk is None or chunk.doc_id != doc_id:
-                        continue
-                    position = self._position(next(result for result in context.results if result.chunk.chunk_id == ref.chunk_id))
-                    if all(existing.doc_id != position.doc_id for existing in positions):
-                        positions.append(position)
-                    break
-            if len(positions) < 2:
-                continue
-            mode = "abstain" if finding.type == "T6" else ("contextual" if finding.type in {"T2", "T5"} else "supersession")
-            winner = self._winner(positions)
-            conflict = Conflict(
-                conflict_id=finding.conflict_id,
-                type=finding.type,
-                positions=positions,
-                resolution_mode=mode,
-                winner_doc_id=None if mode != "supersession" else winner,
-                rationale=finding.rationale,
-                confidence=finding.confidence,
-            )
-            conflicts.append(self.scorer.apply(conflict))
-        return conflicts
+        from ..compact_critic import conflicts
+
+        return conflicts(self, context, as_of)
 
     def _llm_self_critique(self, context: RetrievedContext, conflicts: list[Conflict], as_of: date | None) -> tuple[list[Conflict], list[str]]:
         if not conflicts:
             return [], []
         assert self.router is not None
-        prompt = (
-            'Return ONLY one JSON object with exactly this top-level shape: '
-            '{"keep_conflict_ids":["t1-example"],"dropped_conflict_ids":[],"changes":[]}. '
-            'Use exactly these keys: keep_conflict_ids, dropped_conflict_ids, changes. Do not use wrapper keys or '
-            'alternate names such as conflicts, kept, dropped, review, or notes. Do not return markdown. Attack each '
-            'proposed conflict. Drop false positives caused by different scopes, unrelated topics, or a valid '
-            'supersession relationship. Keep only conflict IDs that are genuine after reviewing the evidence.\n\n'
-            f"QUESTION:\n{context.question}\n\nPROPOSED CONFLICTS:\n"
-            + "\n".join(conflict.model_dump_json() for conflict in conflicts)
-        )
-        response, _ = self.router.complete_json(
-            "critic",
-            [{"role": "system", "content": prompt}, {"role": "user", "content": "Return the JSON self-critique."}],
-            CriticSelfReviewResponse,
-            stage="critic-call-c-self-critique",
-        )
-        keep = set(response.keep_conflict_ids)
-        if not keep:
-            return [], response.changes
-        return [conflict for conflict in conflicts if conflict.conflict_id in keep], response.changes
+        from ..compact_critic import self_review
+
+        return self_review(self, context, conflicts, as_of)
 
     @staticmethod
     def _claims(context: RetrievedContext, draft_text: str, citations: list[Span]) -> list[Claim]:

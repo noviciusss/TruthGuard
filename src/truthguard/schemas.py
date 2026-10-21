@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator, model_validator
 
 
 DocType = Literal["policy", "amendment", "circular", "faq", "manual", "notice"]
@@ -198,6 +198,91 @@ class CriticSelfReviewResponse(TGModel):
     changes: list[str] = Field(default_factory=list)
 
 
+class CompactRationale(TGModel):
+    r: str = Field(default="", max_length=160)
+
+    @field_validator("r")
+    @classmethod
+    def one_line(cls, value: str) -> str:
+        if any(character in value for character in "\r\n\u2028\u2029"):
+            raise ValueError("rationale must be one short line")
+        return value
+
+
+class CompactClaim(CompactRationale):
+    i: str = Field(pattern=r"^c[1-9][0-9]*$")
+    v: Literal["s", "c", "u"]
+    s: list[str] = Field(default_factory=list)
+    x: list[str] = Field(default_factory=list)
+    a: int = Field(default=0, ge=0)
+    b: int | None = Field(default=None, ge=1)
+
+
+class CompactClaimsResponse(TGModel):
+    c: list[CompactClaim]
+
+    @model_validator(mode="after")
+    def references(self, info: ValidationInfo) -> CompactClaimsResponse:
+        context = info.context or {}
+        sources, passages = context.get("claims", {}), context.get("passages", {})
+        seen: set[tuple[str, int, int]] = set()
+        for claim in self.c:
+            if claim.i not in sources:
+                raise ValueError("unknown local claim ID")
+            end = claim.b if claim.b is not None else len(sources[claim.i])
+            if not 0 <= claim.a < end <= len(sources[claim.i]):
+                raise ValueError("invalid claim source offsets")
+            if not sources[claim.i][claim.a:end].strip():
+                raise ValueError("empty claim source span")
+            key = (claim.i, claim.a, end)
+            if key in seen:
+                raise ValueError("duplicate claim source span")
+            seen.add(key)
+            for refs in (claim.s, claim.x):
+                if len(refs) != len(set(refs)) or any(ref not in passages for ref in refs):
+                    raise ValueError("unknown or duplicate passage ID")
+            if (claim.v == "s" and not claim.s) or (claim.v == "c" and not claim.x):
+                raise ValueError("verdict requires matching evidence")
+        if {claim.i for claim in self.c} != set(sources):
+            raise ValueError("every draft unit must be evaluated")
+        return self
+
+
+class CompactConflict(CompactRationale):
+    i: str = Field(pattern=r"^f[1-9][0-9]*$")
+    t: Literal["T1", "T2", "T3", "T4", "T5", "T6"]
+    p: list[str] = Field(min_length=2)
+    c: float = Field(ge=0.0, le=1.0)
+
+
+class CompactConflictsResponse(TGModel):
+    f: list[CompactConflict]
+
+    @model_validator(mode="after")
+    def references(self, info: ValidationInfo) -> CompactConflictsResponse:
+        passages = (info.context or {}).get("passages", {})
+        if len({finding.i for finding in self.f}) != len(self.f):
+            raise ValueError("duplicate conflict ID")
+        for finding in self.f:
+            if len(set(finding.p)) != len(finding.p) or any(ref not in passages for ref in finding.p):
+                raise ValueError("unknown or duplicate passage ID")
+            if len({passages[ref] for ref in finding.p}) < 2:
+                raise ValueError("conflict requires at least two distinct documents")
+        return self
+
+
+class CompactSelfReviewResponse(CompactRationale):
+    k: list[str]
+    d: list[str]
+
+    @model_validator(mode="after")
+    def references(self, info: ValidationInfo) -> CompactSelfReviewResponse:
+        known = set((info.context or {}).get("conflicts", {}))
+        if len(self.k + self.d) != len(set(self.k + self.d)) or set(self.k + self.d) != known:
+            raise ValueError("keep/drop must partition the supplied conflict IDs exactly")
+        return self
+
+
 class LLMUsage(TGModel):
     prompt_tokens: int = Field(default=0, ge=0)
     completion_tokens: int = Field(default=0, ge=0)
@@ -213,6 +298,8 @@ class LLMResult(TGModel):
     repaired: bool = False
     usage: LLMUsage = Field(default_factory=LLMUsage)
     latency_ms: float = Field(default=0.0, ge=0.0)
+    attempt_ids: list[int] = Field(default_factory=list)
+    requested_model: str | None = None
 
 
 class CallRecord(TGModel):
@@ -226,3 +313,13 @@ class CallRecord(TGModel):
     success: bool = True
     error: str | None = None
     usage: LLMUsage = Field(default_factory=LLMUsage)
+    record_id: int | None = None
+    physical_attempt: bool = True
+    attempt_kind: str = "first_json"
+    outcome: str = "valid"
+    reserved_input_tokens: int = Field(default=0, ge=0)
+    reserved_output_tokens: int = Field(default=0, ge=0)
+    rate_limit_headers: dict[str, str] = Field(default_factory=dict)
+    status_code: int | None = None
+    requested_model: str | None = None
+    accounting_version: int = 0
