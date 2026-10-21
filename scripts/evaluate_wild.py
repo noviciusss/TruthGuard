@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 from collections import defaultdict
+import json
 from pathlib import Path
 
 from bench.metrics import evaluate_predictions
@@ -18,9 +19,9 @@ def _value(metrics: dict, key: str) -> float:
     return float(metrics[key]["value"])
 
 
-def evaluate_wild(questions_path: str | Path, output_path: str | Path) -> Path:
+def evaluate_wild(questions_path: str | Path, output_path: str | Path, corpus_dir: str | Path | None = None, json_output: str | Path | None = None) -> Path:
     questions = load_questions(questions_path)
-    pipeline = build_default_pipeline(no_llm_critic=True)
+    pipeline = build_default_pipeline(no_llm_critic=True, corpus_dir=corpus_dir)
     predictions = {question.qid: pipeline.run(question.question) for question in questions}
     overall = evaluate_predictions(questions, predictions)
 
@@ -37,8 +38,8 @@ def evaluate_wild(questions_path: str | Path, output_path: str | Path) -> Path:
     lines = [
         "# Wild Robustness Evaluation",
         "",
-        "This report evaluates the 20 manually written questions in "
-        "`data/benchmark/wild.jsonl` using the offline deterministic critic. "
+        f"This report evaluates the {len(questions)} manually written questions in "
+        f"`{questions_path}` using the offline deterministic critic. "
         "It is separate from the frozen 140-question test result.",
         "",
         "## Overall",
@@ -78,6 +79,13 @@ def evaluate_wild(questions_path: str | Path, output_path: str | Path) -> Path:
         ]
     )
     output_path.write_text("\n".join(lines), encoding="utf-8")
+    if json_output:
+        json_path = Path(json_output)
+        json_path.parent.mkdir(parents=True, exist_ok=True)
+        json_path.write_text(
+            "".join(json.dumps({"qid": question.qid, "system": "truthguard", "split": "wild", "answer": predictions[question.qid].model_dump(mode="json")}, sort_keys=True) + "\n" for question in questions),
+            encoding="utf-8",
+        )
     return output_path
 
 
@@ -85,8 +93,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--questions", type=Path, default=ROOT / "data/benchmark/wild.jsonl")
     parser.add_argument("--output", type=Path, default=ROOT / "reports/wild_results.md")
+    parser.add_argument("--corpus", type=Path, help="Corpus directory; defaults to configured v1 corpus")
+    parser.add_argument("--json-output", type=Path, help="Optional prediction JSONL for aggregate reports")
     args = parser.parse_args()
-    path = evaluate_wild(args.questions, args.output)
+    path = evaluate_wild(args.questions, args.output, args.corpus, args.json_output)
     print(f"Wrote wild robustness report to {path}")
 
 

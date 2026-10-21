@@ -44,6 +44,7 @@ def run_evaluation(
     split: str = "dev",
     limit: int | None = None,
     no_llm_critic: bool = False,
+    corpus_dir: str | Path | None = None,
 ) -> list[dict[str, Any]]:
     questions = [question for question in load_questions(questions_path) if question.split == split]
     if limit is not None:
@@ -62,7 +63,7 @@ def run_evaluation(
                     and "error" not in record
                 ):
                     completed.add(record["qid"])
-    pipeline = build_default_pipeline(no_llm_critic=no_llm_critic)
+    pipeline = build_default_pipeline(no_llm_critic=no_llm_critic, corpus_dir=corpus_dir)
     records: list[dict[str, Any]] = []
     with output_path.open("a", encoding="utf-8") as handle:
         for question in questions:
@@ -98,6 +99,7 @@ def main() -> None:
         action="store_true",
         help="Use the deterministic critic instead of the lineage-separated LLM critic.",
     )
+    parser.add_argument("--corpus", type=Path, help="Corpus directory; defaults to configured v1 corpus")
     args = parser.parse_args()
     records = run_evaluation(
         args.questions,
@@ -106,6 +108,7 @@ def main() -> None:
         split=args.split,
         limit=args.limit,
         no_llm_critic=args.no_llm_critic,
+        corpus_dir=args.corpus,
     )
     print(f"Wrote {len(records)} new {args.system} records to {args.output}")
 

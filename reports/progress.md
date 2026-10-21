@@ -1123,3 +1123,39 @@ same-fact/same-scope scan remains enabled and has no new failures.
 V2 hashes, per-type counts, and distinct fact-key counts by type/split are in
 `reports/benchmark_freeze.md`; full per-qid evidence is in
 `reports/corpus_audit_v2.json`.
+
+## Step 2 — v2 reporting and deterministic reruns
+
+Added micro and macro aggregation to `bench/metrics.py`. Macro values are the
+unweighted mean of the per-type values for each present type. Reports now include
+micro/macro answer proxy, conflict F1, and resolution-mode accuracy, plus the
+TEST distribution by fact key and per-type TEST metrics.
+
+The v2 deterministic reports use the same offline `HashEmbedder` backend for the
+full system and ablations; no provider calls were made. The BGE/FAISS path was
+also exercised during the rerun, but the complete, reproducible five-minute
+bounded report uses HashEmbedder and says so explicitly.
+
+Current v2 deterministic results from `reports/frozen_results.md`:
+
+| Split | Micro conflict F1 | Macro conflict F1 | Micro answer | Macro answer | Micro mode | Macro mode | Abstention recall |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| DEV (44) | 0.9315 | 0.6891 | 0.7273 | 0.8214 | 0.7273 | 0.8214 | 1.0000 |
+| TEST (146) | 0.8835 | 0.6654 | 0.7123 | 0.8068 | 0.6781 | 0.7721 | 1.0000 |
+| Wild (22) | 0.5600 | 0.4000 | 0.4091 | 0.4792 | 0.4091 | 0.4688 | 0.7500 |
+
+The TEST fact-key distribution is in `reports/frozen_results.md`; each of the
+six new T6 fact keys contributes one TEST question.
+
+### V2 ablation numbers
+
+All three effective variants ran on all 146 TEST questions using the same
+HashEmbedder deterministic path. `reports/ablations_test.md` contains bootstrap
+95% CIs.
+
+| Variant | Micro answer | Macro answer | Micro conflict F1 | Macro conflict F1 | Micro mode | Macro mode | Public outputs differing |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Full system | 0.7123 | 0.8068 | 0.8835 | 0.6654 | 0.6781 | 0.7721 | 0 |
+| no_critic | 0.8082 | 0.7032 | 0.0000 | 0.0000 | 0.1233 | 0.1250 | 146 |
+| no_metadata_inference | 0.7123 | 0.8068 | 0.8557 | 0.6546 | 0.6438 | 0.7548 | 10 |
+| no_supersession_graph | 0.7123 | 0.8068 | 0.6782 | 0.4722 | 0.4589 | 0.5719 | 33 |

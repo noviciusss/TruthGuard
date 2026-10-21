@@ -45,6 +45,7 @@ def main():
     parser.add_argument("--baseline", type=Path, required=True)
     parser.add_argument("--ablations", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--retrieval-backend", default="configured", help="Backend used for the baseline and ablation records")
     args = parser.parse_args()
     questions = [q for q in load_questions(args.questions) if q.split == "test"]
     baseline = _load(args.baseline)
@@ -57,12 +58,11 @@ def main():
     lines = [
         "# Deterministic ablations — frozen TEST split",
         "",
-        "All three effective variants ran on all 140 frozen TEST questions with no API calls. "
-        "The JSONL output is resumable stage evidence. The full system uses the "
-        "same BGE/FAISS retrieval and deterministic critic.",
+        f"All three effective variants ran on all {len(questions)} frozen TEST questions with no API calls. "
+        f"The JSONL output is resumable stage evidence. The full system and all variants use the same {args.retrieval_backend} retrieval backend and deterministic critic.",
         "",
-        "| Variant | n | Answer proxy (95% CI) | Conflict F1 (95% CI) | Mode accuracy (95% CI) | TEST T0 false-conflicts | Public outputs differing from full |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+        "| Variant | n | Answer proxy (95% CI) | Macro answer | Conflict F1 (95% CI) | Macro conflict F1 | Mode accuracy (95% CI) | Macro mode | TEST T0 false-conflicts | Public outputs differing from full |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for name in ["full_system", *sorted(variants)]:
         predictions = baseline if name == "full_system" else variants[name]
@@ -81,9 +81,11 @@ def main():
         mode_ci = metrics["resolution_mode_accuracy"]["ci95"]
         lines.append(
             f"| {name} | {metrics['questions_scored']} | {metrics['answer_accuracy']['value']:.4f} "
-            f"[{ci[0]:.4f}, {ci[1]:.4f}] | {metrics['conflict_detection']['f1']:.4f} "
-            f"[{f1_low:.4f}, {f1_high:.4f}] | {metrics['resolution_mode_accuracy']['value']:.4f} "
-            f"[{mode_ci[0]:.4f}, {mode_ci[1]:.4f}] | {t0_fp}/{len(t0)} ({t0_fp / len(t0):.4f}) | {differing} |"
+            f"[{ci[0]:.4f}, {ci[1]:.4f}] | {metrics['macro']['answer_accuracy']:.4f} | "
+            f"{metrics['conflict_detection']['f1']:.4f} [{f1_low:.4f}, {f1_high:.4f}] | "
+            f"{metrics['macro']['conflict_f1']:.4f} | {metrics['resolution_mode_accuracy']['value']:.4f} "
+            f"[{mode_ci[0]:.4f}, {mode_ci[1]:.4f}] | {metrics['macro']['resolution_mode_accuracy']:.4f} | "
+            f"{t0_fp}/{len(t0)} ({t0_fp / len(t0):.4f}) | {differing} |"
         )
     lines.extend([
         "", "## Variant semantics", "",

@@ -29,8 +29,10 @@ def run_ablations(
     *,
     split: str = "test",
     limit: int = 60,
+    corpus_dir: str | Path | None = None,
+    offset: int = 0,
 ) -> list[dict]:
-    questions = [question for question in load_questions(questions_path) if question.split == split][:limit]
+    questions = [question for question in load_questions(questions_path) if question.split == split][offset:offset + limit]
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     completed: set[tuple[str, str]] = set()
@@ -44,6 +46,7 @@ def run_ablations(
         for variant in ABLATION_VARIANTS:
             pipeline = build_default_pipeline(
                 no_llm_critic=True,
+                corpus_dir=corpus_dir,
                 use_supersession_graph=variant != "no_supersession_graph",
                 use_metadata_inference=variant != "no_metadata_inference",
                 use_self_critique=True,
@@ -76,10 +79,12 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=ROOT / "reports/ablation_results.jsonl")
     parser.add_argument("--split", choices=["dev", "test"], default="test")
     parser.add_argument("--limit", type=int, default=60)
+    parser.add_argument("--offset", type=int, default=0)
+    parser.add_argument("--corpus", type=Path, help="Corpus directory; defaults to configured v1 corpus")
     args = parser.parse_args()
-    records = run_ablations(args.questions, args.output, split=args.split, limit=args.limit)
+    records = run_ablations(args.questions, args.output, split=args.split, limit=args.limit, corpus_dir=args.corpus, offset=args.offset)
     print(f"Wrote {len(records)} new ablation records to {args.output}")
-    questions = [question for question in load_questions(args.questions) if question.split == args.split][:args.limit]
+    questions = [question for question in load_questions(args.questions) if question.split == args.split][args.offset:args.offset + args.limit]
     by_variant: dict[str, dict[str, FinalAnswer]] = {}
     for line in Path(args.output).read_text(encoding="utf-8").splitlines():
         record = json.loads(line)

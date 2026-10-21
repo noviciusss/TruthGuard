@@ -1,13 +1,13 @@
 # Deterministic ablations — frozen TEST split
 
-All three effective variants ran on all 140 frozen TEST questions with no API calls. The JSONL output is resumable stage evidence. The full system uses the same BGE/FAISS retrieval and deterministic critic.
+All three effective variants ran on all 146 frozen TEST questions with no API calls. The JSONL output is resumable stage evidence. The full system and all variants use the same HashEmbedder retrieval backend and deterministic critic.
 
-| Variant | n | Answer proxy (95% CI) | Conflict F1 (95% CI) | Mode accuracy (95% CI) | TEST T0 false-conflicts | Public outputs differing from full |
-|---|---:|---:|---:|---:|---:|---:|
-| full_system | 140 | 0.7000 [0.6214, 0.7714] | 0.8763 [0.8242, 0.9192] | 0.7000 [0.6214, 0.7714] | 0/18 (0.0000) | 0 |
-| no_critic | 140 | 0.8929 [0.8429, 0.9429] | 0.0000 [0.0000, 0.0000] | 0.1286 [0.0786, 0.1857] | 0/18 (0.0000) | 140 |
-| no_metadata_inference | 140 | 0.7000 [0.6214, 0.7714] | 0.8763 [0.8242, 0.9192] | 0.7000 [0.6214, 0.7714] | 0/18 (0.0000) | 4 |
-| no_supersession_graph | 140 | 0.7000 [0.6214, 0.7714] | 0.7471 [0.6667, 0.8172] | 0.5571 [0.4786, 0.6429] | 0/18 (0.0000) | 20 |
+| Variant | n | Answer proxy (95% CI) | Macro answer | Conflict F1 (95% CI) | Macro conflict F1 | Mode accuracy (95% CI) | Macro mode | TEST T0 false-conflicts | Public outputs differing from full |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| full_system | 146 | 0.7123 [0.6370, 0.7808] | 0.8068 | 0.8835 [0.8324, 0.9224] | 0.6654 | 0.6781 [0.5890, 0.7534] | 0.7721 | 0/18 (0.0000) | 0 |
+| no_critic | 146 | 0.8082 [0.7534, 0.8699] | 0.7032 | 0.0000 [0.0000, 0.0000] | 0.0000 | 0.1233 [0.0753, 0.1781] | 0.1250 | 0/18 (0.0000) | 146 |
+| no_metadata_inference | 146 | 0.7123 [0.6370, 0.7808] | 0.8068 | 0.8557 [0.7979, 0.9023] | 0.6546 | 0.6438 [0.5616, 0.7192] | 0.7548 | 0/18 (0.0000) | 10 |
+| no_supersession_graph | 146 | 0.7123 [0.6370, 0.7808] | 0.8068 | 0.6782 [0.5904, 0.7553] | 0.4722 | 0.4589 [0.3699, 0.5411] | 0.5719 | 0/18 (0.0000) | 33 |
 
 ## Variant semantics
 

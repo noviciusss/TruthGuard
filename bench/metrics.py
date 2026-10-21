@@ -98,9 +98,11 @@ def evaluate_predictions(
     predictions: Mapping[str, FinalAnswer | dict[str, Any]],
     *,
     bootstrap_samples: int = 1000,
+    include_breakdowns: bool = True,
 ) -> dict[str, Any]:
     """Aggregate question-level metrics and 95% bootstrap confidence intervals."""
 
+    questions = list(questions)
     rows: list[dict[str, float]] = []
     missing = []
     for question in questions:
@@ -138,6 +140,32 @@ def evaluate_predictions(
         "recall": abstention_tp / (abstention_tp + abstention_fn) if abstention_tp + abstention_fn else 0.0,
         "f1": _f1(abstention_tp, abstention_fp, abstention_fn),
     }
+    if include_breakdowns:
+        grouped: dict[str, list[BenchmarkQuestion]] = {}
+        for question in questions:
+            grouped.setdefault(question.type, []).append(question)
+        by_type = {
+            question_type: evaluate_predictions(
+                group,
+                predictions,
+                bootstrap_samples=bootstrap_samples,
+                include_breakdowns=False,
+            )
+            for question_type, group in sorted(grouped.items())
+        }
+        metrics["by_type"] = by_type
+        macro_keys = {
+            "answer_accuracy": lambda item: item["answer_accuracy"]["value"],
+            "conflict_f1": lambda item: item["conflict_detection"]["f1"],
+            "resolution_mode_accuracy": lambda item: item["resolution_mode_accuracy"]["value"],
+            "provenance_correctness": lambda item: item["provenance_correctness"]["value"],
+            "false_conflict_rate": lambda item: item["false_conflict"]["value"],
+            "abstention_recall": lambda item: item["abstention"]["recall"],
+        }
+        metrics["macro"] = {
+            key: sum(selector(item) for item in by_type.values()) / len(by_type) if by_type else 0.0
+            for key, selector in macro_keys.items()
+        }
     return metrics
 
 

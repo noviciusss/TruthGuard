@@ -32,6 +32,12 @@ STOPWORDS = {"the", "a", "an", "is", "are", "for", "of", "and", "or", "to", "wit
 NUMBER_RE = re.compile(r"\b\d+(?:\.\d+)?\s*(?:days?|months?|%|currency units?)?", flags=re.IGNORECASE)
 TOPIC_KEYWORDS = {
     "waiting_period": ("waiting", "hospitalization"),
+    "t6_room_rent_cap": ("room", "cap"),
+    "t6_copay_rate": ("co-payment", "rate"),
+    "t6_grievance_response_window": ("grievance", "response"),
+    "t6_claim_filing_deadline": ("claim", "filing"),
+    "t6_cashless_preauth_window": ("cashless", "pre-authorization"),
+    "t6_renewal_grace_period": ("renewal", "reinstatement"),
     "copay": ("copay", "co-payment", "co payment"),
     "claim_deadline": ("claim", "discharge"),
     "lookback": ("lookback", "pre-existing", "preexisting"),
@@ -62,7 +68,11 @@ def _topic(text: str) -> str | None:
 
 def _contains_topic(topic: str, lowered_text: str) -> bool:
     keywords = TOPIC_KEYWORDS[topic]
-    return all(keyword in lowered_text for keyword in keywords) if topic in {"waiting_period", "claim_deadline"} else any(keyword in lowered_text for keyword in keywords)
+    if topic in {"waiting_period", "claim_deadline", "t6_room_rent_cap", "t6_grievance_response_window", "t6_claim_filing_deadline", "t6_cashless_preauth_window", "t6_renewal_grace_period"}:
+        return all(keyword in lowered_text for keyword in keywords)
+    if topic == "t6_copay_rate":
+        return ("co-payment" in lowered_text or "copay" in lowered_text or "co payment" in lowered_text) and ("rate" in lowered_text or "percentage" in lowered_text)
+    return any(keyword in lowered_text for keyword in keywords)
 
 
 class CriticAgent:
