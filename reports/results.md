@@ -4,6 +4,13 @@ Updated: 2026-10-20
 
 ## Evaluation status
 
+The benchmark was re-adjudicated against the complete corpus and then frozen.
+See `reports/benchmark_freeze.md`, `reports/gold_changes.md`, and the current
+deterministic run in `reports/frozen_results.md`. The frozen main TEST split has
+no T6 questions: all original T6 items had a defensible current winner
+(`POL-2026-V3`) or were reclassified, and no genuine additional same-date /
+same-authority whole-corpus ties existed to reach 12 without fabrication.
+
 **Latest offline correction:** see [fact-level conflict before/after](false_conflicts.md).
 With BGE retrieval held fixed, T0 false conflicts changed from **15/18 to 0/18
 on TEST**, and **2/2 to 0/2 on wild**. This did not improve every metric:

@@ -112,7 +112,7 @@ class TruthGuardPipeline:
                 "critic",
                 "claims-conflicts-self-critique",
                 start,
-                output=f"{len(report.claims)} claims; {len(report.conflicts)} conflicts",
+                output=f"{len(report.claims)} claims; {len(report.conflicts)} conflicts; self_critique={report.self_critique_ran}",
             )
         )
 
@@ -143,10 +143,14 @@ def build_default_pipeline(
     corpus_dir: str | Path | None = None,
     router: LLMRouter | None = None,
     no_llm_critic: bool = False,
+    use_supersession_graph: bool = True,
+    use_metadata_inference: bool = True,
+    use_self_critique: bool = True,
 ) -> TruthGuardPipeline:
     config = load_config()
     corpus_dir = Path(corpus_dir or ROOT / config["project"].get("data_dir", "data") / "corpus")
-    documents = load_documents(corpus_dir, authority_ranks=config.get("authority_rank"))
+    documents = load_documents(corpus_dir, authority_ranks=config.get("authority_rank"),
+                               infer_metadata_fields=use_metadata_inference)
     chunks = [chunk for document in documents for chunk in chunk_document(document)]
     retrieval_config = config.get("retrieval", {})
     backend = os.getenv("TRUTHGUARD_RETRIEVAL_BACKEND", retrieval_config.get("dense_backend", "hash")).lower()
@@ -162,7 +166,7 @@ def build_default_pipeline(
     else:
         raise ValueError(f"Unknown retrieval backend: {backend}")
     index.build(chunks)
-    graph = SupersessionGraph.from_documents(document.meta for document in documents)
+    graph = SupersessionGraph.from_documents(document.meta for document in documents) if use_supersession_graph else None
     router = router or LLMRouter(config)
     return TruthGuardPipeline(
         RetrieverAgent(index, graph, router=router),
@@ -171,6 +175,7 @@ def build_default_pipeline(
             graph,
             router=router,
             use_llm=not no_llm_critic and bool(config.get("critic", {}).get("llm_enabled", True)),
+            self_critique=use_self_critique,
         ),
         ResolverAgent(float(config.get("trust_weights", {}).get("resolution_gap_threshold", 0.15))),
         max_revision_loops=int(config.get("evaluation", {}).get("max_revision_loops", 2)),

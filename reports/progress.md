@@ -990,3 +990,78 @@ passed, **37 local Markdown links resolved**, and corpus/benchmark files have
 no changes relative to `7ab4b48`. `pip check` failed with the six missing
 dependencies listed above; `docker --version` failed because Docker is absent.
 Neither result is described as a passing installation/deployment check.
+
+## Frozen benchmark and post-adjudication deterministic run
+
+- `reports/benchmark_freeze.md` records SHA-256 hashes for the final main,
+  wild, and fixed40 files. No further label changes are allowed without a new
+  freeze revision.
+- Main TEST distribution is T0=18, T1=17, T2=18, T3=36, T4=17, T5=21,
+  T6=0, T7=13. The original 24 main T6 questions were reclassified T3 with
+  winner `POL-2026-V3`; wild T6 items were also reclassified. The requested
+  minimum of 12 T6 was impossible from existing evidence without fabrication.
+- Programmatic audit after adjudication: 126/200 unique main+wild questions
+  pass applicable mechanical checks, 74 are unverifiable, 0 fail; metadata
+  35/35 pass including 7 explicitly accepted unknown versions.
+- Current frozen deterministic run (BGE/FAISS, no API): TEST conflict F1
+  `0.8763`, answer proxy `0.7000`, mode accuracy `0.7000`, T0 false-conflict
+  rate `0/18`, abstention recall `1.0000`; DEV conflict F1 `0.9063`, answer
+  proxy `0.7000`; wild conflict F1 `0.5455`, answer proxy `0.4000`.
+- The answer-proxy decrease from the earlier `0.8214` TEST run is caused by
+  gold re-adjudication, not silently attributed to the detector. Full counts
+  and old/new context are in `reports/frozen_results.md`.
+
+The existing 30-row human review exporter cannot produce its original 4-T6
+stratum after complete-corpus adjudication because frozen TEST now has T6=0.
+The exporter correctly refused to silently substitute other types. The review
+sheet remains a stale pre-adjudication artifact and requires a human-approved
+new stratification before it can be regenerated; no benchmark labels will be
+changed to satisfy the old review quota.
+
+## Step 3 — deterministic ablations complete
+
+Ran on the full frozen 140-question TEST split with BGE/FAISS, no API calls,
+resumable JSONL output, and 1,000-sample bootstrap CIs. Report:
+`reports/ablations_test.md`.
+
+| Variant | Answer proxy | Conflict F1 | Mode accuracy | Public outputs differing |
+|---|---:|---:|---:|---:|
+| Full system | 0.7000 | 0.8763 | 0.7000 | — |
+| no_critic | 0.8929 | 0.0000 | 0.1286 | 140/140 |
+| no_metadata_inference | 0.7000 | 0.8763 | 0.7000 | 4/140 |
+| no_supersession_graph | 0.7000 | 0.7471 | 0.5571 | 20/140 |
+
+`same_model_synth_critic` and `no_trust_scoring` are absent. The requested
+`no_self_critique` and `no_conflict_seeking_expansion` runs changed no public
+answer/status/conflict outputs on frozen TEST, so they were removed from the
+reported table rather than pretending to be effective ablations. Their trace or
+retrieval-internal differences are not claimed as user-visible ablation wins.
+
+## Step 4 — token-aware router implementation (offline verified; live pending)
+
+The router now has model-specific input/output token and request reservations in
+sliding minute windows, request-start pacing, persistent physical-attempt
+records, sanitized `x-ratelimit-*` headers, served/requested model identity,
+quota stop, and a shared three-physical-request critic budget. Critic calls are
+capped at `max_tokens=350` and use compact local-ID JSON wire schemas. Failed
+attempt reservations are not refunded; cache events do not consume budget.
+
+Offline fake-clock/transport tests cover Qwen output-token pacing, invalid JSON
+repair, schema repair/fallback, rate errors without critic retries, cache hits,
+quota stop, and repair consuming the third critic slot. The live provider path
+remains unverified. The Qwen 1000 output-token/minute limit is recorded in
+`config.yaml` from the observed provider error and `reports/provider_limits.md`.
+
+## Clean lockfile environment verification
+
+Created isolated `/tmp/omnirush/truthguard-clean-venv` with Python 3.11.2,
+installed `requirements.lock` using pip 26.2.1, and ran:
+
+```text
+pip check: No broken requirements found.
+TRUTHGUARD_OFFLINE=true make test PYTHON=/tmp/omnirush/truthguard-clean-venv/bin/python
+Result: 139 passed, one existing Starlette/AnyIO deprecation warning.
+```
+
+This clean core installation is verified. Optional ML weights and Docker remain
+separate/unverified; no global packages or project secrets were used.

@@ -1,0 +1,5086 @@
+{
+  "critic": "deterministic",
+  "groups": {
+    "DEV": {
+      "metrics": {
+        "abstention": {
+          "f1": 0.33333333333333337,
+          "precision": 0.2,
+          "recall": 1.0
+        },
+        "answer_accuracy": {
+          "ci95": [
+            0.55,
+            0.825
+          ],
+          "value": 0.7
+        },
+        "blended_answer_rate": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "value": 0.0
+        },
+        "conflict_detection": {
+          "f1": 0.90625,
+          "precision": 1.0,
+          "recall": 0.8285714285714286
+        },
+        "false_conflict": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "value": 0.0
+        },
+        "missing_qids": [],
+        "provenance_correctness": {
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "value": 1.0
+        },
+        "questions_scored": 40,
+        "resolution_mode_accuracy": {
+          "ci95": [
+            0.55,
+            0.825
+          ],
+          "value": 0.7
+        },
+        "type_accuracy": {
+          "ci95": [
+            0.425,
+            0.725
+          ],
+          "value": 0.575
+        },
+        "unsupported_claim_rate": {
+          "ci95": [
+            0.27820512820512827,
+            0.5037499999999999
+          ],
+          "value": 0.38716346153846154
+        },
+        "winner_accuracy": {
+          "ci95": [
+            0.15,
+            0.425
+          ],
+          "value": 0.275
+        }
+      },
+      "questions": 40,
+      "rows": [
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 521,
+                    "char_start": 441,
+                    "chunk_id": "AMD-2025-04:c003"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 501,
+                    "char_start": 421,
+                    "chunk_id": "MAN-2024-CLAIMS:c004"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-023",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-021",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-006",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-017",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-018",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-012",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-020",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-004",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-004",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-05",
+                  "span": {
+                    "char_end": 412,
+                    "char_start": 350,
+                    "chunk_id": "AMD-2025-05:c002"
+                  },
+                  "text": "The lookback period for a pre-existing condition is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-017",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-001",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 417,
+                    "char_start": 346,
+                    "chunk_id": "AMD-2025-04:c002"
+                  },
+                  "text": "A reimbursement claim must be submitted within 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-017",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-019",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 521,
+                    "char_start": 441,
+                    "chunk_id": "AMD-2025-04:c003"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-003",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-007",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-005",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-005",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-005",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-002",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-013",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-003",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-011",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-018",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-002",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-009",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-020",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-014",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-005",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-010",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-004",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-022",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-014",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-004",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-001",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 417,
+                    "char_start": 346,
+                    "chunk_id": "AMD-2025-04:c002"
+                  },
+                  "text": "A reimbursement claim must be submitted within 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-021",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-022",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-015",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-010",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-015",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-05",
+                  "span": {
+                    "char_end": 412,
+                    "char_start": 350,
+                    "chunk_id": "AMD-2025-05:c002"
+                  },
+                  "text": "The lookback period for a pre-existing condition is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-021",
+          "status": "resolved"
+        }
+      ],
+      "t0_false_conflict_rate": 0.0,
+      "t0_false_positives": [],
+      "t0_questions": 2
+    },
+    "TEST": {
+      "metrics": {
+        "abstention": {
+          "f1": 0.3823529411764706,
+          "precision": 0.23636363636363636,
+          "recall": 1.0
+        },
+        "answer_accuracy": {
+          "ci95": [
+            0.6214285714285714,
+            0.7714285714285715
+          ],
+          "value": 0.7
+        },
+        "blended_answer_rate": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "value": 0.0
+        },
+        "conflict_detection": {
+          "f1": 0.8762886597938144,
+          "precision": 1.0,
+          "recall": 0.7798165137614679
+        },
+        "false_conflict": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "value": 0.0
+        },
+        "missing_qids": [],
+        "provenance_correctness": {
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "value": 1.0
+        },
+        "questions_scored": 140,
+        "resolution_mode_accuracy": {
+          "ci95": [
+            0.6214285714285714,
+            0.7714285714285715
+          ],
+          "value": 0.7
+        },
+        "type_accuracy": {
+          "ci95": [
+            0.4,
+            0.5642857142857143
+          ],
+          "value": 0.4785714285714286
+        },
+        "unsupported_claim_rate": {
+          "ci95": [
+            0.3832175562532708,
+            0.5022357404500262
+          ],
+          "value": 0.4435864730507589
+        },
+        "winner_accuracy": {
+          "ci95": [
+            0.11428571428571428,
+            0.24285714285714285
+          ],
+          "value": 0.17857142857142858
+        }
+      },
+      "questions": 140,
+      "rows": [
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 521,
+                    "char_start": 441,
+                    "chunk_id": "AMD-2025-04:c003"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-019",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-014",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-002",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-017",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-016",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-021",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                },
+                {
+                  "doc": "CIR-2025-06",
+                  "span": {
+                    "char_end": 667,
+                    "char_start": 501,
+                    "chunk_id": "CIR-2025-06:c003"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-007",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-008",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-019",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-012",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-008",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-005",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                },
+                {
+                  "doc": "CIR-2025-06",
+                  "span": {
+                    "char_end": 667,
+                    "char_start": 501,
+                    "chunk_id": "CIR-2025-06:c003"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-019",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-023",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-020",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-008",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-05",
+                  "span": {
+                    "char_end": 412,
+                    "char_start": 350,
+                    "chunk_id": "AMD-2025-05:c002"
+                  },
+                  "text": "The lookback period for a pre-existing condition is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-013",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-002",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-008",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-024",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-021",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-011",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-05",
+                  "span": {
+                    "char_end": 412,
+                    "char_start": 350,
+                    "chunk_id": "AMD-2025-05:c002"
+                  },
+                  "text": "The lookback period for a pre-existing condition is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-001",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-004",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-010",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-015",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-006",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-005",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-022",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-007",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-003",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-016",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-002",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                },
+                {
+                  "doc": "CIR-2025-06",
+                  "span": {
+                    "char_end": 667,
+                    "char_start": 501,
+                    "chunk_id": "CIR-2025-06:c003"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-011",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-002",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-019",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-016",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-008",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-016",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 417,
+                    "char_start": 346,
+                    "chunk_id": "AMD-2025-04:c002"
+                  },
+                  "text": "A reimbursement claim must be submitted within 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-013",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-013",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-003",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-009",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-004",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-006",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                },
+                {
+                  "doc": "CIR-2025-06",
+                  "span": {
+                    "char_end": 667,
+                    "char_start": 501,
+                    "chunk_id": "CIR-2025-06:c003"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-015",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-05",
+                  "span": {
+                    "char_end": 412,
+                    "char_start": 350,
+                    "chunk_id": "AMD-2025-05:c002"
+                  },
+                  "text": "The lookback period for a pre-existing condition is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-005",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-021",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                },
+                {
+                  "doc": "CIR-2025-06",
+                  "span": {
+                    "char_end": 667,
+                    "char_start": 501,
+                    "chunk_id": "CIR-2025-06:c003"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-003",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-017",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-018",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-024",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-009",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-014",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-006",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-024",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 521,
+                    "char_start": 441,
+                    "chunk_id": "AMD-2025-04:c003"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 501,
+                    "char_start": 421,
+                    "chunk_id": "MAN-2024-CLAIMS:c004"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-015",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-020",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-009",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-001",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-022",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-006",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-018",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-012",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-013",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-006",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-016",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-011",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-008",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-020",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-016",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-020",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-002",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-002",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-011",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-001",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-004",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-018",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-017",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-007",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-012",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-015",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-010",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 521,
+                    "char_start": 441,
+                    "chunk_id": "AMD-2025-04:c003"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-011",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                },
+                {
+                  "doc": "CIR-2025-06",
+                  "span": {
+                    "char_end": 667,
+                    "char_start": 501,
+                    "chunk_id": "CIR-2025-06:c003"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-023",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-024",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-012",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-05",
+                  "span": {
+                    "char_end": 412,
+                    "char_start": 350,
+                    "chunk_id": "AMD-2025-05:c002"
+                  },
+                  "text": "The lookback period for a pre-existing condition is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-009",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-014",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-008",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 417,
+                    "char_start": 346,
+                    "chunk_id": "AMD-2025-04:c002"
+                  },
+                  "text": "A reimbursement claim must be submitted within 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-005",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-009",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-017",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-009",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-024",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 417,
+                    "char_start": 346,
+                    "chunk_id": "AMD-2025-04:c002"
+                  },
+                  "text": "A reimbursement claim must be submitted within 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-001",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-003",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-023",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-007",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-007",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-019",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-013",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-020",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-003",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-011",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-023",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-012",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 417,
+                    "char_start": 346,
+                    "chunk_id": "AMD-2025-04:c002"
+                  },
+                  "text": "A reimbursement claim must be submitted within 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-009",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-012",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-014",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-010",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-004",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-014",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-007",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-010",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-008",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-001",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-016",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-013",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-022",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-024",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-014",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-018",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-012",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-016",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-023",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-010",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-04",
+                  "span": {
+                    "char_end": 521,
+                    "char_start": 441,
+                    "chunk_id": "AMD-2025-04:c003"
+                  },
+                  "text": "- **claim submission deadline** (reimbursement claims): 60 days after discharge."
+                },
+                {
+                  "doc": "MAN-2024-CLAIMS",
+                  "span": {
+                    "char_end": 305,
+                    "char_start": 246,
+                    "chunk_id": "MAN-2024-CLAIMS:c002"
+                  },
+                  "text": "Submit reimbursement claims within 30 days after discharge."
+                }
+              ],
+              "id": "t3-claim_deadline",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t3-007",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-010",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-015",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "t0-006",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-022",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-001",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T6"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-08-A",
+                  "span": {
+                    "char_end": 345,
+                    "char_start": 265,
+                    "chunk_id": "CIR-2025-08-A:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 351,
+                    "char_start": 271,
+                    "chunk_id": "CIR-2025-08-B:c002"
+                  },
+                  "text": "The Aurelia Standard plan annual hospitalization limit is 600000 currency units."
+                }
+              ],
+              "id": "t6-annual_limit",
+              "type": "T6"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "t6-018",
+          "status": "abstained"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-019",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "t1-013",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "t7-003",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-02",
+                  "span": {
+                    "char_end": 394,
+                    "char_start": 296,
+                    "chunk_id": "NOTICE-2025-02:c002"
+                  },
+                  "text": "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."
+                },
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 309,
+                    "char_start": 264,
+                    "chunk_id": "MAN-2025-CASHLESS:c002"
+                  },
+                  "text": "Planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "t5-006",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                },
+                {
+                  "doc": "FAQ-2025-01",
+                  "span": {
+                    "char_end": 643,
+                    "char_start": 535,
+                    "chunk_id": "FAQ-2025-01:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "t2-015",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "FAQ-2025-06",
+                  "span": {
+                    "char_end": 353,
+                    "char_start": 304,
+                    "chunk_id": "FAQ-2025-06:c002"
+                  },
+                  "text": "the pre-existing condition lookback is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "t4-011",
+          "status": "resolved"
+        }
+      ],
+      "t0_false_conflict_rate": 0.0,
+      "t0_false_positives": [],
+      "t0_questions": 18
+    },
+    "wild": {
+      "metrics": {
+        "abstention": {
+          "f1": 0.16666666666666669,
+          "precision": 0.1,
+          "recall": 0.5
+        },
+        "answer_accuracy": {
+          "ci95": [
+            0.2,
+            0.65
+          ],
+          "value": 0.4
+        },
+        "blended_answer_rate": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "value": 0.0
+        },
+        "conflict_detection": {
+          "f1": 0.5454545454545454,
+          "precision": 1.0,
+          "recall": 0.375
+        },
+        "false_conflict": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "value": 0.0
+        },
+        "missing_qids": [],
+        "provenance_correctness": {
+          "ci95": [
+            1.0,
+            1.0
+          ],
+          "value": 1.0
+        },
+        "questions_scored": 20,
+        "resolution_mode_accuracy": {
+          "ci95": [
+            0.25,
+            0.65
+          ],
+          "value": 0.45
+        },
+        "type_accuracy": {
+          "ci95": [
+            0.1,
+            0.5
+          ],
+          "value": 0.3
+        },
+        "unsupported_claim_rate": {
+          "ci95": [
+            0.4841666666666667,
+            0.8254166666666667
+          ],
+          "value": 0.6579166666666667
+        },
+        "winner_accuracy": {
+          "ci95": [
+            0.0,
+            0.25
+          ],
+          "value": 0.1
+        }
+      },
+      "questions": 20,
+      "rows": [
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "wild-001",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "wild-002",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "wild-003",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "wild-004",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "wild-005",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "wild-006",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "wild-007",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T4"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-05",
+                  "span": {
+                    "char_end": 412,
+                    "char_start": 350,
+                    "chunk_id": "AMD-2025-05:c002"
+                  },
+                  "text": "The lookback period for a pre-existing condition is 48 months."
+                },
+                {
+                  "doc": "FAQ-2024-02",
+                  "span": {
+                    "char_end": 474,
+                    "char_start": 371,
+                    "chunk_id": "FAQ-2024-02:c004"
+                  },
+                  "text": "- **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months."
+                }
+              ],
+              "id": "t4-lookback",
+              "type": "T4"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "wild-008",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "CIR-2025-06",
+                  "span": {
+                    "char_end": 477,
+                    "char_start": 367,
+                    "chunk_id": "CIR-2025-06:c002"
+                  },
+                  "text": "Emergency admissions may use cashless treatment without prior approval if Aurelia is notified within 24 hours."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 880,
+                    "char_start": 771,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "wild-009",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T5"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "MAN-2025-CASHLESS",
+                  "span": {
+                    "char_end": 553,
+                    "char_start": 387,
+                    "chunk_id": "MAN-2025-CASHLESS:c003"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours."
+                },
+                {
+                  "doc": "POL-2025-V2",
+                  "span": {
+                    "char_end": 952,
+                    "char_start": 843,
+                    "chunk_id": "POL-2025-V2:c004"
+                  },
+                  "text": "- **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization."
+                }
+              ],
+              "id": "t5-preauthorization",
+              "type": "T5"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "wild-010",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [
+            "T3"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "NOTICE-2025-11",
+                  "span": {
+                    "char_end": 352,
+                    "char_start": 290,
+                    "chunk_id": "NOTICE-2025-11:c002"
+                  },
+                  "text": "The filed Standard plan annual limit is 500000 currency units."
+                },
+                {
+                  "doc": "CIR-2025-08-B",
+                  "span": {
+                    "char_end": 473,
+                    "char_start": 375,
+                    "chunk_id": "CIR-2025-08-B:c003"
+                  },
+                  "text": "- **annual hospitalization limit** (Aurelia Standard plan): 600000 currency units per policy year."
+                }
+              ],
+              "id": "t3-annual_limit",
+              "type": "T3"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "wild-011",
+          "status": "resolved"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T3",
+          "qid": "wild-012",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "wild-013",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "no_conflict",
+          "gold_type": "T0",
+          "qid": "wild-014",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "wild-015",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "not_in_corpus",
+          "gold_type": "T7",
+          "qid": "wild-016",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T2"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 585,
+                    "char_start": 512,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members."
+                },
+                {
+                  "doc": "CIR-2024-02",
+                  "span": {
+                    "char_end": 470,
+                    "char_start": 362,
+                    "chunk_id": "CIR-2024-02:c003"
+                  },
+                  "text": "- **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above."
+                }
+              ],
+              "id": "t2-copay",
+              "type": "T2"
+            }
+          ],
+          "gold_status": "conditional",
+          "gold_type": "T2",
+          "qid": "wild-017",
+          "status": "conditional"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "conditional",
+          "gold_type": "T5",
+          "qid": "wild-018",
+          "status": "no_conflict"
+        },
+        {
+          "conflict_types": [],
+          "conflicts": [],
+          "gold_status": "resolved",
+          "gold_type": "T4",
+          "qid": "wild-019",
+          "status": "not_in_corpus"
+        },
+        {
+          "conflict_types": [
+            "T1"
+          ],
+          "conflicts": [
+            {
+              "evidence": [
+                {
+                  "doc": "AMD-2025-03",
+                  "span": {
+                    "char_end": 435,
+                    "char_start": 374,
+                    "chunk_id": "AMD-2025-03:c002"
+                  },
+                  "text": "The non-accidental hospitalization waiting period is 45 days."
+                },
+                {
+                  "doc": "POL-2024-V1",
+                  "span": {
+                    "char_end": 511,
+                    "char_start": 417,
+                    "chunk_id": "POL-2024-V1:c004"
+                  },
+                  "text": "- **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days."
+                }
+              ],
+              "id": "t1-waiting_period",
+              "type": "T1"
+            }
+          ],
+          "gold_status": "resolved",
+          "gold_type": "T1",
+          "qid": "wild-020",
+          "status": "resolved"
+        }
+      ],
+      "t0_false_conflict_rate": 0.0,
+      "t0_false_positives": [],
+      "t0_questions": 2
+    }
+  },
+  "input_sha256": {
+    "data/benchmark/questions.jsonl": "92b50347047535807d64b177ea3a90ca19a43937518f7f7e4305df86d146eafc",
+    "data/benchmark/wild.jsonl": "5825609264492996b50656118fd218ac64461c00c3ebdf842ca6e9e01d920e8f"
+  },
+  "label": "frozen-current",
+  "provider": "none",
+  "retrieval": "bge"
+}
