@@ -1272,6 +1272,22 @@ No live metric, parse statistic, fallback result, or provider/model result is
 claimed. Exact status is in `reports/live_v2_status.md`. The v1 partial 7/40
 Qwen run and Mistral 429 remain explicitly non-comparative historical evidence.
 
+## Final session — Step E pitch pack
+
+Added:
+
+```text
+reports/PITCH_NUMBERS.md
+```
+
+`PITCH_NUMBERS.md` is the quote-safe ledger: every recommended number includes
+split, n, system, deterministic/live label, actual provider/model, and source
+report. It includes a do-not-claim list covering semantic provenance, as-of
+dates, unmeasured LLM variants, and all uncompleted v2 live work. `docs/PITCH.md`
+uses the required T1 → T2 → T3 → T5 → T6 → T7 order and documents the observed
+offline B0/B1 compare-mode miss. `docs/JUDGE_QA.md` contains 15 honest judge
+questions and answers.
+
 ## Regression verification after v2 integration
 
 The required system-Python command was attempted and cannot run because the
