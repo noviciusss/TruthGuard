@@ -52,6 +52,8 @@ def test_question_metrics_and_aggregation() -> None:
     assert report["questions_scored"] == 1
     assert report["conflict_detection"]["f1"] == 1.0
     assert report["answer_accuracy"]["ci95"] == (1.0, 1.0)
+    assert report["status_correct_answer"]["value"] == 1.0
+    assert report["status_correct_answer"]["ci95"] == (1.0, 1.0)
     assert report["by_type"]["T1"]["questions_scored"] == 1
     assert report["macro"]["conflict_f1"] == 1.0
 

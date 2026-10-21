@@ -1220,6 +1220,27 @@ queries, deterministic-only components, and that
 `no_self_critique`/`no_conflict_seeking_expansion` are LLM-path-only and were
 not measured on TEST.
 
+## Final session — Step B proxy diagnosis
+
+Added `reports/accuracy_proxy_analysis.md` and the second metric
+`status_correct_answer`, computed identically for every system. For resolved
+rows it is the existing answer proxy; for conditional, abstained, no-conflict,
+and not-in-corpus rows it requires the correct final status. Both metrics use
+1,000-sample question-level bootstrap CIs.
+
+The measured deterministic/offline TEST diagnosis is:
+
+| System | Answer proxy | Status-correct answer rate |
+|---|---:|---:|
+| Full system | 0.7123 [0.6370, 0.7808] | 0.6781 [0.5890, 0.7534] |
+| no_critic | 0.8082 [0.7534, 0.8699] | 0.5411 [0.4589, 0.6233] |
+
+On T2/T5/T6 conflict rows (n=45), full-system answer proxy was 0.8889 but
+status-correct was 0.7778; no_critic was 0.8667 versus 0.0000. The no-critic
+path also measured 0.0000 conflict F1 and 0.1233 mode accuracy. This confirms
+the old proxy can reward value-containing output while failing to credit correct
+conditional/abstained behavior. No TEST detector or gold labels were tuned.
+
 ## Regression verification after v2 integration
 
 The required system-Python command was attempted and cannot run because the

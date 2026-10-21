@@ -2,12 +2,12 @@
 
 All three effective variants ran on all 146 frozen TEST questions with no API calls. The JSONL output is resumable stage evidence. The full system and all variants use the same HashEmbedder retrieval backend and deterministic critic.
 
-| Variant | n | Answer proxy (95% CI) | Macro answer | Conflict F1 (95% CI) | Macro conflict F1 | Mode accuracy (95% CI) | Macro mode | TEST T0 false-conflicts | Public outputs differing from full |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| full_system | 146 | 0.7123 [0.6370, 0.7808] | 0.8068 | 0.8835 [0.8324, 0.9224] | 0.6654 | 0.6781 [0.5890, 0.7534] | 0.7721 | 0/18 (0.0000) | 0 |
-| no_critic | 146 | 0.8082 [0.7534, 0.8699] | 0.7032 | 0.0000 [0.0000, 0.0000] | 0.0000 | 0.1233 [0.0753, 0.1781] | 0.1250 | 0/18 (0.0000) | 146 |
-| no_metadata_inference | 146 | 0.7123 [0.6370, 0.7808] | 0.8068 | 0.8557 [0.7979, 0.9023] | 0.6546 | 0.6438 [0.5616, 0.7192] | 0.7548 | 0/18 (0.0000) | 10 |
-| no_supersession_graph | 146 | 0.7123 [0.6370, 0.7808] | 0.8068 | 0.6782 [0.5904, 0.7553] | 0.4722 | 0.4589 [0.3699, 0.5411] | 0.5719 | 0/18 (0.0000) | 33 |
+| Variant | n | Answer proxy (95% CI) | Status-correct answer (95% CI) | Macro status-correct | Macro answer | Conflict F1 (95% CI) | Macro conflict F1 | Mode accuracy (95% CI) | Macro mode | TEST T0 false-conflicts | Public outputs differing from full |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| full_system | 146 | 0.7123 [0.6370, 0.7808] | 0.6781 [0.5890, 0.7534] | 0.7721 | 0.8068 | 0.8835 [0.8324, 0.9224] | 0.6654 | 0.6781 [0.5890, 0.7534] | 0.7721 | 0/18 (0.0000) | 0 |
+| no_critic | 146 | 0.8082 [0.7534, 0.8699] | 0.5411 [0.4589, 0.6233] | 0.4532 | 0.7032 | 0.0000 [0.0000, 0.0000] | 0.0000 | 0.1233 [0.0753, 0.1781] | 0.1250 | 0/18 (0.0000) | 146 |
+| no_metadata_inference | 146 | 0.7123 [0.6370, 0.7808] | 0.6781 [0.5890, 0.7534] | 0.7721 | 0.8068 | 0.8557 [0.7979, 0.9023] | 0.6546 | 0.6438 [0.5616, 0.7192] | 0.7548 | 0/18 (0.0000) | 10 |
+| no_supersession_graph | 146 | 0.7123 [0.6370, 0.7808] | 0.5822 [0.5000, 0.6644] | 0.6848 | 0.8068 | 0.6782 [0.5904, 0.7553] | 0.4722 | 0.4589 [0.3699, 0.5411] | 0.5719 | 0/18 (0.0000) | 33 |
 
 ## Variant semantics
 

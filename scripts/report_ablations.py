@@ -61,8 +61,8 @@ def main():
         f"All three effective variants ran on all {len(questions)} frozen TEST questions with no API calls. "
         f"The JSONL output is resumable stage evidence. The full system and all variants use the same {args.retrieval_backend} retrieval backend and deterministic critic.",
         "",
-        "| Variant | n | Answer proxy (95% CI) | Macro answer | Conflict F1 (95% CI) | Macro conflict F1 | Mode accuracy (95% CI) | Macro mode | TEST T0 false-conflicts | Public outputs differing from full |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| Variant | n | Answer proxy (95% CI) | Status-correct answer (95% CI) | Macro status-correct | Macro answer | Conflict F1 (95% CI) | Macro conflict F1 | Mode accuracy (95% CI) | Macro mode | TEST T0 false-conflicts | Public outputs differing from full |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for name in ["full_system", *sorted(variants)]:
         predictions = baseline if name == "full_system" else variants[name]
@@ -81,7 +81,9 @@ def main():
         mode_ci = metrics["resolution_mode_accuracy"]["ci95"]
         lines.append(
             f"| {name} | {metrics['questions_scored']} | {metrics['answer_accuracy']['value']:.4f} "
-            f"[{ci[0]:.4f}, {ci[1]:.4f}] | {metrics['macro']['answer_accuracy']:.4f} | "
+            f"[{ci[0]:.4f}, {ci[1]:.4f}] | "
+            f"{metrics['status_correct_answer']['value']:.4f} [{metrics['status_correct_answer']['ci95'][0]:.4f}, {metrics['status_correct_answer']['ci95'][1]:.4f}] | "
+            f"{metrics['macro']['status_correct_answer']:.4f} | {metrics['macro']['answer_accuracy']:.4f} | "
             f"{metrics['conflict_detection']['f1']:.4f} [{f1_low:.4f}, {f1_high:.4f}] | "
             f"{metrics['macro']['conflict_f1']:.4f} | {metrics['resolution_mode_accuracy']['value']:.4f} "
             f"[{mode_ci[0]:.4f}, {mode_ci[1]:.4f}] | {metrics['macro']['resolution_mode_accuracy']:.4f} | "

@@ -6,11 +6,11 @@ V2 uses the additive genuine-T6 corpus and benchmark. Provider/model: none; dete
 
 Micro metrics average every question. Macro metrics average the per-type metric values, giving each present type equal weight.
 
-| Split | Questions | T0 | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T0 false conflicts | Micro conflict F1 | Macro conflict F1 | Micro answer | Macro answer | Micro mode | Macro mode | Abstention recall |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| DEV | 44 | 2 | 7 | 6 | 12 | 7 | 3 | 4 | 3 | 0/2 (0.0000) | 0.9315 | 0.6891 | 0.7273 | 0.8214 | 0.7273 | 0.8214 | 1.0000 |
-| TEST | 146 | 18 | 17 | 18 | 36 | 17 | 21 | 6 | 13 | 0/18 (0.0000) | 0.8835 | 0.6654 | 0.7123 | 0.8068 | 0.6781 | 0.7721 | 1.0000 |
-| wild | 22 | 2 | 3 | 3 | 4 | 3 | 3 | 2 | 2 | 0/2 (0.0000) | 0.5600 | 0.4000 | 0.4091 | 0.4792 | 0.4091 | 0.4688 | 0.7500 |
+| Split | Questions | T0 | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T0 false conflicts | Micro conflict F1 | Macro conflict F1 | Micro answer | Macro answer | Micro status-correct | Macro status-correct | Micro mode | Macro mode | Abstention recall |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| DEV | 44 | 2 | 7 | 6 | 12 | 7 | 3 | 4 | 3 | 0/2 (0.0000) | 0.9315 | 0.6891 | 0.7273 | 0.8214 | 0.7273 | 0.8214 | 0.7273 | 0.8214 | 1.0000 |
+| TEST | 146 | 18 | 17 | 18 | 36 | 17 | 21 | 6 | 13 | 0/18 (0.0000) | 0.8835 | 0.6654 | 0.7123 | 0.8068 | 0.6781 | 0.7721 | 0.6781 | 0.7721 | 1.0000 |
+| wild | 22 | 2 | 3 | 3 | 4 | 3 | 3 | 2 | 2 | 0/2 (0.0000) | 0.5600 | 0.4000 | 0.4091 | 0.4792 | 0.3636 | 0.4375 | 0.4091 | 0.4688 | 0.7500 |
 
 ## TEST distribution by fact key
 

@@ -62,8 +62,8 @@ def report(questions_path: Path, dev_path: Path, test_path: Path, wild_questions
         "",
         "Micro metrics average every question. Macro metrics average the per-type metric values, giving each present type equal weight.",
         "",
-        "| Split | Questions | T0 | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T0 false conflicts | Micro conflict F1 | Macro conflict F1 | Micro answer | Macro answer | Micro mode | Macro mode | Abstention recall |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| Split | Questions | T0 | T1 | T2 | T3 | T4 | T5 | T6 | T7 | T0 false conflicts | Micro conflict F1 | Macro conflict F1 | Micro answer | Macro answer | Micro status-correct | Macro status-correct | Micro mode | Macro mode | Abstention recall |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for split, (questions, predictions) in runs.items():
         metrics = evaluate_predictions(questions, predictions)
@@ -75,6 +75,7 @@ def report(questions_path: Path, dev_path: Path, test_path: Path, wild_questions
             f" | {t0_fp}/{len(t0)} ({_fmt(t0_fp / len(t0) if t0 else 0)}) | "
             f"{_fmt(metrics['conflict_detection']['f1'])} | {_fmt(metrics['macro']['conflict_f1'])} | "
             f"{_fmt(metrics['answer_accuracy']['value'])} | {_fmt(metrics['macro']['answer_accuracy'])} | "
+            f"{_fmt(metrics['status_correct_answer']['value'])} | {_fmt(metrics['macro']['status_correct_answer'])} | "
             f"{_fmt(metrics['resolution_mode_accuracy']['value'])} | {_fmt(metrics['macro']['resolution_mode_accuracy'])} | "
             f"{_fmt(metrics['abstention']['recall'])} |"
         )

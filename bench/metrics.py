@@ -57,8 +57,10 @@ def score_question(gold: BenchmarkQuestion, predicted: FinalAnswer) -> dict[str,
     blended = float(gold_conflict and not predicted_conflict and predicted.status == "resolved")
     abstention_gold = gold.type in {"T6", "T7"}
     abstained = predicted.status in {"abstained", "not_in_corpus"}
+    status_correct_answer = answer_correct if gold.gold_status == "resolved" else float(predicted.status == gold.gold_status)
     return {
         "answer_accuracy": answer_correct,
+        "status_correct_answer": status_correct_answer,
         "conflict_tp": float(gold_conflict and predicted_conflict),
         "conflict_fp": float(not gold_conflict and predicted_conflict),
         "conflict_fn": float(gold_conflict and not predicted_conflict),
@@ -118,7 +120,7 @@ def evaluate_predictions(
         totals.update(row)
     count = len(rows)
     metrics: dict[str, Any] = {"questions_scored": count, "missing_qids": missing}
-    for key in ("answer_accuracy", "type_accuracy", "winner_accuracy", "resolution_mode_accuracy", "provenance_correctness", "unsupported_claim_rate", "blended_answer_rate", "false_conflict"):
+    for key in ("answer_accuracy", "status_correct_answer", "type_accuracy", "winner_accuracy", "resolution_mode_accuracy", "provenance_correctness", "unsupported_claim_rate", "blended_answer_rate", "false_conflict"):
         values = [row[key] for row in rows]
         mean = sum(values) / count if count else 0.0
         metrics[key] = {"value": mean, "ci95": bootstrap_ci(values, samples=bootstrap_samples)}
@@ -156,6 +158,7 @@ def evaluate_predictions(
         metrics["by_type"] = by_type
         macro_keys = {
             "answer_accuracy": lambda item: item["answer_accuracy"]["value"],
+            "status_correct_answer": lambda item: item["status_correct_answer"]["value"],
             "conflict_f1": lambda item: item["conflict_detection"]["f1"],
             "resolution_mode_accuracy": lambda item: item["resolution_mode_accuracy"]["value"],
             "provenance_correctness": lambda item: item["provenance_correctness"]["value"],
