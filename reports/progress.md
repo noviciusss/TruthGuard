@@ -1254,6 +1254,24 @@ Measured focus values: T6 abstention precision `0.2069` (`6/(6+23)` when the
 non-T6 false-abstention rate `0.1643` (`23/140`), T0 false-conflict rate
 `0.0000` (`0/18`), and T7 not-in-corpus recall `1.0000` (`13/13`).
 
+## Final session — Step D live runs
+
+Live D1/D2/D3 were gated before the first request. The optional quota values
+were empty and all configured provider credentials were missing from the
+process environment (`GROQ_API_KEY`, `MISTRAL_API_KEY`, `GEMINI_API_KEY`, and
+`OPENROUTER_API_KEY`). Therefore no response headers or new 429 evidence could
+be discovered. I stopped cleanly without retry loops:
+
+```text
+D1 fixed-40: requested 40, completed 0, failed provider calls 0, unreached 40
+D2 B0/B1: not started, no provider/model answered
+D3 wild: not started, no quota-bearing credential remained
+```
+
+No live metric, parse statistic, fallback result, or provider/model result is
+claimed. Exact status is in `reports/live_v2_status.md`. The v1 partial 7/40
+Qwen run and Mistral 429 remain explicitly non-comparative historical evidence.
+
 ## Regression verification after v2 integration
 
 The required system-Python command was attempted and cannot run because the
