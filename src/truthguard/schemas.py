@@ -145,6 +145,9 @@ class BenchmarkQuestion(TGModel):
     multi_hop: bool = False
     paraphrase_group: str | None = None
     source_passages: list[str] = Field(default_factory=list)
+    # Additive provenance for v2 questions. Legacy v1 rows intentionally omit
+    # this field so their serialized labels and hashes remain unchanged.
+    gold_fact_id: str | None = None
 
 
 class ReformulationResponse(TGModel):

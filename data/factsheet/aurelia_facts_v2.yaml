@@ -1,0 +1,187 @@
+# Additive v2 factsheet. The first fourteen facts are copied from the frozen
+# v1 factsheet; the six t6_* facts are deliberately new and unresolved.
+domain: Aurelia Health
+facts:
+  - fact_id: waiting_period
+    topic: hospitalization waiting period
+    scope: standard plan, non-accidental hospitalization
+    versions:
+      - effective_date: 2024-01-01
+        value: 30 days
+        source_note: Original policy wording
+      - effective_date: 2025-03-01
+        value: 45 days
+        source_note: Amendment AMD-2025-03
+  - fact_id: copay
+    topic: co-payment
+    scope: plan and age dependent
+    versions:
+      - effective_date: 2024-01-01
+        value: 10% for standard plan members
+        source_note: Policy schedule
+      - effective_date: 2024-01-01
+        value: 20% for members aged 60 and above
+        source_note: Senior member schedule
+  - fact_id: claim_deadline
+    topic: claim submission deadline
+    scope: reimbursement claims
+    versions:
+      - effective_date: 2024-01-01
+        value: 30 days after discharge
+        source_note: Original claim process
+      - effective_date: 2025-04-15
+        value: 60 days after discharge
+        source_note: Amendment AMD-2025-04
+  - fact_id: pre_existing_lookback
+    topic: pre-existing condition lookback
+    scope: conditions diagnosed or treated before policy start
+    versions:
+      - effective_date: 2024-01-01
+        value: 36 months
+        source_note: Original definition
+      - effective_date: 2025-05-01
+        value: 48 months
+        source_note: Amendment AMD-2025-05
+  - fact_id: preauthorization
+    topic: pre-authorization
+    scope: planned and emergency admissions
+    versions:
+      - effective_date: 2024-01-01
+        value: All planned admissions require pre-authorization
+        source_note: Policy rule
+      - effective_date: 2025-06-01
+        value: Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours
+        source_note: Emergency circular exception
+  - fact_id: room_rent
+    topic: room rent sub-limit
+    scope: plan tier
+    versions:
+      - effective_date: 2024-01-01
+        value: 1% of sum insured per day for standard plan
+        source_note: Standard plan schedule
+      - effective_date: 2024-01-01
+        value: 2% of sum insured per day for premium plan
+        source_note: Premium plan schedule
+  - fact_id: renewal_grace
+    topic: renewal grace period
+    scope: all active plans
+    versions:
+      - effective_date: 2024-01-01
+        value: 30 days after renewal due date
+        source_note: Renewal policy
+  - fact_id: grievance_timeline
+    topic: grievance response timeline
+    scope: member grievances
+    versions:
+      - effective_date: 2024-01-01
+        value: Acknowledgement within 3 business days and resolution within 30 days
+        source_note: Grievance standard
+  - fact_id: network_cashless
+    topic: network hospital cashless eligibility
+    scope: planned treatment at an Aurelia network hospital
+    versions:
+      - effective_date: 2024-01-01
+        value: Cashless treatment is available when the hospital is in the active Aurelia network and approval is obtained
+        source_note: Network policy
+  - fact_id: ambulance_limit
+    topic: road ambulance benefit
+    scope: covered hospitalization
+    versions:
+      - effective_date: 2024-01-01
+        value: Up to 10000 currency units per hospitalization
+        source_note: Benefit schedule
+  - fact_id: annual_limit
+    topic: annual hospitalization limit
+    scope: Aurelia Standard plan
+    versions:
+      - effective_date: 2025-08-01
+        value: 500000 currency units per policy year
+        source_note: Circular AH/2025/08-A
+      - effective_date: 2025-08-01
+        value: 600000 currency units per policy year
+        source_note: Circular AH/2025/08-B
+  - fact_id: telemedicine
+    topic: telemedicine consultation benefit
+    scope: active members
+    versions:
+      - effective_date: 2025-01-01
+        value: Four telemedicine consultations per policy year
+        source_note: Digital care notice
+  - fact_id: maternity
+    topic: maternity waiting period
+    scope: maternity benefit on eligible plans
+    versions:
+      - effective_date: 2024-01-01
+        value: 24 months
+        source_note: Maternity schedule
+      - effective_date: 2025-01-01
+        value: 18 months for Premium plan
+        source_note: Premium plan amendment
+  - fact_id: exclusions
+    topic: excluded cosmetic treatment
+    scope: treatment primarily for cosmetic enhancement
+    versions:
+      - effective_date: 2024-01-01
+        value: Cosmetic treatment is excluded unless medically necessary after an accident
+        source_note: Exclusions section
+
+  - fact_id: t6_room_rent_cap
+    topic: room rent cap
+    scope: Aurelia Standard plan inpatient room
+    versions:
+      - effective_date: 2026-05-01
+        value: 1% of sum insured per day
+        source_note: CIR-2026-T6-ROOM-A
+      - effective_date: 2026-05-01
+        value: 2% of sum insured per day
+        source_note: CIR-2026-T6-ROOM-B
+  - fact_id: t6_copay_rate
+    topic: co-payment rate
+    scope: Aurelia Standard plan members
+    versions:
+      - effective_date: 2026-06-01
+        value: 15%
+        source_note: CIR-2026-T6-COPAY-A
+      - effective_date: 2026-06-01
+        value: 25%
+        source_note: CIR-2026-T6-COPAY-B
+  - fact_id: t6_grievance_response_window
+    topic: grievance response window
+    scope: Standard plan member grievances
+    versions:
+      - effective_date: 2026-07-01
+        value: 15 days
+        source_note: CIR-2026-T6-GRV-A
+      - effective_date: 2026-07-01
+        value: 30 days
+        source_note: CIR-2026-T6-GRV-B
+  - fact_id: t6_claim_filing_deadline
+    topic: claim filing deadline
+    scope: Standard plan reimbursement claims
+    versions:
+      - effective_date: 2026-08-01
+        value: 45 days after discharge
+        source_note: CIR-2026-T6-CLAIM-A
+      - effective_date: 2026-08-01
+        value: 75 days after discharge
+        source_note: CIR-2026-T6-CLAIM-B
+  - fact_id: t6_cashless_preauth_window
+    topic: cashless pre-authorization window
+    scope: Standard plan planned admissions
+    versions:
+      - effective_date: 2026-09-01
+        value: 2 hours before admission
+        source_note: CIR-2026-T6-PREAUTH-A
+      - effective_date: 2026-09-01
+        value: 6 hours before admission
+        source_note: CIR-2026-T6-PREAUTH-B
+  - fact_id: t6_renewal_grace_period
+    topic: renewal reinstatement grace period
+    scope: Standard plan renewal reinstatement
+    versions:
+      - effective_date: 2026-10-01
+        value: 14 days after renewal due date
+        source_note: CIR-2026-T6-RENEW-A
+      - effective_date: 2026-10-01
+        value: 21 days after renewal due date
+        source_note: CIR-2026-T6-RENEW-B

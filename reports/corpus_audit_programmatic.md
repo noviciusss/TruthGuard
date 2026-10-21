@@ -17,7 +17,7 @@ Value evidence is read from actual Markdown bodies/headings, not the factsheet, 
 
 T7 searches every document with only the disclosed selected probe families. No hit is lexical evidence only and remains unverifiable; unknown subject families also remain unverifiable. A hit is a review candidate, not proof of coverage. Synonyms outside the probes, implicit statements, and semantic entailment are not detectable.
 
-T0 scans lines containing the factsheet topic or bounded aliases (`renewal grace period`, `renewal may be completed`) and compares numeric durations only; unrelated durations do not count. For competition only, singular/plural and hyphenated durations such as `30-day` and `30 days` are treated alike. It cannot guarantee synonym completeness or adjudicate time/scope. T6 checks actual distinct annual-limit values, both issued/effective dates, and authority against loader and manifest. Its bounded topic aliases are `annual hospitalization limit` and `annual limit`; all matching positions are retained, including disagreements inside one document. The local tie does not prove whole-corpus abstention. Later higher-authority same-fact counterevidence fails current pair-only abstention. Gold was revised by explicit corpus adjudication; see `reports/gold_changes.md`. The audit performs no runtime tuning or benchmark freeze.
+T0 scans lines containing the factsheet topic or bounded aliases (`renewal grace period`, `renewal may be completed`) and compares numeric durations only; unrelated durations do not count. For competition only, singular/plural and hyphenated durations such as `30-day` and `30 days` are treated alike. It cannot guarantee synonym completeness or adjudicate time/scope. T6 checks actual distinct annual-limit values, both issued/effective dates, and authority against loader and manifest. Its bounded topic aliases are factsheet topics; all matching positions are retained, including disagreements inside one document. For v2 T6, the audit checks equal effective/issued dates and authority, no supersession/amendment edge, exactly two physical documents, and no third same-fact document. Gold was revised by explicit corpus adjudication; see `reports/gold_changes.md`. The audit performs no runtime tuning or benchmark freeze.
 
 ## Measured question counts
 
@@ -64,6 +64,40 @@ T0 scans lines containing the factsheet topic or bounded aliases (`renewal grace
 | Unique (main + wild) | T5 | 0 | 0 | 27 |
 | Unique (main + wild) | T6 | 0 | 0 | 0 |
 | Unique (main + wild) | T7 | 0 | 0 | 18 |
+
+## Distinct fact keys by type and split
+
+The v2 rows carry `gold_fact_id`; legacy rows use the conservative type-to-fact mapping documented in the JSON.
+
+| Dataset | Type | Distinct keys | Fact keys |
+|---|---|---:|---|
+| questions.jsonl | T0 | 1 | renewal_grace |
+| questions.jsonl | T1 | 1 | waiting_period |
+| questions.jsonl | T2 | 1 | copay |
+| questions.jsonl | T3 | 2 | annual_limit, claim_deadline |
+| questions.jsonl | T4 | 1 | pre_existing_lookback |
+| questions.jsonl | T5 | 1 | preauthorization |
+| questions.jsonl | T6 | 0 | none |
+| questions.jsonl | T7 | 0 | none |
+| wild.jsonl | T0 | 1 | renewal_grace |
+| wild.jsonl | T1 | 1 | waiting_period |
+| wild.jsonl | T2 | 1 | copay |
+| wild.jsonl | T3 | 1 | claim_deadline |
+| wild.jsonl | T4 | 1 | pre_existing_lookback |
+| wild.jsonl | T5 | 1 | preauthorization |
+| wild.jsonl | T6 | 0 | none |
+| wild.jsonl | T7 | 0 | none |
+| eval_subset_40.jsonl | T0 | 1 | renewal_grace |
+| eval_subset_40.jsonl | T1 | 1 | waiting_period |
+| eval_subset_40.jsonl | T2 | 1 | copay |
+| eval_subset_40.jsonl | T3 | 2 | annual_limit, claim_deadline |
+| eval_subset_40.jsonl | T4 | 1 | pre_existing_lookback |
+| eval_subset_40.jsonl | T5 | 1 | preauthorization |
+| eval_subset_40.jsonl | T6 | 0 | none |
+| eval_subset_40.jsonl | T7 | 0 | none |
+| Unique split=dev | all types | 7 | annual_limit, claim_deadline, copay, pre_existing_lookback, preauthorization, renewal_grace, waiting_period |
+| Unique split=test | all types | 7 | annual_limit, claim_deadline, copay, pre_existing_lookback, preauthorization, renewal_grace, waiting_period |
+| Unique split=unspecified | all types | 6 | claim_deadline, copay, pre_existing_lookback, preauthorization, renewal_grace, waiting_period |
 
 ## Check counts and exact affected qids
 

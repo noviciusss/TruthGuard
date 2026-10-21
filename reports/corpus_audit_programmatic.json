@@ -26,6 +26,20 @@
         "pass": 26,
         "unverifiable": 14
       },
+      "per_split_fact_keys": {
+        "test": {
+          "count": 7,
+          "fact_keys": [
+            "annual_limit",
+            "claim_deadline",
+            "copay",
+            "pre_existing_lookback",
+            "preauthorization",
+            "renewal_grace",
+            "waiting_period"
+          ]
+        }
+      },
       "per_type_counts": {
         "T0": {
           "fail": 0,
@@ -66,6 +80,53 @@
           "fail": 0,
           "pass": 0,
           "unverifiable": 2
+        }
+      },
+      "per_type_fact_keys": {
+        "T0": {
+          "count": 1,
+          "fact_keys": [
+            "renewal_grace"
+          ]
+        },
+        "T1": {
+          "count": 1,
+          "fact_keys": [
+            "waiting_period"
+          ]
+        },
+        "T2": {
+          "count": 1,
+          "fact_keys": [
+            "copay"
+          ]
+        },
+        "T3": {
+          "count": 2,
+          "fact_keys": [
+            "annual_limit",
+            "claim_deadline"
+          ]
+        },
+        "T4": {
+          "count": 1,
+          "fact_keys": [
+            "pre_existing_lookback"
+          ]
+        },
+        "T5": {
+          "count": 1,
+          "fact_keys": [
+            "preauthorization"
+          ]
+        },
+        "T6": {
+          "count": 0,
+          "fact_keys": []
+        },
+        "T7": {
+          "count": 0,
+          "fact_keys": []
         }
       },
       "records": [
@@ -205,6 +266,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-004",
           "split": "test",
           "status": "pass",
@@ -346,6 +408,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-012",
           "split": "test",
           "status": "pass",
@@ -396,6 +459,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-003",
           "split": "test",
           "status": "pass",
@@ -446,6 +510,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-011",
           "split": "test",
           "status": "pass",
@@ -496,6 +561,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-017",
           "split": "test",
           "status": "pass",
@@ -546,6 +612,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-019",
           "split": "test",
           "status": "pass",
@@ -596,6 +663,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-023",
           "split": "test",
           "status": "pass",
@@ -646,6 +714,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-024",
           "split": "test",
           "status": "pass",
@@ -693,6 +762,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-002",
           "split": "test",
           "status": "unverifiable",
@@ -740,6 +810,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-004",
           "split": "test",
           "status": "unverifiable",
@@ -787,6 +858,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-005",
           "split": "test",
           "status": "unverifiable",
@@ -834,6 +906,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-017",
           "split": "test",
           "status": "unverifiable",
@@ -881,6 +954,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-022",
           "split": "test",
           "status": "unverifiable",
@@ -928,6 +1002,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-024",
           "split": "test",
           "status": "unverifiable",
@@ -980,6 +1055,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-001",
           "split": "test",
           "status": "pass",
@@ -1032,6 +1108,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-002",
           "split": "test",
           "status": "pass",
@@ -1084,6 +1161,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-008",
           "split": "test",
           "status": "pass",
@@ -1136,6 +1214,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-013",
           "split": "test",
           "status": "pass",
@@ -1188,6 +1267,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-016",
           "split": "test",
           "status": "pass",
@@ -1240,6 +1320,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-018",
           "split": "test",
           "status": "pass",
@@ -1290,6 +1371,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-003",
           "split": "test",
           "status": "pass",
@@ -1340,6 +1422,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-005",
           "split": "test",
           "status": "pass",
@@ -1390,6 +1473,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-007",
           "split": "test",
           "status": "pass",
@@ -1440,6 +1524,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-008",
           "split": "test",
           "status": "pass",
@@ -1490,6 +1575,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-011",
           "split": "test",
           "status": "pass",
@@ -1540,6 +1626,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-013",
           "split": "test",
           "status": "pass",
@@ -1585,6 +1672,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-001",
           "split": "test",
           "status": "unverifiable",
@@ -1630,6 +1718,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-004",
           "split": "test",
           "status": "unverifiable",
@@ -1675,6 +1764,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-005",
           "split": "test",
           "status": "unverifiable",
@@ -1720,6 +1810,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-015",
           "split": "test",
           "status": "unverifiable",
@@ -1765,6 +1856,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-016",
           "split": "test",
           "status": "unverifiable",
@@ -1810,6 +1902,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-020",
           "split": "test",
           "status": "unverifiable",
@@ -1865,6 +1958,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-001",
           "split": "test",
           "status": "pass",
@@ -1920,6 +2014,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-008",
           "split": "test",
           "status": "pass",
@@ -1975,6 +2070,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-016",
           "split": "test",
           "status": "pass",
@@ -2030,6 +2126,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-018",
           "split": "test",
           "status": "pass",
@@ -2085,6 +2182,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-021",
           "split": "test",
           "status": "pass",
@@ -2140,6 +2238,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-023",
           "split": "test",
           "status": "pass",
@@ -2176,6 +2275,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": null,
           "qid": "t7-007",
           "split": "test",
           "status": "unverifiable",
@@ -2212,6 +2312,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": null,
           "qid": "t7-011",
           "split": "test",
           "status": "unverifiable",
@@ -2225,6 +2326,32 @@
         "fail": 0,
         "pass": 116,
         "unverifiable": 64
+      },
+      "per_split_fact_keys": {
+        "dev": {
+          "count": 7,
+          "fact_keys": [
+            "annual_limit",
+            "claim_deadline",
+            "copay",
+            "pre_existing_lookback",
+            "preauthorization",
+            "renewal_grace",
+            "waiting_period"
+          ]
+        },
+        "test": {
+          "count": 7,
+          "fact_keys": [
+            "annual_limit",
+            "claim_deadline",
+            "copay",
+            "pre_existing_lookback",
+            "preauthorization",
+            "renewal_grace",
+            "waiting_period"
+          ]
+        }
       },
       "per_type_counts": {
         "T0": {
@@ -2266,6 +2393,53 @@
           "fail": 0,
           "pass": 0,
           "unverifiable": 16
+        }
+      },
+      "per_type_fact_keys": {
+        "T0": {
+          "count": 1,
+          "fact_keys": [
+            "renewal_grace"
+          ]
+        },
+        "T1": {
+          "count": 1,
+          "fact_keys": [
+            "waiting_period"
+          ]
+        },
+        "T2": {
+          "count": 1,
+          "fact_keys": [
+            "copay"
+          ]
+        },
+        "T3": {
+          "count": 2,
+          "fact_keys": [
+            "annual_limit",
+            "claim_deadline"
+          ]
+        },
+        "T4": {
+          "count": 1,
+          "fact_keys": [
+            "pre_existing_lookback"
+          ]
+        },
+        "T5": {
+          "count": 1,
+          "fact_keys": [
+            "preauthorization"
+          ]
+        },
+        "T6": {
+          "count": 0,
+          "fact_keys": []
+        },
+        "T7": {
+          "count": 0,
+          "fact_keys": []
         }
       },
       "records": [
@@ -2311,6 +2485,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-023",
           "split": "dev",
           "status": "pass",
@@ -2356,6 +2531,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-021",
           "split": "dev",
           "status": "pass",
@@ -2398,6 +2574,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-006",
           "split": "dev",
           "status": "unverifiable",
@@ -2438,6 +2615,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-017",
           "split": "dev",
           "status": "unverifiable",
@@ -2480,6 +2658,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-018",
           "split": "dev",
           "status": "unverifiable",
@@ -2525,6 +2704,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-012",
           "split": "dev",
           "status": "pass",
@@ -2575,6 +2755,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-020",
           "split": "dev",
           "status": "pass",
@@ -2620,6 +2801,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-004",
           "split": "dev",
           "status": "pass",
@@ -2667,6 +2849,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-004",
           "split": "dev",
           "status": "pass",
@@ -2712,6 +2895,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-017",
           "split": "dev",
           "status": "pass",
@@ -2743,6 +2927,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-001",
           "split": "dev",
           "status": "unverifiable",
@@ -2790,6 +2975,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-017",
           "split": "dev",
           "status": "pass",
@@ -2832,6 +3018,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-019",
           "split": "dev",
           "status": "unverifiable",
@@ -2879,6 +3066,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-003",
           "split": "dev",
           "status": "pass",
@@ -2924,6 +3112,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-007",
           "split": "dev",
           "status": "pass",
@@ -2974,6 +3163,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-005",
           "split": "dev",
           "status": "pass",
@@ -3110,6 +3300,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-005",
           "split": "dev",
           "status": "pass",
@@ -3141,6 +3332,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-005",
           "split": "dev",
           "status": "unverifiable",
@@ -3186,6 +3378,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-002",
           "split": "dev",
           "status": "pass",
@@ -3236,6 +3429,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-013",
           "split": "dev",
           "status": "pass",
@@ -3286,6 +3480,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-003",
           "split": "dev",
           "status": "pass",
@@ -3336,6 +3531,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-011",
           "split": "dev",
           "status": "pass",
@@ -3472,6 +3668,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-018",
           "split": "dev",
           "status": "pass",
@@ -3512,6 +3709,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-002",
           "split": "dev",
           "status": "unverifiable",
@@ -3554,6 +3752,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-009",
           "split": "dev",
           "status": "unverifiable",
@@ -3599,6 +3798,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-020",
           "split": "dev",
           "status": "pass",
@@ -3644,6 +3844,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-014",
           "split": "dev",
           "status": "pass",
@@ -3689,6 +3890,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-005",
           "split": "dev",
           "status": "pass",
@@ -3731,6 +3933,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-010",
           "split": "dev",
           "status": "unverifiable",
@@ -3776,6 +3979,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-004",
           "split": "dev",
           "status": "pass",
@@ -3823,6 +4027,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-022",
           "split": "dev",
           "status": "pass",
@@ -3865,6 +4070,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-014",
           "split": "dev",
           "status": "unverifiable",
@@ -3896,6 +4102,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-004",
           "split": "dev",
           "status": "unverifiable",
@@ -3941,6 +4148,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-001",
           "split": "dev",
           "status": "pass",
@@ -3988,6 +4196,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-021",
           "split": "dev",
           "status": "pass",
@@ -4028,6 +4237,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-022",
           "split": "dev",
           "status": "unverifiable",
@@ -4073,6 +4283,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-015",
           "split": "dev",
           "status": "pass",
@@ -4118,6 +4329,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-010",
           "split": "dev",
           "status": "pass",
@@ -4168,6 +4380,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-015",
           "split": "dev",
           "status": "pass",
@@ -4213,6 +4426,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-021",
           "split": "dev",
           "status": "pass",
@@ -4260,6 +4474,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-019",
           "split": "test",
           "status": "pass",
@@ -4310,6 +4525,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-014",
           "split": "test",
           "status": "pass",
@@ -4341,6 +4557,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-002",
           "split": "test",
           "status": "unverifiable",
@@ -4391,6 +4608,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-017",
           "split": "test",
           "status": "pass",
@@ -4441,6 +4659,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-016",
           "split": "test",
           "status": "pass",
@@ -4481,6 +4700,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-021",
           "split": "test",
           "status": "unverifiable",
@@ -4521,6 +4741,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-007",
           "split": "test",
           "status": "unverifiable",
@@ -4566,6 +4787,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-008",
           "split": "test",
           "status": "pass",
@@ -4702,6 +4924,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-019",
           "split": "test",
           "status": "pass",
@@ -4744,6 +4967,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-012",
           "split": "test",
           "status": "unverifiable",
@@ -4880,6 +5104,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-008",
           "split": "test",
           "status": "pass",
@@ -4922,6 +5147,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-005",
           "split": "test",
           "status": "unverifiable",
@@ -4962,6 +5188,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-019",
           "split": "test",
           "status": "unverifiable",
@@ -5007,6 +5234,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-023",
           "split": "test",
           "status": "pass",
@@ -5047,6 +5275,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-020",
           "split": "test",
           "status": "unverifiable",
@@ -5094,6 +5323,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-008",
           "split": "test",
           "status": "pass",
@@ -5139,6 +5369,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-013",
           "split": "test",
           "status": "pass",
@@ -5181,6 +5412,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-002",
           "split": "test",
           "status": "unverifiable",
@@ -5221,6 +5453,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-008",
           "split": "test",
           "status": "unverifiable",
@@ -5263,6 +5496,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-024",
           "split": "test",
           "status": "unverifiable",
@@ -5313,6 +5547,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-021",
           "split": "test",
           "status": "pass",
@@ -5344,6 +5579,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-011",
           "split": "test",
           "status": "unverifiable",
@@ -5389,6 +5625,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-001",
           "split": "test",
           "status": "pass",
@@ -5431,6 +5668,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-004",
           "split": "test",
           "status": "unverifiable",
@@ -5471,6 +5709,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-010",
           "split": "test",
           "status": "unverifiable",
@@ -5607,6 +5846,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-015",
           "split": "test",
           "status": "pass",
@@ -5638,6 +5878,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-006",
           "split": "test",
           "status": "unverifiable",
@@ -5678,6 +5919,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-005",
           "split": "test",
           "status": "unverifiable",
@@ -5720,6 +5962,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-022",
           "split": "test",
           "status": "unverifiable",
@@ -5770,6 +6013,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-007",
           "split": "test",
           "status": "pass",
@@ -5815,6 +6059,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-003",
           "split": "test",
           "status": "pass",
@@ -5860,6 +6105,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-016",
           "split": "test",
           "status": "pass",
@@ -5907,6 +6153,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-002",
           "split": "test",
           "status": "pass",
@@ -5947,6 +6194,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-011",
           "split": "test",
           "status": "unverifiable",
@@ -6083,6 +6331,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-002",
           "split": "test",
           "status": "pass",
@@ -6128,6 +6377,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-019",
           "split": "test",
           "status": "pass",
@@ -6170,6 +6420,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-016",
           "split": "test",
           "status": "unverifiable",
@@ -6215,6 +6466,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-008",
           "split": "test",
           "status": "pass",
@@ -6246,6 +6498,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-016",
           "split": "test",
           "status": "unverifiable",
@@ -6293,6 +6546,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-013",
           "split": "test",
           "status": "pass",
@@ -6429,6 +6683,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-013",
           "split": "test",
           "status": "pass",
@@ -6565,6 +6820,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-003",
           "split": "test",
           "status": "pass",
@@ -6610,6 +6866,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-009",
           "split": "test",
           "status": "pass",
@@ -6660,6 +6917,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-004",
           "split": "test",
           "status": "pass",
@@ -6710,6 +6968,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-006",
           "split": "test",
           "status": "pass",
@@ -6750,6 +7009,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-015",
           "split": "test",
           "status": "unverifiable",
@@ -6795,6 +7055,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-005",
           "split": "test",
           "status": "pass",
@@ -6837,6 +7098,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-021",
           "split": "test",
           "status": "unverifiable",
@@ -6877,6 +7139,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-003",
           "split": "test",
           "status": "unverifiable",
@@ -6919,6 +7182,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-017",
           "split": "test",
           "status": "unverifiable",
@@ -6959,6 +7223,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-018",
           "split": "test",
           "status": "unverifiable",
@@ -7006,6 +7271,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-024",
           "split": "test",
           "status": "pass",
@@ -7046,6 +7312,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-009",
           "split": "test",
           "status": "unverifiable",
@@ -7091,6 +7358,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-014",
           "split": "test",
           "status": "pass",
@@ -7136,6 +7404,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-006",
           "split": "test",
           "status": "pass",
@@ -7176,6 +7445,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-024",
           "split": "test",
           "status": "unverifiable",
@@ -7223,6 +7493,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-015",
           "split": "test",
           "status": "pass",
@@ -7268,6 +7539,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-020",
           "split": "test",
           "status": "pass",
@@ -7318,6 +7590,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-009",
           "split": "test",
           "status": "pass",
@@ -7358,6 +7631,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-001",
           "split": "test",
           "status": "unverifiable",
@@ -7403,6 +7677,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-022",
           "split": "test",
           "status": "pass",
@@ -7450,6 +7725,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-006",
           "split": "test",
           "status": "pass",
@@ -7497,6 +7773,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-018",
           "split": "test",
           "status": "pass",
@@ -7547,6 +7824,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-012",
           "split": "test",
           "status": "pass",
@@ -7578,6 +7856,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-013",
           "split": "test",
           "status": "unverifiable",
@@ -7623,6 +7902,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-006",
           "split": "test",
           "status": "pass",
@@ -7759,6 +8039,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-016",
           "split": "test",
           "status": "pass",
@@ -7895,6 +8176,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-011",
           "split": "test",
           "status": "pass",
@@ -7926,6 +8208,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-008",
           "split": "test",
           "status": "unverifiable",
@@ -7968,6 +8251,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-020",
           "split": "test",
           "status": "unverifiable",
@@ -8015,6 +8299,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-016",
           "split": "test",
           "status": "pass",
@@ -8062,6 +8347,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-020",
           "split": "test",
           "status": "pass",
@@ -8112,6 +8398,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-002",
           "split": "test",
           "status": "pass",
@@ -8157,6 +8444,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-002",
           "split": "test",
           "status": "pass",
@@ -8202,6 +8490,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-011",
           "split": "test",
           "status": "pass",
@@ -8252,6 +8541,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-001",
           "split": "test",
           "status": "pass",
@@ -8292,6 +8582,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-004",
           "split": "test",
           "status": "unverifiable",
@@ -8337,6 +8628,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-018",
           "split": "test",
           "status": "pass",
@@ -8473,6 +8765,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-017",
           "split": "test",
           "status": "pass",
@@ -8609,6 +8902,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-007",
           "split": "test",
           "status": "pass",
@@ -8745,6 +9039,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-012",
           "split": "test",
           "status": "pass",
@@ -8776,6 +9071,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-015",
           "split": "test",
           "status": "unverifiable",
@@ -8807,6 +9103,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-010",
           "split": "test",
           "status": "unverifiable",
@@ -8854,6 +9151,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-011",
           "split": "test",
           "status": "pass",
@@ -8894,6 +9192,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-023",
           "split": "test",
           "status": "unverifiable",
@@ -8944,6 +9243,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-024",
           "split": "test",
           "status": "pass",
@@ -8991,6 +9291,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-012",
           "split": "test",
           "status": "pass",
@@ -9036,6 +9337,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-009",
           "split": "test",
           "status": "pass",
@@ -9076,6 +9378,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-014",
           "split": "test",
           "status": "unverifiable",
@@ -9126,6 +9429,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-008",
           "split": "test",
           "status": "pass",
@@ -9173,6 +9477,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-005",
           "split": "test",
           "status": "pass",
@@ -9309,6 +9614,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-009",
           "split": "test",
           "status": "pass",
@@ -9354,6 +9660,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-017",
           "split": "test",
           "status": "pass",
@@ -9385,6 +9692,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-009",
           "split": "test",
           "status": "unverifiable",
@@ -9430,6 +9738,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-024",
           "split": "test",
           "status": "pass",
@@ -9477,6 +9786,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-001",
           "split": "test",
           "status": "pass",
@@ -9519,6 +9829,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-003",
           "split": "test",
           "status": "unverifiable",
@@ -9561,6 +9872,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-023",
           "split": "test",
           "status": "unverifiable",
@@ -9606,6 +9918,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-007",
           "split": "test",
           "status": "pass",
@@ -9648,6 +9961,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-007",
           "split": "test",
           "status": "unverifiable",
@@ -9698,6 +10012,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-019",
           "split": "test",
           "status": "pass",
@@ -9740,6 +10055,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-013",
           "split": "test",
           "status": "unverifiable",
@@ -9876,6 +10192,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-020",
           "split": "test",
           "status": "pass",
@@ -9921,6 +10238,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-003",
           "split": "test",
           "status": "pass",
@@ -9963,6 +10281,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-011",
           "split": "test",
           "status": "unverifiable",
@@ -10013,6 +10332,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-023",
           "split": "test",
           "status": "pass",
@@ -10058,6 +10378,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-012",
           "split": "test",
           "status": "pass",
@@ -10105,6 +10426,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-009",
           "split": "test",
           "status": "pass",
@@ -10136,6 +10458,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-012",
           "split": "test",
           "status": "unverifiable",
@@ -10167,6 +10490,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-014",
           "split": "test",
           "status": "unverifiable",
@@ -10303,6 +10627,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-010",
           "split": "test",
           "status": "pass",
@@ -10439,6 +10764,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-004",
           "split": "test",
           "status": "pass",
@@ -10575,6 +10901,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-014",
           "split": "test",
           "status": "pass",
@@ -10606,6 +10933,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-007",
           "split": "test",
           "status": "unverifiable",
@@ -10653,6 +10981,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-010",
           "split": "test",
           "status": "pass",
@@ -10695,6 +11024,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-008",
           "split": "test",
           "status": "unverifiable",
@@ -10831,6 +11161,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-001",
           "split": "test",
           "status": "pass",
@@ -10876,6 +11207,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-016",
           "split": "test",
           "status": "pass",
@@ -10916,6 +11248,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-013",
           "split": "test",
           "status": "unverifiable",
@@ -10966,6 +11299,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-022",
           "split": "test",
           "status": "pass",
@@ -11011,6 +11345,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-024",
           "split": "test",
           "status": "pass",
@@ -11058,6 +11393,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-014",
           "split": "test",
           "status": "pass",
@@ -11103,6 +11439,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-018",
           "split": "test",
           "status": "pass",
@@ -11143,6 +11480,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-012",
           "split": "test",
           "status": "unverifiable",
@@ -11183,6 +11521,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-016",
           "split": "test",
           "status": "unverifiable",
@@ -11228,6 +11567,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-023",
           "split": "test",
           "status": "pass",
@@ -11273,6 +11613,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-010",
           "split": "test",
           "status": "pass",
@@ -11320,6 +11661,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "t3-007",
           "split": "test",
           "status": "pass",
@@ -11370,6 +11712,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-010",
           "split": "test",
           "status": "pass",
@@ -11415,6 +11758,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-015",
           "split": "test",
           "status": "pass",
@@ -11551,6 +11895,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "t0-006",
           "split": "test",
           "status": "pass",
@@ -11596,6 +11941,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-022",
           "split": "test",
           "status": "pass",
@@ -11638,6 +11984,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-001",
           "split": "test",
           "status": "unverifiable",
@@ -11688,6 +12035,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "annual_limit",
           "qid": "t6-018",
           "split": "test",
           "status": "pass",
@@ -11733,6 +12081,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-019",
           "split": "test",
           "status": "pass",
@@ -11778,6 +12127,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "t1-013",
           "split": "test",
           "status": "pass",
@@ -11809,6 +12159,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "t7-003",
           "split": "test",
           "status": "unverifiable",
@@ -11849,6 +12200,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "t5-006",
           "split": "test",
           "status": "unverifiable",
@@ -11891,6 +12243,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "t2-015",
           "split": "test",
           "status": "unverifiable",
@@ -11936,6 +12289,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "t4-011",
           "split": "test",
           "status": "pass",
@@ -11949,6 +12303,19 @@
         "fail": 0,
         "pass": 10,
         "unverifiable": 10
+      },
+      "per_split_fact_keys": {
+        "unspecified": {
+          "count": 6,
+          "fact_keys": [
+            "claim_deadline",
+            "copay",
+            "pre_existing_lookback",
+            "preauthorization",
+            "renewal_grace",
+            "waiting_period"
+          ]
+        }
       },
       "per_type_counts": {
         "T0": {
@@ -11990,6 +12357,52 @@
           "fail": 0,
           "pass": 0,
           "unverifiable": 2
+        }
+      },
+      "per_type_fact_keys": {
+        "T0": {
+          "count": 1,
+          "fact_keys": [
+            "renewal_grace"
+          ]
+        },
+        "T1": {
+          "count": 1,
+          "fact_keys": [
+            "waiting_period"
+          ]
+        },
+        "T2": {
+          "count": 1,
+          "fact_keys": [
+            "copay"
+          ]
+        },
+        "T3": {
+          "count": 1,
+          "fact_keys": [
+            "claim_deadline"
+          ]
+        },
+        "T4": {
+          "count": 1,
+          "fact_keys": [
+            "pre_existing_lookback"
+          ]
+        },
+        "T5": {
+          "count": 1,
+          "fact_keys": [
+            "preauthorization"
+          ]
+        },
+        "T6": {
+          "count": 0,
+          "fact_keys": []
+        },
+        "T7": {
+          "count": 0,
+          "fact_keys": []
         }
       },
       "records": [
@@ -12034,6 +12447,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "wild-001",
           "split": "unspecified",
           "status": "pass",
@@ -12079,6 +12493,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "wild-002",
           "split": "unspecified",
           "status": "pass",
@@ -12121,6 +12536,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "wild-003",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12166,6 +12582,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "wild-004",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12213,6 +12630,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "wild-005",
           "split": "unspecified",
           "status": "pass",
@@ -12258,6 +12676,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "wild-006",
           "split": "unspecified",
           "status": "pass",
@@ -12303,6 +12722,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "wild-007",
           "split": "unspecified",
           "status": "pass",
@@ -12348,6 +12768,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "wild-008",
           "split": "unspecified",
           "status": "pass",
@@ -12388,6 +12809,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "wild-009",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12431,6 +12853,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "wild-010",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12481,6 +12904,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "wild-011",
           "split": "unspecified",
           "status": "pass",
@@ -12531,6 +12955,7 @@
               "status": "pass"
             }
           ],
+          "fact_id": "claim_deadline",
           "qid": "wild-012",
           "split": "unspecified",
           "status": "pass",
@@ -12662,6 +13087,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "wild-013",
           "split": "unspecified",
           "status": "pass",
@@ -12793,6 +13219,7 @@
               "topic": "renewal grace period"
             }
           ],
+          "fact_id": "renewal_grace",
           "qid": "wild-014",
           "split": "unspecified",
           "status": "pass",
@@ -12824,6 +13251,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "wild-015",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12855,6 +13283,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": null,
           "qid": "wild-016",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12894,6 +13323,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "copay",
           "qid": "wild-017",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12931,6 +13361,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "preauthorization",
           "qid": "wild-018",
           "split": "unspecified",
           "status": "unverifiable",
@@ -12968,6 +13399,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "pre_existing_lookback",
           "qid": "wild-019",
           "split": "unspecified",
           "status": "unverifiable",
@@ -13007,6 +13439,7 @@
               "status": "unverifiable"
             }
           ],
+          "fact_id": "waiting_period",
           "qid": "wild-020",
           "split": "unspecified",
           "status": "unverifiable",
@@ -13016,6 +13449,18 @@
     }
   },
   "factsheet_reference": {
+    "ambulance_limit": {
+      "fact_id": "ambulance_limit",
+      "scope": "covered hospitalization",
+      "topic": "road ambulance benefit",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Benefit schedule",
+          "value": "Up to 10000 currency units per hospitalization"
+        }
+      ]
+    },
     "annual_limit": {
       "fact_id": "annual_limit",
       "scope": "Aurelia Standard plan",
@@ -13033,6 +13478,127 @@
         }
       ]
     },
+    "claim_deadline": {
+      "fact_id": "claim_deadline",
+      "scope": "reimbursement claims",
+      "topic": "claim submission deadline",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Original claim process",
+          "value": "30 days after discharge"
+        },
+        {
+          "effective_date": "2025-04-15",
+          "source_note": "Amendment AMD-2025-04",
+          "value": "60 days after discharge"
+        }
+      ]
+    },
+    "copay": {
+      "fact_id": "copay",
+      "scope": "plan and age dependent",
+      "topic": "co-payment",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Policy schedule",
+          "value": "10% for standard plan members"
+        },
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Senior member schedule",
+          "value": "20% for members aged 60 and above"
+        }
+      ]
+    },
+    "exclusions": {
+      "fact_id": "exclusions",
+      "scope": "treatment primarily for cosmetic enhancement",
+      "topic": "excluded cosmetic treatment",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Exclusions section",
+          "value": "Cosmetic treatment is excluded unless medically necessary after an accident"
+        }
+      ]
+    },
+    "grievance_timeline": {
+      "fact_id": "grievance_timeline",
+      "scope": "member grievances",
+      "topic": "grievance response timeline",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Grievance standard",
+          "value": "Acknowledgement within 3 business days and resolution within 30 days"
+        }
+      ]
+    },
+    "maternity": {
+      "fact_id": "maternity",
+      "scope": "maternity benefit on eligible plans",
+      "topic": "maternity waiting period",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Maternity schedule",
+          "value": "24 months"
+        },
+        {
+          "effective_date": "2025-01-01",
+          "source_note": "Premium plan amendment",
+          "value": "18 months for Premium plan"
+        }
+      ]
+    },
+    "network_cashless": {
+      "fact_id": "network_cashless",
+      "scope": "planned treatment at an Aurelia network hospital",
+      "topic": "network hospital cashless eligibility",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Network policy",
+          "value": "Cashless treatment is available when the hospital is in the active Aurelia network and approval is obtained"
+        }
+      ]
+    },
+    "pre_existing_lookback": {
+      "fact_id": "pre_existing_lookback",
+      "scope": "conditions diagnosed or treated before policy start",
+      "topic": "pre-existing condition lookback",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Original definition",
+          "value": "36 months"
+        },
+        {
+          "effective_date": "2025-05-01",
+          "source_note": "Amendment AMD-2025-05",
+          "value": "48 months"
+        }
+      ]
+    },
+    "preauthorization": {
+      "fact_id": "preauthorization",
+      "scope": "planned and emergency admissions",
+      "topic": "pre-authorization",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Policy rule",
+          "value": "All planned admissions require pre-authorization"
+        },
+        {
+          "effective_date": "2025-06-01",
+          "source_note": "Emergency circular exception",
+          "value": "Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours"
+        }
+      ]
+    },
     "renewal_grace": {
       "fact_id": "renewal_grace",
       "scope": "all active plans",
@@ -13042,6 +13608,52 @@
           "effective_date": "2024-01-01",
           "source_note": "Renewal policy",
           "value": "30 days after renewal due date"
+        }
+      ]
+    },
+    "room_rent": {
+      "fact_id": "room_rent",
+      "scope": "plan tier",
+      "topic": "room rent sub-limit",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Standard plan schedule",
+          "value": "1% of sum insured per day for standard plan"
+        },
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Premium plan schedule",
+          "value": "2% of sum insured per day for premium plan"
+        }
+      ]
+    },
+    "telemedicine": {
+      "fact_id": "telemedicine",
+      "scope": "active members",
+      "topic": "telemedicine consultation benefit",
+      "versions": [
+        {
+          "effective_date": "2025-01-01",
+          "source_note": "Digital care notice",
+          "value": "Four telemedicine consultations per policy year"
+        }
+      ]
+    },
+    "waiting_period": {
+      "fact_id": "waiting_period",
+      "scope": "standard plan, non-accidental hospitalization",
+      "topic": "hospitalization waiting period",
+      "versions": [
+        {
+          "effective_date": "2024-01-01",
+          "source_note": "Original policy wording",
+          "value": "30 days"
+        },
+        {
+          "effective_date": "2025-03-01",
+          "source_note": "Amendment AMD-2025-03",
+          "value": "45 days"
         }
       ]
     }
@@ -13133,6 +13745,12 @@
       "preauthorization": "pre[ -]?authorization|prior approval|(?:planned|emergency) admissions?",
       "renewal_grace": "renewal.*(?:grace|completed)",
       "room_rent": "room[ -]rent",
+      "t6_cashless_preauth_window": "cashless pre[ -]?authorization window",
+      "t6_claim_filing_deadline": "claim filing deadline",
+      "t6_copay_rate": "co[ -]?payment rate|copay rate",
+      "t6_grievance_response_window": "grievance response window",
+      "t6_renewal_grace_period": "renewal reinstatement grace period",
+      "t6_room_rent_cap": "room rent cap",
       "telemedicine": "telemedicine",
       "waiting_period": "(?<!maternity )waiting period"
     },
@@ -18156,6 +18774,43 @@
       }
     ]
   },
+  "unique_per_split_fact_keys": {
+    "dev": {
+      "count": 7,
+      "fact_keys": [
+        "annual_limit",
+        "claim_deadline",
+        "copay",
+        "pre_existing_lookback",
+        "preauthorization",
+        "renewal_grace",
+        "waiting_period"
+      ]
+    },
+    "test": {
+      "count": 7,
+      "fact_keys": [
+        "annual_limit",
+        "claim_deadline",
+        "copay",
+        "pre_existing_lookback",
+        "preauthorization",
+        "renewal_grace",
+        "waiting_period"
+      ]
+    },
+    "unspecified": {
+      "count": 6,
+      "fact_keys": [
+        "claim_deadline",
+        "copay",
+        "pre_existing_lookback",
+        "preauthorization",
+        "renewal_grace",
+        "waiting_period"
+      ]
+    }
+  },
   "unique_per_type_counts": {
     "T0": {
       "fail": 0,
@@ -18196,6 +18851,53 @@
       "fail": 0,
       "pass": 0,
       "unverifiable": 18
+    }
+  },
+  "unique_per_type_fact_keys": {
+    "T0": {
+      "count": 1,
+      "fact_keys": [
+        "renewal_grace"
+      ]
+    },
+    "T1": {
+      "count": 1,
+      "fact_keys": [
+        "waiting_period"
+      ]
+    },
+    "T2": {
+      "count": 1,
+      "fact_keys": [
+        "copay"
+      ]
+    },
+    "T3": {
+      "count": 2,
+      "fact_keys": [
+        "annual_limit",
+        "claim_deadline"
+      ]
+    },
+    "T4": {
+      "count": 1,
+      "fact_keys": [
+        "pre_existing_lookback"
+      ]
+    },
+    "T5": {
+      "count": 1,
+      "fact_keys": [
+        "preauthorization"
+      ]
+    },
+    "T6": {
+      "count": 0,
+      "fact_keys": []
+    },
+    "T7": {
+      "count": 0,
+      "fact_keys": []
     }
   },
   "unique_question_counts": {

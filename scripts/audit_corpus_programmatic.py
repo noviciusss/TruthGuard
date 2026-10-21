@@ -34,7 +34,7 @@ ABSENCE_PROBES = {
     "underwater rehabilitation": (r"underwater", r"aquatic", r"hydrotherap(?:y|ies)"),
 }
 QUANTITY = re.compile(r"(?<![\w.])\d+(?:\.\d+)?(?:\s*-\s*|\s*)(?:%|days?\b|months?\b|hours?\b|currency units?\b)", re.I)
-SCOPED_QUANTITY = re.compile(r"(?<![\w.])(?:\d+(?:\.\d+)?|four)(?:\s*-\s*|\s*)(?:%|business days?\b|days?\b|months?\b|hours?\b|currency units?\b|telemedicine consultations?\b)", re.I)
+SCOPED_QUANTITY = re.compile(r"(?<![\w.])(?:\d+(?:\.\d+)?|four)(?:\s*-\s*|\s*)(?:%|business days?\b|days?\b|months?\b|hours?\b|currency units?\b|telemedicine consultations?\b|visits?\b|sessions?\b|scans?\b)", re.I)
 PHYSICAL_FIELDS = ("doc_id", "title", "doc_type", "version", "effective_date", "issued_date", "authority_rank", "supersedes", "amends")
 FACT_PATTERNS = {
     "waiting_period": r"(?<!maternity )waiting period",
@@ -51,6 +51,23 @@ FACT_PATTERNS = {
     "telemedicine": r"telemedicine",
     "maternity": r"maternity",
     "exclusions": r"cosmetic",
+    "t6_room_rent_cap": r"room rent cap",
+    "t6_copay_rate": r"co[ -]?payment rate|copay rate",
+    "t6_grievance_response_window": r"grievance response window",
+    "t6_claim_filing_deadline": r"claim filing deadline",
+    "t6_cashless_preauth_window": r"cashless pre[ -]?authorization window",
+    "t6_renewal_grace_period": r"renewal reinstatement grace period",
+}
+
+
+LEGACY_FACT_BY_TYPE = {
+    "T0": "renewal_grace",
+    "T1": "waiting_period",
+    "T2": "copay",
+    "T3": "claim_deadline",
+    "T4": "pre_existing_lookback",
+    "T5": "preauthorization",
+    "T7": None,
 }
 
 
@@ -107,6 +124,32 @@ def counts(records: list[dict]) -> dict[str, int]:
 
 def per_type_counts(records: list[dict]) -> dict[str, dict[str, int]]:
     return {kind: counts([row for row in records if row["type"] == kind]) for kind in (f"T{i}" for i in range(8))}
+
+
+def question_fact_key(question: dict) -> str | None:
+    if question.get("gold_fact_id"):
+        return question["gold_fact_id"]
+    # The v1 T6 qids were adjudicated into annual-limit T3 rows. Preserve that
+    # provenance without changing their serialized labels.
+    if question.get("qid", "").startswith("t6-"):
+        return "annual_limit"
+    return LEGACY_FACT_BY_TYPE.get(question.get("type"))
+
+
+def per_type_fact_keys(records: list[dict]) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    for kind in (f"T{i}" for i in range(8)):
+        keys = sorted({key for row in records if row["type"] == kind for key in [row.get("fact_id")] if key})
+        result[kind] = {"count": len(keys), "fact_keys": keys}
+    return result
+
+
+def per_split_fact_keys(records: list[dict]) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    for split in sorted({row.get("split", "unspecified") for row in records}):
+        keys = sorted({row.get("fact_id") for row in records if row.get("split", "unspecified") == split and row.get("fact_id")})
+        result[split] = {"count": len(keys), "fact_keys": keys}
+    return result
 
 
 def read_questions(path: Path) -> list[dict]:
@@ -328,7 +371,9 @@ def audit_question(question: dict, documents: dict, manifest_docs: dict, facts: 
                             "Whole-corpus bounded topic/alias-line duration scan; no temporal/scope adjudication or synonym completeness claimed.",
                             topic=topic, positions=rows, competing_positions=competing))
     if question["type"] == "T6":
-        rows = fact_lines(documents, facts["annual_limit"]["topic"])
+        fact_id = question.get("gold_fact_id", "annual_limit")
+        fact = facts.get(fact_id)
+        rows = fact_lines(documents, fact["topic"]) if fact else []
         pair = []
         for left_index, left in enumerate(cited):
             for right in cited[left_index + 1:]:
@@ -348,38 +393,51 @@ def audit_question(question: dict, documents: dict, manifest_docs: dict, facts: 
                 agrees = all(doc.meta.model_dump(mode="json").get(field) == expected.get(field)
                              for doc, expected in ((documents[left], expected_a), (documents[right], expected_b))
                              for field in ("effective_date", "issued_date", "authority_rank"))
-                pair.append({"docs": [left, right], "values": [sorted(values_a), sorted(values_b)],
+                a_relations = set(a.supersedes) | {doc_id for doc_id, _ in a.amends}
+                b_relations = set(b.supersedes) | {doc_id for doc_id, _ in b.amends}
+                no_relation = right not in a_relations and left not in b_relations
+                pair.append({"docs": [left, right], "fact_id": fact_id, "values": [sorted(values_a), sorted(values_b)],
                              "same_date_authority_loaded": same, "same_date_authority_manifest": manifest_same,
-                             "loaded_agrees_with_manifest": agrees,
+                             "loaded_agrees_with_manifest": agrees, "no_supersession_or_amendment_edge": no_relation,
                              "effective_dates": [str(a.effective_date), str(b.effective_date)],
                              "issued_dates": [str(a.issued_date), str(b.issued_date)],
                              "authority_ranks": [a.authority_rank, b.authority_rank]})
-        tied = [item for item in pair if item["same_date_authority_loaded"] and item["same_date_authority_manifest"] and item["loaded_agrees_with_manifest"]]
-        checks.append(check("t6_pair", "pass" if tied else "fail" if pair else "unverifiable",
-                            "Different same-topic values checked against effective date, issued date, and authority in loader AND manifest.", pairs=pair))
+        tied = [item for item in pair if item["same_date_authority_loaded"] and item["same_date_authority_manifest"] and item["loaded_agrees_with_manifest"] and item["no_supersession_or_amendment_edge"]]
+        pair_check_name = "t6_pair" if fact_id == "annual_limit" else "t6_same_date_same_authority"
+        checks.append(check(pair_check_name, "pass" if tied else "fail" if pair else "unverifiable",
+                            "Different values checked against equal effective/issued dates, authority, and no pair amendment edge.", pairs=pair, fact_id=fact_id))
         tied_docs = {doc_id for item in tied for doc_id in item["docs"]}
         other = [row for row in rows if row["doc_id"] not in tied_docs]
+        checks.append(check("t6_no_third_document", "pass" if tied and not other else "fail" if tied else "unverifiable",
+                            "A genuine v2 tie has exactly two physical documents for the fact key; a third position could settle it.",
+                            fact_id=fact_id, other_positions=other, cited_documents=sorted(tied_docs)))
         internal = {}
         for doc_id in sorted({row["doc_id"] for row in rows}):
-            values = sorted({re.match(r"\d+(?:\.\d+)?", value)[0]
-                             for row in rows if row["doc_id"] == doc_id for value in row["values"]})
+            if fact_id == "annual_limit":
+                values = sorted({re.match(r"\d+(?:\.\d+)?", value)[0]
+                                 for row in rows if row["doc_id"] == doc_id for value in row["values"]})
+            else:
+                values = sorted({value for row in rows if row["doc_id"] == doc_id for value in row["values"]})
             if len(values) > 1:
                 internal[doc_id] = values
-        # A strictly higher-authority AND later applicable Standard position is
-        # counterevidence to a purported current pair tie. Never call a local tie
-        # proof of global abstention, and never manufacture a global T6 pass.
-        dated_tied = [row for row in rows if row["doc_id"] in tied_docs]
-        dominating = [row for row in other if dated_tied and "premium" not in normalized(row["text"]) and row["effective_date"] != "None" and
-                      all(row["authority_rank"] > tied_row["authority_rank"] and
-                          row["effective_date"] > tied_row["effective_date"] for tied_row in dated_tied) and
-                      not question.get("as_of_date")]
-        checks.append(check("t6_global_abstention", "fail" if dominating else "unverifiable",
-                            "Later, higher-authority same-fact positions defeat this current pair-only abstention; applicability still needs adjudication." if dominating else
-                            "Pair tie alone cannot establish global abstention; review other same-fact documents and applicability.",
-                            other_positions=other, dominating_positions=dominating, internal_competing_values=internal))
+        if fact_id == "annual_limit":
+            dated_tied = [row for row in rows if row["doc_id"] in tied_docs]
+            dominating = [row for row in other if dated_tied and "premium" not in normalized(row["text"]) and row["effective_date"] != "None" and
+                          all(row["authority_rank"] > tied_row["authority_rank"] and
+                              row["effective_date"] > tied_row["effective_date"] for tied_row in dated_tied) and
+                          not question.get("as_of_date")]
+            checks.append(check("t6_global_abstention", "fail" if dominating else "unverifiable",
+                                "Later, higher-authority same-fact positions defeat this current pair-only abstention; applicability still needs adjudication." if dominating else
+                                "Pair tie alone cannot establish global abstention; review other same-fact documents and applicability.",
+                                other_positions=other, dominating_positions=dominating, internal_competing_values=internal))
+        else:
+            checks.append(check("t6_global_abstention", "pass" if tied and not other else "fail" if other else "unverifiable",
+                                "No later or higher-authority same-fact document exists in the v2 corpus.",
+                                other_positions=other, internal_competing_values=internal))
         checks.append(check("t6_gold_shape", "pass" if answer is None and question["gold_status"] == "abstained" and not question["gold_winner_doc"] else "fail",
                             "Checked null answer/winner and abstained status."))
     return {"qid": question["qid"], "type": question["type"], "split": question.get("split", "unspecified"),
+            "fact_id": question_fact_key(question),
             "status": rollup(checks), "checks": checks}
 
 
@@ -414,10 +472,16 @@ def audit_metadata(documents: dict, manifest: dict) -> list[dict]:
     return records
 
 
-def run_audit(root: Path) -> dict:
-    corpus = root / "data/corpus"
+def run_audit(
+    root: Path,
+    *,
+    corpus_rel: str = "data/corpus",
+    facts_rel: str = "data/factsheet/aurelia_facts.yaml",
+    question_files: tuple[str, ...] = ("questions.jsonl", "wild.jsonl", "eval_subset_40.jsonl"),
+) -> dict:
+    corpus = root / corpus_rel
     manifest_path = corpus / "corpus_manifest.json"
-    facts_path = root / "data/factsheet/aurelia_facts.yaml"
+    facts_path = root / facts_rel
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     factsheet = yaml.safe_load(facts_path.read_text(encoding="utf-8"))
     facts = {fact["fact_id"]: fact for fact in factsheet["facts"]}
@@ -434,21 +498,24 @@ def run_audit(root: Path) -> dict:
     datasets = {}
     paths = [manifest_path, facts_path, config_path] + [document.path for document in loaded]
     source_records = {}
-    for filename in ("questions.jsonl", "wild.jsonl", "eval_subset_40.jsonl"):
+    for filename in question_files:
         path = root / "data/benchmark" / filename
         paths.append(path)
         questions = read_questions(path)
         source_records[filename] = {q["qid"]: q for q in questions}
         records = [audit_question(q, documents, manifest_docs, facts) for q in questions]
         datasets[filename] = {"count": len(records), "counts": counts(records), "per_type_counts": per_type_counts(records), "records": records}
-    for record in datasets["eval_subset_40.jsonl"]["records"]:
+    subset_name = next((name for name in datasets if "subset" in name), None)
+    for record in datasets[subset_name]["records"] if subset_name else []:
         qid = record["qid"]
-        original = source_records["questions.jsonl"].get(qid)
-        valid = original == source_records["eval_subset_40.jsonl"][qid] and original.get("split") == "test" if original else False
+        main_name = question_files[0]
+        original = source_records[main_name].get(qid)
+        valid = original == source_records[subset_name][qid] and original.get("split") == "test" if original and subset_name else False
         record["checks"].append(check("subset_membership", "pass" if valid else "fail", "Frozen subset row must exactly equal its TEST source row."))
         record["status"] = rollup(record["checks"])
-    datasets["eval_subset_40.jsonl"]["counts"] = counts(datasets["eval_subset_40.jsonl"]["records"])
-    datasets["eval_subset_40.jsonl"]["per_type_counts"] = per_type_counts(datasets["eval_subset_40.jsonl"]["records"])
+    if subset_name:
+        datasets[subset_name]["counts"] = counts(datasets[subset_name]["records"])
+        datasets[subset_name]["per_type_counts"] = per_type_counts(datasets[subset_name]["records"])
     metadata = audit_metadata(documents, manifest)
     for row in metadata:
         row["cited_by"] = {
@@ -457,14 +524,17 @@ def run_audit(root: Path) -> dict:
                           for target in record["checks"][0]["targets"])]
             for name, dataset in datasets.items()
         }
-    unique = [row for name, dataset in datasets.items() if name != "eval_subset_40.jsonl" for row in dataset["records"]]
+    unique = [row for name, dataset in datasets.items() if "subset" not in name for row in dataset["records"]]
+    for dataset in datasets.values():
+        dataset["per_type_fact_keys"] = per_type_fact_keys(dataset["records"])
+        dataset["per_split_fact_keys"] = per_split_fact_keys(dataset["records"])
     return {"format_version": 2, "input_sha256": {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)},
-            "unique_question_counts": counts(unique), "unique_per_type_counts": per_type_counts(unique), "unique_questions": len(unique), "datasets": datasets,
+            "unique_question_counts": counts(unique), "unique_per_type_counts": per_type_counts(unique), "unique_per_type_fact_keys": per_type_fact_keys(unique), "unique_per_split_fact_keys": per_split_fact_keys(unique), "unique_questions": len(unique), "datasets": datasets,
             "intra_document": audit_intra_document(documents, facts),
             "gold_adjudication": manifest.get("gold_adjudication", {}),
             "metadata": {"counts": counts(metadata), "accepted_unknown_version_count": sum(row.get("recovery_outcome") == "accepted_unknown_version" for row in metadata), "corrupted_counts": counts([row for row in metadata if row.get("corrupted")]), "records": metadata},
             "absence_probes": ABSENCE_PROBES,
-            "factsheet_reference": {key: facts[key] for key in ("renewal_grace", "annual_limit")}}
+            "factsheet_reference": facts}
 
 
 def markdown(report: dict) -> str:
@@ -487,8 +557,8 @@ def markdown(report: dict) -> str:
              "T0 scans lines containing the factsheet topic or bounded aliases (`renewal grace period`, `renewal may be completed`) and compares numeric durations only; unrelated durations do not count. "
              "For competition only, singular/plural and hyphenated durations such as `30-day` and `30 days` are treated alike. "
              "It cannot guarantee synonym completeness or adjudicate time/scope. T6 checks actual distinct annual-limit values, both issued/effective dates, and authority against loader and manifest. "
-             "Its bounded topic aliases are `annual hospitalization limit` and `annual limit`; all matching positions are retained, including disagreements inside one document. "
-              "The local tie does not prove whole-corpus abstention. Later higher-authority same-fact counterevidence fails current pair-only abstention. "
+              "Its bounded topic aliases are factsheet topics; all matching positions are retained, including disagreements inside one document. "
+               "For v2 T6, the audit checks equal effective/issued dates and authority, no supersession/amendment edge, exactly two physical documents, and no third same-fact document. "
               "Gold was revised by explicit corpus adjudication; see `reports/gold_changes.md`. The audit performs no runtime tuning or benchmark freeze.", "",
              "## Measured question counts", "", "| Dataset | Rows | Pass | Fail | Unverifiable |", "|---|---:|---:|---:|---:|"]
     for name, dataset in report["datasets"].items():
@@ -502,6 +572,12 @@ def markdown(report: dict) -> str:
             lines.append(f"| {name} | {kind} | {c['pass']} | {c['fail']} | {c['unverifiable']} |")
     for kind, c in report["unique_per_type_counts"].items():
         lines.append(f"| Unique (main + wild) | {kind} | {c['pass']} | {c['fail']} | {c['unverifiable']} |")
+    lines += ["", "## Distinct fact keys by type and split", "", "The v2 rows carry `gold_fact_id`; legacy rows use the conservative type-to-fact mapping documented in the JSON.", "", "| Dataset | Type | Distinct keys | Fact keys |", "|---|---|---:|---|"]
+    for name, dataset in report["datasets"].items():
+        for kind, info in dataset["per_type_fact_keys"].items():
+            lines.append(f"| {name} | {kind} | {info['count']} | {', '.join(info['fact_keys']) or 'none'} |")
+    for split, info in report["unique_per_split_fact_keys"].items():
+        lines.append(f"| Unique split={split} | all types | {info['count']} | {', '.join(info['fact_keys']) or 'none'} |")
     lines += ["", "## Check counts and exact affected qids", ""]
     for name, dataset in report["datasets"].items():
         lines += [f"### {name}", "", "| Check | Pass | Fail | Unverifiable |", "|---|---:|---:|---:|"]
@@ -587,10 +663,20 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--output", type=Path, default=Path("reports/corpus_audit_programmatic.md"))
     parser.add_argument("--json-output", type=Path, default=Path("reports/corpus_audit_programmatic.json"))
+    parser.add_argument("--corpus", default="data/corpus", help="Corpus directory relative to root")
+    parser.add_argument("--factsheet", default="data/factsheet/aurelia_facts.yaml", help="Factsheet relative to root")
+    parser.add_argument("--questions", default="questions.jsonl", help="Main question file in data/benchmark")
+    parser.add_argument("--wild", default="wild.jsonl", help="Wild question file in data/benchmark")
+    parser.add_argument("--subset", default="eval_subset_40.jsonl", help="Subset question file in data/benchmark")
     parser.add_argument("--fail-on-findings", action="store_true")
     args = parser.parse_args()
     try:
-        report = run_audit(args.root.resolve())
+        report = run_audit(
+            args.root.resolve(),
+            corpus_rel=args.corpus,
+            facts_rel=args.factsheet,
+            question_files=(args.questions, args.wild, args.subset),
+        )
         for path, content in ((args.output, markdown(report)), (args.json_output, json.dumps(report, indent=2, sort_keys=True, default=str) + "\n")):
             path = path if path.is_absolute() else args.root / path
             path.parent.mkdir(parents=True, exist_ok=True)

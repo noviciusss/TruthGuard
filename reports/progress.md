@@ -1065,3 +1065,61 @@ Result: 139 passed, one existing Starlette/AnyIO deprecation warning.
 
 This clean core installation is verified. Optional ML weights and Docker remain
 separate/unverified; no global packages or project secrets were used.
+
+## Step 1 — additive genuine-T6 freeze v2
+
+Started from the frozen v1 files and did not rewrite any existing question
+labels. Added six fact keys to `data/factsheet/aurelia_facts_v2.yaml` and twelve
+new circular documents to `data/corpus_v2`: exactly two same-authority,
+same-effective-date positions per key, with no supersedes/amends edge and no
+third document mentioning a v2 key. Added 10 main questions (4 DEV, 6 TEST)
+and 2 wild questions. Every new row is `T6`, `gold_status=abstained`, has a
+null answer/winner, two cited documents, exact `source_passages`, and a
+`gold_fact_id`.
+
+New fact keys:
+
+```text
+t6_room_rent_cap
+t6_copay_rate
+t6_grievance_response_window
+t6_claim_filing_deadline
+t6_cashless_preauth_window
+t6_renewal_grace_period
+```
+
+V2 generated artifacts:
+
+```text
+data/factsheet/aurelia_facts_v2.yaml
+data/corpus_v2/
+data/benchmark/questions_v2.jsonl
+data/benchmark/wild_v2.jsonl
+data/benchmark/eval_subset_v2_40.jsonl
+```
+
+The v2 subset uses the existing seed `20261020` and the existing 2/6/6/6/6/6/6/2
+T0–T7 stratification. The original 180 main rows compare equal by qid and full
+serialized fields to the v1 source rows.
+
+Programmatic v2 audit command:
+
+```bash
+TRUTHGUARD_OFFLINE=true .venv/bin/python scripts/audit_corpus_programmatic.py \
+  --corpus data/corpus_v2 \
+  --factsheet data/factsheet/aurelia_facts_v2.yaml \
+  --questions questions_v2.jsonl --wild wild_v2.jsonl \
+  --subset eval_subset_v2_40.jsonl \
+  --output reports/corpus_audit_v2.md \
+  --json-output reports/corpus_audit_v2.json
+```
+
+Result: 47/47 metadata records pass, 138/212 unique questions pass the
+mechanical checks, 74 remain unverifiable, and 0 fail. All 12 new T6 rows pass
+the same-date/same-authority check, the no-third-document check, the global
+abstention check, and the gold-shape check. The existing intra-document
+same-fact/same-scope scan remains enabled and has no new failures.
+
+V2 hashes, per-type counts, and distinct fact-key counts by type/split are in
+`reports/benchmark_freeze.md`; full per-qid evidence is in
+`reports/corpus_audit_v2.json`.

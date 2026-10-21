@@ -1,0 +1,1804 @@
+{
+  "audit": {
+    "llm_audit_required": false,
+    "status": "offline-v2-genuine-t6"
+  },
+  "conflicts": [
+    {
+      "conflict_id": "T1-waiting-period",
+      "correct_mode": "supersession",
+      "documents": [
+        "POL-2024-V1",
+        "AMD-2025-03"
+      ],
+      "gold_answer": "45 days",
+      "type": "T1",
+      "winner_doc_id": "AMD-2025-03"
+    },
+    {
+      "conflict_id": "T2-copay-scope",
+      "correct_mode": "contextual",
+      "documents": [
+        "CIR-2024-02",
+        "POL-2024-V1"
+      ],
+      "gold_answer": "10% for standard members; 20% for members aged 60 and above",
+      "type": "T2",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T3-claim-deadline",
+      "correct_mode": "supersession",
+      "documents": [
+        "POL-2024-V1",
+        "AMD-2025-04"
+      ],
+      "gold_answer": "60 days after discharge",
+      "type": "T3",
+      "winner_doc_id": "AMD-2025-04"
+    },
+    {
+      "conflict_id": "T4-lookback-definition",
+      "correct_mode": "supersession",
+      "documents": [
+        "FAQ-2024-02",
+        "AMD-2025-05"
+      ],
+      "gold_answer": "48 months",
+      "type": "T4",
+      "winner_doc_id": "AMD-2025-05"
+    },
+    {
+      "conflict_id": "T5-emergency-preauth",
+      "correct_mode": "contextual",
+      "documents": [
+        "POL-2025-V2",
+        "CIR-2025-06"
+      ],
+      "gold_answer": "Planned admissions require prior approval; emergency admissions may proceed without it if notified within 24 hours",
+      "type": "T5",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T3-annual-limit",
+      "correct_mode": "supersession",
+      "documents": [
+        "CIR-2025-08-A",
+        "CIR-2025-08-B",
+        "NOTICE-2025-11",
+        "POL-2026-V3"
+      ],
+      "gold_answer": "600000 currency units per policy year",
+      "original_conflict_id": "T6-annual-limit",
+      "type": "T3",
+      "winner_doc_id": "POL-2026-V3"
+    },
+    {
+      "conflict_id": "T0-renewal-grace",
+      "correct_mode": null,
+      "documents": [
+        "CIR-2024-01",
+        "CIR-2025-10"
+      ],
+      "gold_answer": "30 days",
+      "type": "T0",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T7-hearing-aid",
+      "correct_mode": "abstain",
+      "documents": [],
+      "gold_answer": null,
+      "type": "T7",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T6-t6_room_rent_cap",
+      "correct_mode": "abstain",
+      "documents": [
+        "CIR-2026-T6-ROOM-A",
+        "CIR-2026-T6-ROOM-B"
+      ],
+      "fact_id": "t6_room_rent_cap",
+      "gold_answer": null,
+      "type": "T6",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T6-t6_copay_rate",
+      "correct_mode": "abstain",
+      "documents": [
+        "CIR-2026-T6-COPAY-A",
+        "CIR-2026-T6-COPAY-B"
+      ],
+      "fact_id": "t6_copay_rate",
+      "gold_answer": null,
+      "type": "T6",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T6-t6_grievance_response_window",
+      "correct_mode": "abstain",
+      "documents": [
+        "CIR-2026-T6-GRV-A",
+        "CIR-2026-T6-GRV-B"
+      ],
+      "fact_id": "t6_grievance_response_window",
+      "gold_answer": null,
+      "type": "T6",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T6-t6_claim_filing_deadline",
+      "correct_mode": "abstain",
+      "documents": [
+        "CIR-2026-T6-CLAIM-A",
+        "CIR-2026-T6-CLAIM-B"
+      ],
+      "fact_id": "t6_claim_filing_deadline",
+      "gold_answer": null,
+      "type": "T6",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T6-t6_cashless_preauth_window",
+      "correct_mode": "abstain",
+      "documents": [
+        "CIR-2026-T6-PREAUTH-A",
+        "CIR-2026-T6-PREAUTH-B"
+      ],
+      "fact_id": "t6_cashless_preauth_window",
+      "gold_answer": null,
+      "type": "T6",
+      "winner_doc_id": null
+    },
+    {
+      "conflict_id": "T6-t6_renewal_grace_period",
+      "correct_mode": "abstain",
+      "documents": [
+        "CIR-2026-T6-RENEW-A",
+        "CIR-2026-T6-RENEW-B"
+      ],
+      "fact_id": "t6_renewal_grace_period",
+      "gold_answer": null,
+      "type": "T6",
+      "winner_doc_id": null
+    }
+  ],
+  "document_count": 47,
+  "documents": [
+    {
+      "char_count": 955,
+      "doc_id": "POL-2024-V1",
+      "doc_type": "policy",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 4,
+        "doc_id": "POL-2024-V1",
+        "doc_type": "policy",
+        "effective_date": "2024-01-01",
+        "issued_date": "2023-12-15",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Aurelia Health Standard Policy Wording v1",
+        "version": "1.0"
+      },
+      "header_metadata": {
+        "corruption_kind": "missing_effective",
+        "effective_date": null,
+        "metadata_corrupted": true,
+        "version": "1.0"
+      },
+      "metadata_corrupted": true,
+      "path": "POL-2024-V1.md",
+      "sections": [
+        "Eligibility",
+        "Benefits",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health Standard Policy Wording v1"
+    },
+    {
+      "char_count": 1027,
+      "doc_id": "POL-2025-V2",
+      "doc_type": "policy",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 4,
+        "doc_id": "POL-2025-V2",
+        "doc_type": "policy",
+        "effective_date": "2025-06-01",
+        "issued_date": "2025-05-01",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [
+          "POL-2024-V1"
+        ],
+        "title": "Aurelia Health Standard Policy Wording v2",
+        "version": "2.0"
+      },
+      "header_metadata": {
+        "corruption_kind": "wrong_version",
+        "effective_date": "2025-06-01",
+        "metadata_corrupted": true,
+        "version": "0.0"
+      },
+      "metadata_corrupted": true,
+      "path": "POL-2025-V2.md",
+      "sections": [
+        "Eligibility",
+        "Benefits",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health Standard Policy Wording v2"
+    },
+    {
+      "char_count": 1052,
+      "doc_id": "POL-2026-V3",
+      "doc_type": "policy",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 4,
+        "doc_id": "POL-2026-V3",
+        "doc_type": "policy",
+        "effective_date": "2026-01-01",
+        "issued_date": "2025-12-01",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [
+          "POL-2025-V2"
+        ],
+        "title": "Aurelia Health Standard Policy Wording v3",
+        "version": "3.0"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-01-01",
+        "metadata_corrupted": false,
+        "version": "3.0"
+      },
+      "metadata_corrupted": false,
+      "path": "POL-2026-V3.md",
+      "sections": [
+        "Administration",
+        "Benefits",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health Standard Policy Wording v3"
+    },
+    {
+      "char_count": 628,
+      "doc_id": "AMD-2025-03",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2024-V1",
+            "Section 4.1"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2025-03",
+        "doc_type": "amendment",
+        "effective_date": "2025-03-01",
+        "issued_date": "2025-02-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2025/03 \u2014 Hospitalization Waiting Period",
+        "version": "2025-03"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-03-01",
+        "metadata_corrupted": false,
+        "version": "2025-03"
+      },
+      "metadata_corrupted": false,
+      "path": "AMD-2025-03.md",
+      "sections": [
+        "Section 4.1",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2025/03 \u2014 Hospitalization Waiting Period"
+    },
+    {
+      "char_count": 596,
+      "doc_id": "AMD-2025-04",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2024-V1",
+            "Section 8.2"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2025-04",
+        "doc_type": "amendment",
+        "effective_date": "2025-04-15",
+        "issued_date": "2025-04-01",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2025/04 \u2014 Claim Submission",
+        "version": "2025-04"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-04-15",
+        "metadata_corrupted": false,
+        "version": "2025-04"
+      },
+      "metadata_corrupted": false,
+      "path": "AMD-2025-04.md",
+      "sections": [
+        "Section 8.2",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2025/04 \u2014 Claim Submission"
+    },
+    {
+      "char_count": 614,
+      "doc_id": "AMD-2025-05",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2024-V1",
+            "Section 3.2"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2025-05",
+        "doc_type": "amendment",
+        "effective_date": "2025-05-01",
+        "issued_date": "2025-04-20",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2025/05 \u2014 Pre-existing Conditions",
+        "version": "2025-05"
+      },
+      "header_metadata": {
+        "corruption_kind": "missing_effective",
+        "effective_date": null,
+        "metadata_corrupted": true,
+        "version": "2025-05"
+      },
+      "metadata_corrupted": true,
+      "path": "AMD-2025-05.md",
+      "sections": [
+        "Section 3.2",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2025/05 \u2014 Pre-existing Conditions"
+    },
+    {
+      "char_count": 572,
+      "doc_id": "AMD-2025-07",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2025-V2",
+            "Section 11"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2025-07",
+        "doc_type": "amendment",
+        "effective_date": "2025-07-01",
+        "issued_date": "2025-06-15",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2025/07 \u2014 Maternity",
+        "version": "2025-07"
+      },
+      "header_metadata": {
+        "corruption_kind": "wrong_version",
+        "effective_date": "2025-07-01",
+        "metadata_corrupted": true,
+        "version": "0.0"
+      },
+      "metadata_corrupted": true,
+      "path": "AMD-2025-07.md",
+      "sections": [
+        "Section 11",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2025/07 \u2014 Maternity"
+    },
+    {
+      "char_count": 713,
+      "doc_id": "AMD-2025-09",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2025-V2",
+            "Section 6"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2025-09",
+        "doc_type": "amendment",
+        "effective_date": "2025-09-01",
+        "issued_date": "2025-08-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2025/09 \u2014 Network Hospitals",
+        "version": "2025-09"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-09-01",
+        "metadata_corrupted": false,
+        "version": "2025-09"
+      },
+      "metadata_corrupted": false,
+      "path": "AMD-2025-09.md",
+      "sections": [
+        "Section 6",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2025/09 \u2014 Network Hospitals"
+    },
+    {
+      "char_count": 604,
+      "doc_id": "AMD-2026-01",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2025-V2",
+            "Section 12"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2026-01",
+        "doc_type": "amendment",
+        "effective_date": "2026-01-01",
+        "issued_date": "2025-12-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2026/01 \u2014 Telemedicine",
+        "version": "2026-01"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-01-01",
+        "metadata_corrupted": false,
+        "version": "2026-01"
+      },
+      "metadata_corrupted": false,
+      "path": "AMD-2026-01.md",
+      "sections": [
+        "Section 12",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2026/01 \u2014 Telemedicine"
+    },
+    {
+      "char_count": 593,
+      "doc_id": "AMD-2026-02",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2025-V2",
+            "Section 14"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2026-02",
+        "doc_type": "amendment",
+        "effective_date": "2026-02-01",
+        "issued_date": "2026-01-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2026/02 \u2014 Grievances",
+        "version": "2026-02"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-02-01",
+        "metadata_corrupted": false,
+        "version": "2026-02"
+      },
+      "metadata_corrupted": false,
+      "path": "AMD-2026-02.md",
+      "sections": [
+        "Section 14",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2026/02 \u2014 Grievances"
+    },
+    {
+      "char_count": 599,
+      "doc_id": "AMD-2026-03",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2024-V1",
+            "Section 7"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2026-03",
+        "doc_type": "amendment",
+        "effective_date": "2026-03-01",
+        "issued_date": "2026-02-15",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2026/03 \u2014 Ambulance",
+        "version": "2026-03"
+      },
+      "header_metadata": {
+        "corruption_kind": "missing_effective",
+        "effective_date": null,
+        "metadata_corrupted": true,
+        "version": "2026-03"
+      },
+      "metadata_corrupted": true,
+      "path": "AMD-2026-03.md",
+      "sections": [
+        "Section 7",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2026/03 \u2014 Ambulance"
+    },
+    {
+      "char_count": 665,
+      "doc_id": "AMD-2026-04",
+      "doc_type": "amendment",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2025-V2",
+            "Section 15"
+          ]
+        ],
+        "authority_rank": 3,
+        "doc_id": "AMD-2026-04",
+        "doc_type": "amendment",
+        "effective_date": "2026-04-01",
+        "issued_date": "2026-03-15",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Amendment AH/2026/04 \u2014 Exclusions",
+        "version": "2026-04"
+      },
+      "header_metadata": {
+        "corruption_kind": "wrong_version",
+        "effective_date": "2026-04-01",
+        "metadata_corrupted": true,
+        "version": "0.0"
+      },
+      "metadata_corrupted": true,
+      "path": "AMD-2026-04.md",
+      "sections": [
+        "Section 15",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Amendment AH/2026/04 \u2014 Exclusions"
+    },
+    {
+      "char_count": 515,
+      "doc_id": "CIR-2024-01",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2024-01",
+        "doc_type": "circular",
+        "effective_date": "2024-02-01",
+        "issued_date": "2024-01-20",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2024/01 \u2014 Member Administration",
+        "version": "2024/01"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2024-02-01",
+        "metadata_corrupted": false,
+        "version": "2024/01"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2024-01.md",
+      "sections": [
+        "Renewals",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2024/01 \u2014 Member Administration"
+    },
+    {
+      "char_count": 545,
+      "doc_id": "CIR-2024-02",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2024-02",
+        "doc_type": "circular",
+        "effective_date": "2024-03-01",
+        "issued_date": "2024-02-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2024/02 \u2014 Co-payment Examples",
+        "version": "2024/02"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2024-03-01",
+        "metadata_corrupted": false,
+        "version": "2024/02"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2024-02.md",
+      "sections": [
+        "Examples",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2024/02 \u2014 Co-payment Examples"
+    },
+    {
+      "char_count": 573,
+      "doc_id": "CIR-2024-03",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2024-03",
+        "doc_type": "circular",
+        "effective_date": "2024-04-01",
+        "issued_date": "2024-03-20",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2024/03 \u2014 Room Rent Schedule",
+        "version": "2024/03"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2024-04-01",
+        "metadata_corrupted": false,
+        "version": "2024/03"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2024-03.md",
+      "sections": [
+        "Schedule",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2024/03 \u2014 Room Rent Schedule"
+    },
+    {
+      "char_count": 742,
+      "doc_id": "CIR-2025-06",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [
+          [
+            "POL-2025-V2",
+            "Section 5.4"
+          ]
+        ],
+        "authority_rank": 2,
+        "doc_id": "CIR-2025-06",
+        "doc_type": "circular",
+        "effective_date": "2025-06-01",
+        "issued_date": "2025-05-20",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2025/06 \u2014 Emergency Admission Exception",
+        "version": "2025/06"
+      },
+      "header_metadata": {
+        "corruption_kind": "missing_effective",
+        "effective_date": null,
+        "metadata_corrupted": true,
+        "version": "2025/06"
+      },
+      "metadata_corrupted": true,
+      "path": "CIR-2025-06.md",
+      "sections": [
+        "Emergency exception",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2025/06 \u2014 Emergency Admission Exception"
+    },
+    {
+      "char_count": 542,
+      "doc_id": "CIR-2025-08-A",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2025-08-A",
+        "doc_type": "circular",
+        "effective_date": "2025-08-01",
+        "issued_date": "2025-08-01",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2025/08-A \u2014 Annual Limit",
+        "version": "2025/08-A"
+      },
+      "header_metadata": {
+        "corruption_kind": "wrong_version",
+        "effective_date": "2025-08-01",
+        "metadata_corrupted": true,
+        "version": "0.0"
+      },
+      "metadata_corrupted": true,
+      "path": "CIR-2025-08-A.md",
+      "sections": [
+        "Annual limit",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2025/08-A \u2014 Annual Limit"
+    },
+    {
+      "char_count": 548,
+      "doc_id": "CIR-2025-08-B",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2025-08-B",
+        "doc_type": "circular",
+        "effective_date": "2025-08-01",
+        "issued_date": "2025-08-01",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2025/08-B \u2014 Annual Limit",
+        "version": "2025/08-B"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-08-01",
+        "metadata_corrupted": false,
+        "version": "2025/08-B"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2025-08-B.md",
+      "sections": [
+        "Annual limit",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2025/08-B \u2014 Annual Limit"
+    },
+    {
+      "char_count": 508,
+      "doc_id": "CIR-2025-10",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2025-10",
+        "doc_type": "circular",
+        "effective_date": "2025-10-01",
+        "issued_date": "2025-09-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2025/10 \u2014 Renewal Operations",
+        "version": "2025/10"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-10-01",
+        "metadata_corrupted": false,
+        "version": "2025/10"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2025-10.md",
+      "sections": [
+        "Renewals",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2025/10 \u2014 Renewal Operations"
+    },
+    {
+      "char_count": 530,
+      "doc_id": "CIR-2026-01",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-01",
+        "doc_type": "circular",
+        "effective_date": "2026-01-10",
+        "issued_date": "2025-12-20",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/01 \u2014 Digital Care",
+        "version": "2026/01"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-01-10",
+        "metadata_corrupted": false,
+        "version": "2026/01"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-01.md",
+      "sections": [
+        "Digital care",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/01 \u2014 Digital Care"
+    },
+    {
+      "char_count": 544,
+      "doc_id": "CIR-2026-02",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-02",
+        "doc_type": "circular",
+        "effective_date": "2026-02-10",
+        "issued_date": "2026-01-25",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/02 \u2014 Ambulance Claims",
+        "version": "2026/02"
+      },
+      "header_metadata": {
+        "corruption_kind": "missing_effective",
+        "effective_date": null,
+        "metadata_corrupted": true,
+        "version": "2026/02"
+      },
+      "metadata_corrupted": true,
+      "path": "CIR-2026-02.md",
+      "sections": [
+        "Ambulance",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/02 \u2014 Ambulance Claims"
+    },
+    {
+      "char_count": 587,
+      "doc_id": "FAQ-2024-01",
+      "doc_type": "faq",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 0,
+        "doc_id": "FAQ-2024-01",
+        "doc_type": "faq",
+        "effective_date": "2024-02-15",
+        "issued_date": "2024-02-15",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Aurelia Health FAQ \u2014 Waiting Periods",
+        "version": "2024.1"
+      },
+      "header_metadata": {
+        "corruption_kind": "wrong_version",
+        "effective_date": "2024-02-15",
+        "metadata_corrupted": true,
+        "version": "0.0"
+      },
+      "metadata_corrupted": true,
+      "path": "FAQ-2024-01.md",
+      "sections": [
+        "Question",
+        "Answer",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health FAQ \u2014 Waiting Periods"
+    },
+    {
+      "char_count": 549,
+      "doc_id": "FAQ-2024-02",
+      "doc_type": "faq",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 0,
+        "doc_id": "FAQ-2024-02",
+        "doc_type": "faq",
+        "effective_date": "2024-03-15",
+        "issued_date": "2024-03-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Aurelia Health FAQ \u2014 Definitions",
+        "version": "2024.2"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2024-03-15",
+        "metadata_corrupted": false,
+        "version": "2024.2"
+      },
+      "metadata_corrupted": false,
+      "path": "FAQ-2024-02.md",
+      "sections": [
+        "Question",
+        "Answer",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health FAQ \u2014 Definitions"
+    },
+    {
+      "char_count": 718,
+      "doc_id": "FAQ-2025-01",
+      "doc_type": "faq",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 0,
+        "doc_id": "FAQ-2025-01",
+        "doc_type": "faq",
+        "effective_date": "2025-01-15",
+        "issued_date": "2025-01-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Aurelia Health FAQ \u2014 Plan Comparisons",
+        "version": "2025.1"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-01-15",
+        "metadata_corrupted": false,
+        "version": "2025.1"
+      },
+      "metadata_corrupted": false,
+      "path": "FAQ-2025-01.md",
+      "sections": [
+        "Question",
+        "Answer",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health FAQ \u2014 Plan Comparisons"
+    },
+    {
+      "char_count": 748,
+      "doc_id": "FAQ-2025-06",
+      "doc_type": "faq",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 0,
+        "doc_id": "FAQ-2025-06",
+        "doc_type": "faq",
+        "effective_date": "2025-06-15",
+        "issued_date": "2025-06-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Aurelia Health FAQ \u2014 Current Benefits",
+        "version": "2025.6"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-06-15",
+        "metadata_corrupted": false,
+        "version": "2025.6"
+      },
+      "metadata_corrupted": false,
+      "path": "FAQ-2025-06.md",
+      "sections": [
+        "Current answer",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health FAQ \u2014 Current Benefits"
+    },
+    {
+      "char_count": 449,
+      "doc_id": "FAQ-2026-01",
+      "doc_type": "faq",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 0,
+        "doc_id": "FAQ-2026-01",
+        "doc_type": "faq",
+        "effective_date": "2026-01-20",
+        "issued_date": "2026-01-20",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Aurelia Health FAQ \u2014 Renewal",
+        "version": "2026.1"
+      },
+      "header_metadata": {
+        "corruption_kind": "missing_effective",
+        "effective_date": null,
+        "metadata_corrupted": true,
+        "version": "2026.1"
+      },
+      "metadata_corrupted": true,
+      "path": "FAQ-2026-01.md",
+      "sections": [
+        "Answer",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health FAQ \u2014 Renewal"
+    },
+    {
+      "char_count": 775,
+      "doc_id": "FAQ-2026-02",
+      "doc_type": "faq",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 0,
+        "doc_id": "FAQ-2026-02",
+        "doc_type": "faq",
+        "effective_date": "2026-02-20",
+        "issued_date": "2026-02-20",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Aurelia Health FAQ \u2014 Network and Digital Care",
+        "version": "2026.2"
+      },
+      "header_metadata": {
+        "corruption_kind": "wrong_version",
+        "effective_date": "2026-02-20",
+        "metadata_corrupted": true,
+        "version": "0.0"
+      },
+      "metadata_corrupted": true,
+      "path": "FAQ-2026-02.md",
+      "sections": [
+        "Answer",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Aurelia Health FAQ \u2014 Network and Digital Care"
+    },
+    {
+      "char_count": 735,
+      "doc_id": "MAN-2024-CLAIMS",
+      "doc_type": "manual",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 1,
+        "doc_id": "MAN-2024-CLAIMS",
+        "doc_type": "manual",
+        "effective_date": "2024-01-10",
+        "issued_date": "2024-01-10",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Claims Processing Manual 2024",
+        "version": "2024"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2024-01-10",
+        "metadata_corrupted": false,
+        "version": "2024"
+      },
+      "metadata_corrupted": false,
+      "path": "MAN-2024-CLAIMS.md",
+      "sections": [
+        "Claims",
+        "Exclusions",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Claims Processing Manual 2024"
+    },
+    {
+      "char_count": 484,
+      "doc_id": "MAN-2025-CLAIMS",
+      "doc_type": "manual",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 1,
+        "doc_id": "MAN-2025-CLAIMS",
+        "doc_type": "manual",
+        "effective_date": "2025-05-15",
+        "issued_date": "2025-05-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Claims Processing Manual 2025",
+        "version": "2025"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-05-15",
+        "metadata_corrupted": false,
+        "version": "2025"
+      },
+      "metadata_corrupted": false,
+      "path": "MAN-2025-CLAIMS.md",
+      "sections": [
+        "Claims",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Claims Processing Manual 2025"
+    },
+    {
+      "char_count": 833,
+      "doc_id": "MAN-2025-CASHLESS",
+      "doc_type": "manual",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 1,
+        "doc_id": "MAN-2025-CASHLESS",
+        "doc_type": "manual",
+        "effective_date": "2025-06-15",
+        "issued_date": "2025-06-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Cashless Hospital Operations Manual",
+        "version": "2025"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-06-15",
+        "metadata_corrupted": false,
+        "version": "2025"
+      },
+      "metadata_corrupted": false,
+      "path": "MAN-2025-CASHLESS.md",
+      "sections": [
+        "Operations",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Cashless Hospital Operations Manual"
+    },
+    {
+      "char_count": 538,
+      "doc_id": "MAN-2026-GRIEVANCE",
+      "doc_type": "manual",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 1,
+        "doc_id": "MAN-2026-GRIEVANCE",
+        "doc_type": "manual",
+        "effective_date": "2026-02-15",
+        "issued_date": "2026-02-15",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Member Grievance Operations Manual",
+        "version": "2026"
+      },
+      "header_metadata": {
+        "corruption_kind": "missing_effective",
+        "effective_date": null,
+        "metadata_corrupted": true,
+        "version": "2026"
+      },
+      "metadata_corrupted": true,
+      "path": "MAN-2026-GRIEVANCE.md",
+      "sections": [
+        "Grievances",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Member Grievance Operations Manual"
+    },
+    {
+      "char_count": 628,
+      "doc_id": "NOTICE-2024-01",
+      "doc_type": "notice",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 3,
+        "doc_id": "NOTICE-2024-01",
+        "doc_type": "notice",
+        "effective_date": "2024-05-01",
+        "issued_date": "2024-05-01",
+        "metadata_confidence": 0.45,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Regulatory Notice AH/2024/01 \u2014 Coverage Disclosures",
+        "version": "2024/01"
+      },
+      "header_metadata": {
+        "corruption_kind": "wrong_version",
+        "effective_date": "2024-05-01",
+        "metadata_corrupted": true,
+        "version": "0.0"
+      },
+      "metadata_corrupted": true,
+      "path": "NOTICE-2024-01.md",
+      "sections": [
+        "Disclosure",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Regulatory Notice AH/2024/01 \u2014 Coverage Disclosures"
+    },
+    {
+      "char_count": 659,
+      "doc_id": "NOTICE-2025-02",
+      "doc_type": "notice",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 3,
+        "doc_id": "NOTICE-2025-02",
+        "doc_type": "notice",
+        "effective_date": "2025-06-05",
+        "issued_date": "2025-06-05",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Regulatory Notice AH/2025/02 \u2014 Emergency Cashless",
+        "version": "2025/02"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-06-05",
+        "metadata_corrupted": false,
+        "version": "2025/02"
+      },
+      "metadata_corrupted": false,
+      "path": "NOTICE-2025-02.md",
+      "sections": [
+        "Emergency care",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Regulatory Notice AH/2025/02 \u2014 Emergency Cashless"
+    },
+    {
+      "char_count": 549,
+      "doc_id": "NOTICE-2025-11",
+      "doc_type": "notice",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 3,
+        "doc_id": "NOTICE-2025-11",
+        "doc_type": "notice",
+        "effective_date": "2025-11-01",
+        "issued_date": "2025-11-01",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Regulatory Notice AH/2025/11 \u2014 Annual Limit Filing",
+        "version": "2025/11"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2025-11-01",
+        "metadata_corrupted": false,
+        "version": "2025/11"
+      },
+      "metadata_corrupted": false,
+      "path": "NOTICE-2025-11.md",
+      "sections": [
+        "Filing",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Regulatory Notice AH/2025/11 \u2014 Annual Limit Filing"
+    },
+    {
+      "char_count": 558,
+      "doc_id": "NOTICE-2026-01",
+      "doc_type": "notice",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 3,
+        "doc_id": "NOTICE-2026-01",
+        "doc_type": "notice",
+        "effective_date": "2026-01-05",
+        "issued_date": "2026-01-05",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Regulatory Notice AH/2026/01 \u2014 Grievance Standard",
+        "version": "2026/01"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-01-05",
+        "metadata_corrupted": false,
+        "version": "2026/01"
+      },
+      "metadata_corrupted": false,
+      "path": "NOTICE-2026-01.md",
+      "sections": [
+        "Standard",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Regulatory Notice AH/2026/01 \u2014 Grievance Standard"
+    },
+    {
+      "char_count": 546,
+      "doc_id": "CIR-2026-T6-ROOM-A",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-ROOM-A",
+        "doc_type": "circular",
+        "effective_date": "2026-05-01",
+        "issued_date": "2026-04-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-ROOM-A \u2014 Room Rent Cap",
+        "version": "2026/T6-ROOM-A"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-05-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-ROOM-A"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-ROOM-A.md",
+      "sections": [
+        "Room rent",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-ROOM-A \u2014 Room Rent Cap"
+    },
+    {
+      "char_count": 546,
+      "doc_id": "CIR-2026-T6-ROOM-B",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-ROOM-B",
+        "doc_type": "circular",
+        "effective_date": "2026-05-01",
+        "issued_date": "2026-04-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-ROOM-B \u2014 Room Rent Cap",
+        "version": "2026/T6-ROOM-B"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-05-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-ROOM-B"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-ROOM-B.md",
+      "sections": [
+        "Room rent",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-ROOM-B \u2014 Room Rent Cap"
+    },
+    {
+      "char_count": 498,
+      "doc_id": "CIR-2026-T6-COPAY-A",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-COPAY-A",
+        "doc_type": "circular",
+        "effective_date": "2026-06-01",
+        "issued_date": "2026-05-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-COPAY-A \u2014 Co-payment Rate",
+        "version": "2026/T6-COPAY-A"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-06-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-COPAY-A"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-COPAY-A.md",
+      "sections": [
+        "Co-payment",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-COPAY-A \u2014 Co-payment Rate"
+    },
+    {
+      "char_count": 498,
+      "doc_id": "CIR-2026-T6-COPAY-B",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-COPAY-B",
+        "doc_type": "circular",
+        "effective_date": "2026-06-01",
+        "issued_date": "2026-05-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-COPAY-B \u2014 Co-payment Rate",
+        "version": "2026/T6-COPAY-B"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-06-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-COPAY-B"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-COPAY-B.md",
+      "sections": [
+        "Co-payment",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-COPAY-B \u2014 Co-payment Rate"
+    },
+    {
+      "char_count": 540,
+      "doc_id": "CIR-2026-T6-GRV-A",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-GRV-A",
+        "doc_type": "circular",
+        "effective_date": "2026-07-01",
+        "issued_date": "2026-06-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-GRV-A \u2014 Grievance Response Window",
+        "version": "2026/T6-GRV-A"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-07-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-GRV-A"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-GRV-A.md",
+      "sections": [
+        "Grievances",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-GRV-A \u2014 Grievance Response Window"
+    },
+    {
+      "char_count": 540,
+      "doc_id": "CIR-2026-T6-GRV-B",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-GRV-B",
+        "doc_type": "circular",
+        "effective_date": "2026-07-01",
+        "issued_date": "2026-06-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-GRV-B \u2014 Grievance Response Window",
+        "version": "2026/T6-GRV-B"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-07-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-GRV-B"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-GRV-B.md",
+      "sections": [
+        "Grievances",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-GRV-B \u2014 Grievance Response Window"
+    },
+    {
+      "char_count": 563,
+      "doc_id": "CIR-2026-T6-CLAIM-A",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-CLAIM-A",
+        "doc_type": "circular",
+        "effective_date": "2026-08-01",
+        "issued_date": "2026-07-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-CLAIM-A \u2014 Claim Filing Deadline",
+        "version": "2026/T6-CLAIM-A"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-08-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-CLAIM-A"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-CLAIM-A.md",
+      "sections": [
+        "Claims",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-CLAIM-A \u2014 Claim Filing Deadline"
+    },
+    {
+      "char_count": 563,
+      "doc_id": "CIR-2026-T6-CLAIM-B",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-CLAIM-B",
+        "doc_type": "circular",
+        "effective_date": "2026-08-01",
+        "issued_date": "2026-07-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-CLAIM-B \u2014 Claim Filing Deadline",
+        "version": "2026/T6-CLAIM-B"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-08-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-CLAIM-B"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-CLAIM-B.md",
+      "sections": [
+        "Claims",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-CLAIM-B \u2014 Claim Filing Deadline"
+    },
+    {
+      "char_count": 609,
+      "doc_id": "CIR-2026-T6-PREAUTH-A",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-PREAUTH-A",
+        "doc_type": "circular",
+        "effective_date": "2026-09-01",
+        "issued_date": "2026-08-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-PREAUTH-A \u2014 Cashless Pre-authorization Window",
+        "version": "2026/T6-PREAUTH-A"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-09-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-PREAUTH-A"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-PREAUTH-A.md",
+      "sections": [
+        "Admissions",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-PREAUTH-A \u2014 Cashless Pre-authorization Window"
+    },
+    {
+      "char_count": 609,
+      "doc_id": "CIR-2026-T6-PREAUTH-B",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-PREAUTH-B",
+        "doc_type": "circular",
+        "effective_date": "2026-09-01",
+        "issued_date": "2026-08-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-PREAUTH-B \u2014 Cashless Pre-authorization Window",
+        "version": "2026/T6-PREAUTH-B"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-09-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-PREAUTH-B"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-PREAUTH-B.md",
+      "sections": [
+        "Admissions",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-PREAUTH-B \u2014 Cashless Pre-authorization Window"
+    },
+    {
+      "char_count": 622,
+      "doc_id": "CIR-2026-T6-RENEW-A",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-RENEW-A",
+        "doc_type": "circular",
+        "effective_date": "2026-10-01",
+        "issued_date": "2026-09-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-RENEW-A \u2014 Renewal Reinstatement Grace",
+        "version": "2026/T6-RENEW-A"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-10-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-RENEW-A"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-RENEW-A.md",
+      "sections": [
+        "Renewals",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-RENEW-A \u2014 Renewal Reinstatement Grace"
+    },
+    {
+      "char_count": 622,
+      "doc_id": "CIR-2026-T6-RENEW-B",
+      "doc_type": "circular",
+      "expected_metadata": {
+        "amends": [],
+        "authority_rank": 2,
+        "doc_id": "CIR-2026-T6-RENEW-B",
+        "doc_type": "circular",
+        "effective_date": "2026-10-01",
+        "issued_date": "2026-09-15",
+        "metadata_confidence": 1.0,
+        "metadata_source": "provided",
+        "supersedes": [],
+        "title": "Circular AH/2026/T6-RENEW-B \u2014 Renewal Reinstatement Grace",
+        "version": "2026/T6-RENEW-B"
+      },
+      "header_metadata": {
+        "corruption_kind": null,
+        "effective_date": "2026-10-01",
+        "metadata_corrupted": false,
+        "version": "2026/T6-RENEW-B"
+      },
+      "metadata_corrupted": false,
+      "path": "CIR-2026-T6-RENEW-B.md",
+      "sections": [
+        "Renewals",
+        "Operational rules",
+        "Contact"
+      ],
+      "title": "Circular AH/2026/T6-RENEW-B \u2014 Renewal Reinstatement Grace"
+    }
+  ],
+  "domain": "Aurelia Health",
+  "fact_use_counts": {
+    "ambulance_limit": 2,
+    "annual_limit": 4,
+    "claim_deadline": 5,
+    "copay": 4,
+    "exclusions": 3,
+    "grievance_timeline": 4,
+    "maternity": 3,
+    "network_cashless": 3,
+    "pre_existing_lookback": 5,
+    "preauthorization": 5,
+    "renewal_grace": 4,
+    "room_rent": 2,
+    "t6_cashless_preauth_window": 2,
+    "t6_claim_filing_deadline": 2,
+    "t6_copay_rate": 2,
+    "t6_grievance_response_window": 2,
+    "t6_renewal_grace_period": 2,
+    "t6_room_rent_cap": 2,
+    "telemedicine": 4,
+    "waiting_period": 5
+  },
+  "generator": "bench.generate_v2",
+  "gold_adjudication": {
+    "annual_limit": {
+      "current": {
+        "authority_rank": 4,
+        "correct_mode": "supersession",
+        "doc_id": "POL-2026-V3",
+        "effective_date": "2026-01-01",
+        "source_passage": "POL-2026-V3#Operational rules",
+        "type": "T3",
+        "value": "600000 currency units per policy year"
+      },
+      "genuine_current_whole_corpus_t6": 0,
+      "history": "Simultaneous 500000/600000 entries effective 2025-08-01; no unique in-force value before the notice. List order is not precedence.",
+      "notice": {
+        "authority_rank": 3,
+        "basis": "Explicit owner adjudication: both Filing and Operational rules use fallback 500000.",
+        "doc_id": "NOTICE-2025-11",
+        "effective_date": "2025-11-01",
+        "value": "500000 currency units per policy year"
+      },
+      "scope": "Aurelia Standard plan",
+      "t6_target_blocker": "Existing fact conflicts supply no 12 defensible current whole-corpus T6 examples; do not invent evidence or restrict queries to the August pair."
+    },
+    "v2_genuine_t6": {
+      "fact_keys": [
+        "t6_room_rent_cap",
+        "t6_copay_rate",
+        "t6_grievance_response_window",
+        "t6_claim_filing_deadline",
+        "t6_cashless_preauth_window",
+        "t6_renewal_grace_period"
+      ],
+      "pair_rule": "Exactly two circulars per fact key; equal effective/issued dates and authority rank; no supersedes/amends edge; no third document mentions the key.",
+      "question_additions": {
+        "dev": 4,
+        "test": 6,
+        "wild": 2
+      }
+    }
+  },
+  "manifest_version": 2,
+  "metadata_corrupted_count": 14,
+  "metadata_corrupted_fraction": 0.2978723404255319,
+  "seed": 7
+}

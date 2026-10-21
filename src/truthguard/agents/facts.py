@@ -12,6 +12,16 @@ from dataclasses import dataclass
 from ..schemas import Chunk, Position, Span
 
 
+GENUINE_T6_FACT_KEYS = {
+    "t6_room_rent_cap",
+    "t6_copay_rate",
+    "t6_grievance_response_window",
+    "t6_claim_filing_deadline",
+    "t6_cashless_preauth_window",
+    "t6_renewal_grace_period",
+}
+
+
 @dataclass(frozen=True)
 class FactObservation:
     key: str
@@ -69,7 +79,19 @@ def observations(chunk: Chunk) -> list[FactObservation]:
         values_lower = value_text.lower()
         key = None
         pattern = None
-        if "hospitalization" in lower and "waiting period" in lower:
+        if "room rent cap" in lower:
+            key, pattern = "t6_room_rent_cap", r"\b(\d+(?:\.\d+)?)\s*%"
+        elif "co-payment rate" in lower or "copay rate" in lower:
+            key, pattern = "t6_copay_rate", r"\b(\d+(?:\.\d+)?)\s*%"
+        elif "grievance response window" in lower:
+            key, pattern = "t6_grievance_response_window", r"\b(\d+)\s*[- ]?days?\b"
+        elif "claim filing deadline" in lower:
+            key, pattern = "t6_claim_filing_deadline", r"\b(\d+)\s*[- ]?days?\b"
+        elif "cashless pre-authorization window" in lower or "cashless preauthorization window" in lower:
+            key, pattern = "t6_cashless_preauth_window", r"\b(\d+)\s*[- ]?hours?\b"
+        elif "renewal reinstatement grace period" in lower:
+            key, pattern = "t6_renewal_grace_period", r"\b(\d+)\s*[- ]?days?\b"
+        elif "hospitalization" in lower and "waiting period" in lower:
             key, pattern = "waiting_period", r"\b(\d+)\s*[- ]?\s*days?\b"
         elif re.search(r"co[- ]?pay(?:ment)?", lower):
             key, pattern = "copay", r"\b(\d+(?:\.\d+)?)\s*%"
@@ -119,6 +141,12 @@ def typed_pair(left: FactObservation, right: FactObservation, graph=None, *, as_
         return "T2" if {left.scope, right.scope} == expected else None
     if left.scope != right.scope and "unspecified" not in {left.scope, right.scope}:
         return None
+    if left.key in GENUINE_T6_FACT_KEYS:
+        if left.scope != right.scope:
+            return None
+        if a.effective_date and a.effective_date == b.effective_date and a.authority_rank == b.authority_rank:
+            if graph is None or not graph.graph.has_edge(a.doc_id, b.doc_id) and not graph.graph.has_edge(b.doc_id, a.doc_id):
+                return "T6"
     if left.key == "annual_limit":
         if a.effective_date and a.effective_date == b.effective_date and a.authority_rank == b.authority_rank:
             return "T6"
