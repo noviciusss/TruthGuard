@@ -1205,3 +1205,23 @@ values. No live result is claimed for any component.
 The previous live evidence remains non-comparative: Qwen produced 7/40 answers
 before quota/failure interruption, Mistral returned HTTP 429, and the upstream
 contexts differ from v2. It is not being reused as a v2 result.
+
+## Regression verification after v2 integration
+
+The required system-Python command was attempted and cannot run because the
+system interpreter has no pytest:
+
+```text
+python3 -m pytest -q
+/usr/bin/python3: No module named pytest
+```
+
+The repository-pinned check was then run. A v1 JSONL reproducibility regression
+was found because the new optional `gold_fact_id` serialized as null on legacy
+rows. `bench/generate_questions.py` now omits that optional field when absent,
+preserving v1 bytes. Final repository checks:
+
+```text
+TRUTHGUARD_OFFLINE=true make test: 143 passed, one existing warning
+make compile: passed
+```

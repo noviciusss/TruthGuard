@@ -171,6 +171,8 @@ def serialized_question(question: BenchmarkQuestion) -> dict[str, Any]:
     row = question.model_dump(mode="json")
     if not row["source_passages"]:
         row.pop("source_passages")  # Preserve original unrelated row serialization.
+    if row.get("gold_fact_id") is None:
+        row.pop("gold_fact_id", None)  # Keep legacy v1 JSONL byte-identical.
     return row
 
 
