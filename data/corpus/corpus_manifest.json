@@ -1,7 +1,7 @@
 {
   "audit": {
-    "llm_audit_required": true,
-    "status": "deterministic-template-audit"
+    "llm_audit_required": false,
+    "status": "offline-owner-adjudicated-gold"
   },
   "conflicts": [
     {
@@ -60,15 +60,18 @@
       "winner_doc_id": null
     },
     {
-      "conflict_id": "T6-annual-limit",
-      "correct_mode": "abstain",
+      "conflict_id": "T3-annual-limit",
+      "correct_mode": "supersession",
       "documents": [
         "CIR-2025-08-A",
-        "CIR-2025-08-B"
+        "CIR-2025-08-B",
+        "NOTICE-2025-11",
+        "POL-2026-V3"
       ],
-      "gold_answer": null,
-      "type": "T6",
-      "winner_doc_id": null
+      "gold_answer": "600000 currency units per policy year",
+      "original_conflict_id": "T6-annual-limit",
+      "type": "T3",
+      "winner_doc_id": "POL-2026-V3"
     },
     {
       "conflict_id": "T0-renewal-grace",
@@ -593,7 +596,7 @@
       "title": "Circular AH/2024/02 \u2014 Co-payment Examples"
     },
     {
-      "char_count": 528,
+      "char_count": 573,
       "doc_id": "CIR-2024-03",
       "doc_type": "circular",
       "expected_metadata": {
@@ -888,7 +891,7 @@
       "title": "Aurelia Health FAQ \u2014 Definitions"
     },
     {
-      "char_count": 642,
+      "char_count": 718,
       "doc_id": "FAQ-2025-01",
       "doc_type": "faq",
       "expected_metadata": {
@@ -1292,6 +1295,30 @@
     "waiting_period": 5
   },
   "generator": "bench.generate_corpus",
+  "gold_adjudication": {
+    "annual_limit": {
+      "current": {
+        "authority_rank": 4,
+        "correct_mode": "supersession",
+        "doc_id": "POL-2026-V3",
+        "effective_date": "2026-01-01",
+        "source_passage": "POL-2026-V3#Operational rules",
+        "type": "T3",
+        "value": "600000 currency units per policy year"
+      },
+      "genuine_current_whole_corpus_t6": 0,
+      "history": "Simultaneous 500000/600000 entries effective 2025-08-01; no unique in-force value before the notice. List order is not precedence.",
+      "notice": {
+        "authority_rank": 3,
+        "basis": "Explicit owner adjudication: both Filing and Operational rules use fallback 500000.",
+        "doc_id": "NOTICE-2025-11",
+        "effective_date": "2025-11-01",
+        "value": "500000 currency units per policy year"
+      },
+      "scope": "Aurelia Standard plan",
+      "t6_target_blocker": "Existing fact conflicts supply no 12 defensible current whole-corpus T6 examples; do not invent evidence or restrict queries to the August pair."
+    }
+  },
   "manifest_version": 1,
   "metadata_corrupted_count": 14,
   "metadata_corrupted_fraction": 0.4,

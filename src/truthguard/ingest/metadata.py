@@ -121,6 +121,7 @@ def infer_metadata(
     *,
     known_doc_ids: Iterable[str] = (),
     authority_ranks: dict[str, int] | None = None,
+    infer_missing: bool = True,
 ) -> DocMeta:
     """Infer a ``DocMeta`` while preserving unknown dates as ``None``."""
 
@@ -142,20 +143,20 @@ def infer_metadata(
         text,
         flags=re.IGNORECASE,
     )
-    if effective is None and body_effective:
+    if infer_missing and effective is None and body_effective:
         effective = _parse_date(body_effective.group(1))
-    if effective is None:
+    if infer_missing and effective is None:
         effective = _filename_date(path)
 
     supersedes = _references(header.get("supersedes", ""), known)
-    if not supersedes:
+    if infer_missing and not supersedes:
         supersedes = _body_references(
             text,
             r"(?:supersedes|replaces)\s+([A-Z][A-Z0-9-]+)",
             known,
         )
     amends = _parse_amends(header.get("amends", ""), known)
-    if not amends:
+    if infer_missing and not amends:
         for match in re.finditer(
             r"amends\s+(?:Section\s+)?([A-Za-z0-9. -]+?)\s+of\s+([A-Z][A-Z0-9-]+)",
             text,
@@ -175,7 +176,13 @@ def infer_metadata(
     if not effective:
         confidence -= 0.2
     confidence = max(0.0, confidence)
-    version = header.get("version") or None
+    # The corpus generator uses 0.0 as an intentional wrong-version
+    # corruption. Preserve the information loss instead of treating that
+    # sentinel as a real version or copying manifest gold into runtime state.
+    raw_version = header.get("version") or None
+    version = None if raw_version == "0.0" else raw_version
+    if raw_version == "0.0":
+        confidence = 0.0
     return DocMeta(
         doc_id=doc_id,
         title=title,

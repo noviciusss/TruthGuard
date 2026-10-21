@@ -109,7 +109,7 @@ facts:
         source_note: Circular AH/2025/08-A
       - effective_date: 2025-08-01
         value: 600000 currency units per policy year
-        source_note: Circular AH/2025/08-B; same date and authority creates T6
+        source_note: Circular AH/2025/08-B; historical same-date/authority tie, not current whole-corpus T6 (NOTICE-2025-11 and POL-2026-V3 govern later)
 
   - fact_id: telemedicine
     topic: telemedicine consultation benefit

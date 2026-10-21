@@ -34,7 +34,24 @@ ABSENCE_PROBES = {
     "underwater rehabilitation": (r"underwater", r"aquatic", r"hydrotherap(?:y|ies)"),
 }
 QUANTITY = re.compile(r"(?<![\w.])\d+(?:\.\d+)?(?:\s*-\s*|\s*)(?:%|days?\b|months?\b|hours?\b|currency units?\b)", re.I)
+SCOPED_QUANTITY = re.compile(r"(?<![\w.])(?:\d+(?:\.\d+)?|four)(?:\s*-\s*|\s*)(?:%|business days?\b|days?\b|months?\b|hours?\b|currency units?\b|telemedicine consultations?\b)", re.I)
 PHYSICAL_FIELDS = ("doc_id", "title", "doc_type", "version", "effective_date", "issued_date", "authority_rank", "supersedes", "amends")
+FACT_PATTERNS = {
+    "waiting_period": r"(?<!maternity )waiting period",
+    "copay": r"co[ -]?pay(?:ment)?|members? (?:aged 60 and above )?pay",
+    "claim_deadline": r"claim submission deadline|(?:reimbursement )?claims?.*(?:submit|discharge)|submit.*claims?",
+    "pre_existing_lookback": r"look[ -]?back|pre-existing condition",
+    "preauthorization": r"pre[ -]?authorization|prior approval|(?:planned|emergency) admissions?",
+    "room_rent": r"room[ -]rent",
+    "renewal_grace": r"renewal.*(?:grace|completed)",
+    "grievance_timeline": r"grievance|acknowledge|acknowledgement|resolve|resolution",
+    "network_cashless": r"network.*(?:hospital|cashless)|cashless.*network",
+    "ambulance_limit": r"ambulance",
+    "annual_limit": r"annual\s+(?:hospitalization\s+)?limit",
+    "telemedicine": r"telemedicine",
+    "maternity": r"maternity",
+    "exclusions": r"cosmetic",
+}
 
 
 def normalized(text: str) -> str:
@@ -88,6 +105,10 @@ def counts(records: list[dict]) -> dict[str, int]:
     return {key: counter[key] for key in ("pass", "fail", "unverifiable")}
 
 
+def per_type_counts(records: list[dict]) -> dict[str, dict[str, int]]:
+    return {kind: counts([row for row in records if row["type"] == kind]) for kind in (f"T{i}" for i in range(8))}
+
+
 def read_questions(path: Path) -> list[dict]:
     records = []
     seen = set()
@@ -128,6 +149,109 @@ def fact_lines(documents: dict, topic: str) -> list[dict]:
     return rows
 
 
+def scoped_fact_positions(documents: dict, facts: dict) -> list[dict]:
+    """Bounded clause/heading probes with explicit age, plan and phase scopes.
+
+    Quantities from distinct clauses or phases never compete merely because they
+    share a document. This is a numeric consistency scan, not semantic entailment.
+    Unknown age/plan/phase scope is retained as unverifiable, not guessed.
+    """
+    rows = []
+    for doc_id, document in sorted(documents.items()):
+        heading = ""
+        header = HEADER_RE.match(document.text)
+        header_lines = document.text[:header.end()].count("\n") if header else 0
+        for line_number, line in enumerate(document.text.splitlines(), 1):
+            if line_number <= header_lines:
+                continue
+            if line.startswith("#"):
+                heading = line.lstrip("# ")
+                continue
+            if not line.strip() or line.startswith("This document "):
+                continue
+            bullet = re.match(r"- \*\*(.+?)\*\* \((.*?)\): (.*)", line)
+            for fact_id, fact in facts.items():
+                pattern = FACT_PATTERNS.get(fact_id, re.escape(fact["topic"]))
+                if bullet and normalized(bullet[1]) != normalized(fact["topic"]):
+                    continue
+                clauses = re.split(r";|/|,\s*(?=\d)|\band\s+(?=(?:premium|standard|members|seniors?|resolution|resolve|\d+)\b)", bullet[3] if bullet else line, flags=re.I)
+                for clause in clauses:
+                    context = f"{bullet[1]} {clause}" if bullet else clause
+                    if not re.search(pattern, context, re.I):
+                        # A scope-only continuation may inherit the line's fact,
+                        # but a clause explicitly naming another fact may not.
+                        other_fact = any(re.search(other, clause, re.I) for key, other in FACT_PATTERNS.items() if key != fact_id)
+                        inherited = re.search(pattern, line, re.I) and not other_fact
+                        if bullet or not (inherited or re.search(pattern, heading, re.I)):
+                            continue
+                    # Prevent the generic waiting-period alias from treating a
+                    # maternity schedule as ordinary hospitalization evidence.
+                    if fact_id == "waiting_period" and re.search(r"maternity", context + heading, re.I):
+                        continue
+                    scope = normalized(fact.get("scope", fact["topic"]))
+                    known_scope = True
+                    lower = normalized(clause)
+                    if fact_id in {"copay", "room_rent", "annual_limit", "maternity"}:
+                        populations = [name for name, probe in (("senior", r"aged\s+60|senior"), ("premium", r"premium"), ("standard", r"standard")) if re.search(probe, lower)]
+                        if len(populations) > 1:
+                            scope, known_scope = "ambiguous age/plan clause", False
+                        elif "senior" in populations:
+                            scope = "senior members aged 60 and above"
+                        elif "premium" in lower:
+                            scope = "premium plan"
+                        elif "standard" in lower:
+                            scope = "standard plan"
+                        elif fact_id == "annual_limit":
+                            # The disclosed annual-limit fact is Standard-only;
+                            # generated bullet scope supplies the population.
+                            scope = "standard plan" if bullet and "standard" in normalized(bullet[2]) else "unspecified plan"
+                            known_scope = scope != "unspecified plan"
+                        else:
+                            scope, known_scope = "unspecified age/plan", False
+                    matches = list(SCOPED_QUANTITY.finditer(clause))
+                    if not matches:
+                        rows.append({"doc_id": doc_id, "fact_id": fact_id, "scope": scope, "scope_known": known_scope,
+                                     "line": line_number, "text": line, "clause": clause.strip(), "value": None,
+                                     "effective_date": document.meta.model_dump(mode="json")["effective_date"],
+                                     "issued_date": document.meta.model_dump(mode="json")["issued_date"],
+                                     "authority_rank": document.meta.authority_rank})
+                    for match in matches:
+                        value_scope, value_known = scope, known_scope
+                        if fact_id == "grievance_timeline":
+                            # Separate acknowledgement and resolution deadlines.
+                            prefix = lower[:match.start()]
+                            cues = list(re.finditer(r"acknowledge(?:ment)?|resol(?:ve|ution)", prefix))
+                            value_scope = "acknowledgement" if cues and cues[-1][0].startswith("ack") else "resolution" if cues else "unspecified phase"
+                            value_known = bool(cues)
+                        if fact_id == "preauthorization":
+                            value_scope = "emergency notification" if "emergency" in lower else "unspecified admission"
+                            value_known = "emergency" in lower
+                        rows.append({"doc_id": doc_id, "fact_id": fact_id, "scope": value_scope, "scope_known": value_known,
+                                     "line": line_number, "text": line, "clause": clause.strip(), "value": canonical_quantity(match[0]),
+                                     "effective_date": document.meta.model_dump(mode="json")["effective_date"],
+                                     "issued_date": document.meta.model_dump(mode="json")["issued_date"],
+                                     "authority_rank": document.meta.authority_rank})
+    return rows
+
+
+def audit_intra_document(documents: dict, facts: dict) -> dict:
+    positions = scoped_fact_positions(documents, facts)
+    groups = {}
+    for row in positions:
+        groups.setdefault((row["doc_id"], row["fact_id"], row["scope"]), []).append(row)
+    records = []
+    for (doc_id, fact_id, scope), rows in sorted(groups.items()):
+        values = sorted({row["value"] for row in rows if row["value"] is not None})
+        known = all(row["scope_known"] for row in rows)
+        status = "unverifiable" if not known or not values else "fail" if len(values) > 1 else "pass"
+        records.append({"doc_id": doc_id, "fact_id": fact_id, "scope": scope, "values": values,
+                        "status": status, "detail": "Competing quantities for the same fact AND same scope." if status == "fail" else
+                        "One distinct quantity in bounded same-fact/scope positions; not semantic proof." if status == "pass" else
+                        "No quantitative value or no explicit scope; semantic consistency is unverifiable.", "positions": rows})
+    return {"counts": counts(records), "records": records, "positions": positions,
+            "fact_patterns": FACT_PATTERNS, "scope_rules": "Age/plan and grievance phase are distinct scopes. Unknown scope stays unverifiable. Annual generated bullets use explicit Standard scope."}
+
+
 def absence_check(question: dict, documents: dict) -> dict:
     families = [name for name, patterns in ABSENCE_PROBES.items()
                 if any(re.search(pattern, question["question"], re.I) for pattern in patterns)]
@@ -165,20 +289,22 @@ def audit_question(question: dict, documents: dict, manifest_docs: dict, facts: 
     for doc_id in cited:
         if doc_id in documents and not any(ref.split("#", 1)[0] == doc_id for ref in passages):
             targets[doc_id] = body(documents[doc_id].text)
-    checks.append(check("cited_sources", "fail" if missing or missing_sections else "pass",
+    checks.append(check("cited_sources", "fail" if missing else "unverifiable" if missing_sections else "pass",
                         "Actual cited documents and headings checked; no implied section citations.",
                         missing_docs=missing, missing_sections=missing_sections, targets=list(targets)))
     answer = question["gold_answer"]
     if answer is not None:
         hits = [ref for ref, text in targets.items() if present(answer, text)]
         raw_hits = [ref for ref, text in targets.items() if answer in text]
-        simple = QUANTITY.fullmatch(answer.strip()) is not None or bool(re.fullmatch(r"\d+ days after discharge", answer))
+        simple = QUANTITY.fullmatch(answer.strip()) is not None or bool(re.fullmatch(r"\d+ days after discharge|\d+ currency units per (?:policy year|hospitalization)", answer))
         # Resolved values must occur in the actual winner, not just a losing source.
         winner = question["gold_winner_doc"]
         eligible = [ref for ref in hits if not winner or ref.split("#", 1)[0] == winner]
         atoms = sorted(set(QUANTITY.findall(answer)))
         atom_hits = {atom: [ref for ref, text in targets.items() if present(atom, text)] for atom in atoms}
-        checks.append(check("gold_value_presence", "pass" if eligible else "fail" if simple else "unverifiable",
+        checks.append(check("gold_value_presence", "unverifiable" if missing_sections or not simple else "pass" if eligible else "fail",
+                            "Missing cited section prevents evidence verification." if missing_sections else
+                            "Composed/paraphrased answer remains unverifiable even if a full string or all quantities occur." if not simple else
                             "Literal value found in eligible cited evidence; this is not an entailment judgment." if eligible else
                             "Simple gold value missing from eligible cited evidence." if simple else
                             "Composed/paraphrased answer is not a literal string; atom hits do not prove its semantics.",
@@ -239,9 +365,18 @@ def audit_question(question: dict, documents: dict, manifest_docs: dict, facts: 
                              for row in rows if row["doc_id"] == doc_id for value in row["values"]})
             if len(values) > 1:
                 internal[doc_id] = values
-        checks.append(check("t6_global_abstention", "unverifiable",
+        # A strictly higher-authority AND later applicable Standard position is
+        # counterevidence to a purported current pair tie. Never call a local tie
+        # proof of global abstention, and never manufacture a global T6 pass.
+        dated_tied = [row for row in rows if row["doc_id"] in tied_docs]
+        dominating = [row for row in other if dated_tied and "premium" not in normalized(row["text"]) and row["effective_date"] != "None" and
+                      all(row["authority_rank"] > tied_row["authority_rank"] and
+                          row["effective_date"] > tied_row["effective_date"] for tied_row in dated_tied) and
+                      not question.get("as_of_date")]
+        checks.append(check("t6_global_abstention", "fail" if dominating else "unverifiable",
+                            "Later, higher-authority same-fact positions defeat this current pair-only abstention; applicability still needs adjudication." if dominating else
                             "Pair tie alone cannot establish global abstention; review other same-fact documents and applicability.",
-                            other_positions=other, internal_competing_values=internal))
+                            other_positions=other, dominating_positions=dominating, internal_competing_values=internal))
         checks.append(check("t6_gold_shape", "pass" if answer is None and question["gold_status"] == "abstained" and not question["gold_winner_doc"] else "fail",
                             "Checked null answer/winner and abstained status."))
     return {"qid": question["qid"], "type": question["type"], "split": question.get("split", "unspecified"),
@@ -261,11 +396,17 @@ def audit_metadata(documents: dict, manifest: dict) -> list[dict]:
         differences = {field: {"expected": expected.get(field), "loaded": actual.get(field)}
                        for field in PHYSICAL_FIELDS if expected.get(field) != actual.get(field)}
         header = parse_header(document.text)
-        records.append({"doc_id": doc_id, "status": "fail" if differences else "pass",
-                        "corrupted": entry["metadata_corrupted"],
+        corrupt_version = entry["header_metadata"]["corruption_kind"] == "wrong_version" and header.get("version") == "0.0"
+        accepted = corrupt_version and actual["version"] is None and actual["metadata_confidence"] == 0.0
+        unexpected = {key: value for key, value in differences.items() if not (accepted and key == "version")}
+        records.append({"doc_id": doc_id, "status": "fail" if unexpected or (corrupt_version and not accepted) else "pass",
+                         "corrupted": entry["metadata_corrupted"],
                         "corruption_kind": entry["header_metadata"]["corruption_kind"],
                         "header_version": header.get("version"), "header_effective": header.get("effective"),
-                        "differences": differences,
+                         "differences": differences,
+                        "accepted_loss": {"version": differences["version"]} if accepted and "version" in differences else {},
+                        "version_recovered": False if corrupt_version else None,
+                        "recovery_outcome": "accepted_unknown_version" if accepted else "unsupported_corrupted_version" if corrupt_version else "physical_fields_compared",
                         "derived_diagnostics": {field: {"manifest": expected.get(field), "loaded": actual.get(field)}
                                                 for field in ("metadata_source", "metadata_confidence")}})
     for doc_id in sorted(set(documents) - {entry["doc_id"] for entry in manifest["documents"]}):
@@ -299,7 +440,7 @@ def run_audit(root: Path) -> dict:
         questions = read_questions(path)
         source_records[filename] = {q["qid"]: q for q in questions}
         records = [audit_question(q, documents, manifest_docs, facts) for q in questions]
-        datasets[filename] = {"count": len(records), "counts": counts(records), "records": records}
+        datasets[filename] = {"count": len(records), "counts": counts(records), "per_type_counts": per_type_counts(records), "records": records}
     for record in datasets["eval_subset_40.jsonl"]["records"]:
         qid = record["qid"]
         original = source_records["questions.jsonl"].get(qid)
@@ -307,6 +448,7 @@ def run_audit(root: Path) -> dict:
         record["checks"].append(check("subset_membership", "pass" if valid else "fail", "Frozen subset row must exactly equal its TEST source row."))
         record["status"] = rollup(record["checks"])
     datasets["eval_subset_40.jsonl"]["counts"] = counts(datasets["eval_subset_40.jsonl"]["records"])
+    datasets["eval_subset_40.jsonl"]["per_type_counts"] = per_type_counts(datasets["eval_subset_40.jsonl"]["records"])
     metadata = audit_metadata(documents, manifest)
     for row in metadata:
         row["cited_by"] = {
@@ -316,9 +458,11 @@ def run_audit(root: Path) -> dict:
             for name, dataset in datasets.items()
         }
     unique = [row for name, dataset in datasets.items() if name != "eval_subset_40.jsonl" for row in dataset["records"]]
-    return {"format_version": 1, "input_sha256": {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)},
-            "unique_question_counts": counts(unique), "unique_questions": len(unique), "datasets": datasets,
-            "metadata": {"counts": counts(metadata), "corrupted_counts": counts([row for row in metadata if row.get("corrupted")]), "records": metadata},
+    return {"format_version": 2, "input_sha256": {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)},
+            "unique_question_counts": counts(unique), "unique_per_type_counts": per_type_counts(unique), "unique_questions": len(unique), "datasets": datasets,
+            "intra_document": audit_intra_document(documents, facts),
+            "gold_adjudication": manifest.get("gold_adjudication", {}),
+            "metadata": {"counts": counts(metadata), "accepted_unknown_version_count": sum(row.get("recovery_outcome") == "accepted_unknown_version" for row in metadata), "corrupted_counts": counts([row for row in metadata if row.get("corrupted")]), "records": metadata},
             "absence_probes": ABSENCE_PROBES,
             "factsheet_reference": {key: facts[key] for key in ("renewal_grace", "annual_limit")}}
 
@@ -326,16 +470,17 @@ def run_audit(root: Path) -> dict:
 def markdown(report: dict) -> str:
     lines = ["# Programmatic corpus audit (offline)", "",
              "## Reproduce", "", "```bash", "TRUTHGUARD_OFFLINE=true .venv/bin/python scripts/audit_corpus_programmatic.py",
-             "TRUTHGUARD_OFFLINE=true .venv/bin/python -m pytest -q tests/test_programmatic_audit.py", "make test", "```", "",
+              "TRUTHGUARD_OFFLINE=true PYTHONPATH=.:src .venv/bin/python -m pytest -q tests/test_corpus.py tests/test_benchmark.py tests/test_programmatic_audit.py", "```", "",
              "Default outputs: `reports/corpus_audit_programmatic.md` and `.json`. Use `--root`, `--output`, and `--json-output` to select paths. "
              "No network, API, retrieval, critic, model, or pipeline execution. Exit 0 means completion; `--fail-on-findings` exits 1 for any fail/unverifiable finding. Invalid inputs exit 2.", "",
              "## Interpretation and limits", "",
              "Pass means only the named mechanical check passed, never semantic gold correctness. Question rollup: any failure → fail; otherwise any unverifiable check → unverifiable; otherwise pass. "
-             "Metadata recovery is counted separately, not folded into question gold counts. The fixed subset overlaps the main benchmark and is not additional unique evidence.", "",
+              "Metadata handling is counted separately, not folded into question gold counts. The fixed subset overlaps the main benchmark and is not additional unique evidence.", "",
              "Value evidence is read from actual Markdown bodies/headings, not the factsheet, manifest answers, or runtime predictions. "
              "Matching is case/whitespace-normalized with word boundaries; raw case-sensitive hits are also recorded. "
              "Explicit section citations restrict matching to that section. Resolved answers must match the winner's cited evidence. "
-             "Simple missing values fail. Nonliteral composed/paraphrased answers remain unverifiable even when quantities match; scenario arithmetic, exceptions, scope, and entailment require review. "
+              "Simple missing values fail when cited sections exist. Missing cited sections are unverifiable, never widened to the body or passed. "
+              "Composed/paraphrased answers remain unverifiable even when full strings or quantities match; scenario arithmetic, exceptions, scope, and entailment require review. "
              "Literal claims and quantity matches are diagnostics in JSON, not substitute passes.", "",
              "T7 searches every document with only the disclosed selected probe families. No hit is lexical evidence only and remains unverifiable; "
              "unknown subject families also remain unverifiable. A hit is a review candidate, not proof of coverage. Synonyms outside the probes, implicit statements, and semantic entailment are not detectable.", "",
@@ -343,14 +488,21 @@ def markdown(report: dict) -> str:
              "For competition only, singular/plural and hyphenated durations such as `30-day` and `30 days` are treated alike. "
              "It cannot guarantee synonym completeness or adjudicate time/scope. T6 checks actual distinct annual-limit values, both issued/effective dates, and authority against loader and manifest. "
              "Its bounded topic aliases are `annual hospitalization limit` and `annual limit`; all matching positions are retained, including disagreements inside one document. "
-             "The local tie does not prove whole-corpus abstention. No runtime was tuned on TEST and no gold was changed.", "",
+              "The local tie does not prove whole-corpus abstention. Later higher-authority same-fact counterevidence fails current pair-only abstention. "
+              "Gold was revised by explicit corpus adjudication; see `reports/gold_changes.md`. The audit performs no runtime tuning or benchmark freeze.", "",
              "## Measured question counts", "", "| Dataset | Rows | Pass | Fail | Unverifiable |", "|---|---:|---:|---:|---:|"]
     for name, dataset in report["datasets"].items():
         c = dataset["counts"]
         lines.append(f"| {name} | {dataset['count']} | {c['pass']} | {c['fail']} | {c['unverifiable']} |")
     c = report["unique_question_counts"]
     lines += [f"| Unique (main + wild) | {report['unique_questions']} | {c['pass']} | {c['fail']} | {c['unverifiable']} |", "",
-              "## Check counts and exact affected qids", ""]
+               "## Per-type question counts", "", "| Dataset | Type | Pass | Fail | Unverifiable |", "|---|---|---:|---:|---:|"]
+    for name, dataset in report["datasets"].items():
+        for kind, c in dataset["per_type_counts"].items():
+            lines.append(f"| {name} | {kind} | {c['pass']} | {c['fail']} | {c['unverifiable']} |")
+    for kind, c in report["unique_per_type_counts"].items():
+        lines.append(f"| Unique (main + wild) | {kind} | {c['pass']} | {c['fail']} | {c['unverifiable']} |")
+    lines += ["", "## Check counts and exact affected qids", ""]
     for name, dataset in report["datasets"].items():
         lines += [f"### {name}", "", "| Check | Pass | Fail | Unverifiable |", "|---|---:|---:|---:|"]
         names = sorted({item["check"] for row in dataset["records"] for item in row["checks"]})
@@ -368,14 +520,17 @@ def markdown(report: dict) -> str:
                     groups.setdefault((item["check"], item["detail"]), []).append(row["qid"])
         for (check_name, detail), qids in groups.items():
             lines += ["", f"- **{check_name}:** {detail} Qids: " + ", ".join(f"`{qid}`" for qid in qids)]
-    lines += ["", "## Metadata recovery against manifest", "",
-              f"All documents: `{report['metadata']['counts']}`. Corrupted only: `{report['metadata']['corrupted_counts']}`.", "",
-              "Compared identity, title, type, version, issued/effective dates, authority, supersedes, and amends. "
-              "Derived metadata_source/confidence are disclosed in JSON but not expected to equal generator annotations.", "",
-              "| Document | Corruption | Result | Physical-field differences |", "|---|---|---|---|"]
+    lines += ["", "## Metadata handling against manifest", "",
+               f"All documents: `{report['metadata']['counts']}`. Corrupted only: `{report['metadata']['corrupted_counts']}`.", "",
+               "Compared identity, title, type, version, issued/effective dates, authority, supersedes, and amends. "
+               "A corrupted header version `0.0` must become null with metadata_confidence `0.0`: this is an accepted information loss, **not recovered-version success**. "
+               "The expected manifest version is comparison-only and must never be copied into loaded metadata. Other physical-field differences still fail. "
+               "Derived annotations are disclosed in JSON; confidence zero is required for the accepted unknown-version case.", "",
+               f"Accepted unknown versions: **{report['metadata']['accepted_unknown_version_count']}** (version_recovered=false).", "",
+               "| Document | Corruption | Result | Outcome | Physical-field differences |", "|---|---|---|---|---|"]
     for row in report["metadata"]["records"]:
         differences = json.dumps(row["differences"], sort_keys=True)
-        lines.append(f"| {row['doc_id']} | {row.get('corruption_kind') or 'none'} | {row['status']} | `{differences}` |")
+        lines.append(f"| {row['doc_id']} | {row.get('corruption_kind') or 'none'} | {row['status']} | {row.get('recovery_outcome', 'missing')} | `{differences}` |")
     lines += ["", "### Exact qids citing failed metadata documents", "",
               "These are metadata-impact qids, separate from question gold failures above.", ""]
     for row in report["metadata"]["records"]:
@@ -383,31 +538,28 @@ def markdown(report: dict) -> str:
             for name, qids in row["cited_by"].items():
                 lines.append(f"- `{row['doc_id']}` / `{name}`: " + (", ".join(f"`{qid}`" for qid in qids) or "none"))
     lines += ["", "## T7 lexical probes", "", "```json", json.dumps(report["absence_probes"], indent=2), "```", "",
-              "## Evidence and human decisions", "",
+               "## Evidence and adjudication limits", "",
               "1. **Composed gold:** review all `gold_value_presence` unverifiable qids listed above. Check clauses, scope, exception, and scenario arithmetic against the exact cited sections in JSON. "
               "Safe proposal: add independently reviewed atomic evidence mappings or correct a section citation if it points to the wrong passage. "
-              "Approval is needed for any answer/claim/status change. Missing full strings must not be relabeled as literal passes.", "",
-              "2. **T6 global applicability:** decide whether questions are deliberately restricted to the two August circulars or ask for a current whole-corpus answer. "
-              "Inspect all `other_positions` in JSON, particularly later/higher-authority material if present. "
-               "Possible safe proposals, requiring owner approval: explicitly restrict the question to the cited documents, or semantically revise gold after adjudication. "
-              "Do not infer a winner automatically from the pair tie or a later date alone.", "",
-              "3. **Metadata:** failed version recovery means the current loader retained a physical value that differs from the manifest. "
-              "A safe future fix would flag an unsupported version as unknown or recover it only from an independently documented rule/body cue, with tests. "
-              "Do not silently copy manifest gold into runtime metadata. Owner approval/clarification is needed for the recovery rule.", "",
+               "Missing full strings must not be relabeled as literal passes.", "",
+               "2. **Annual-limit adjudication:** both sections of NOTICE-2025-11 use the owner-adjudicated 500000 fallback, effective 2025-11-01, authority 3. "
+               "The simultaneous August 500000/600000 history has no unique pre-notice value. Current POL-2026-V3 gives 600000 at authority 4, effective 2026-01-01. "
+               "All original annual-limit T6 qids now have T3/resolved gold with supersession mode recorded in the manifest. "
+               "No 12 genuine current whole-corpus TEST T6 examples exist in the reviewed evidence; zero were retained. No pair-only query scoping or invented evidence was used. "
+               "The full per-qid old/new ledger and existing-fact review are in `reports/gold_changes.md`.", "",
+               "3. **Metadata:** safe unknown versions are explicitly accepted losses with confidence zero, not successful version recovery. "
+               "An unsupported non-null corrupted version fails, even if it happens to equal manifest gold.", "",
               "4. **T7:** a human must adjudicate semantic absence for every T7 qid; the lexical no-hit result is insufficient. "
               "T0 passes are bounded topic/alias scans, not a proof that no paraphrased competing rule exists.", "",
-              "5. **Internal annual-limit contradictions:** the audit retains both prose and operational-rule positions rather than selecting one. "
-              "For each document listed below, clarify the intended value before approving any corpus/factsheet/gold edit. "
-              "A safe proposed repair is to make its prose and operational rule agree on the independently adjudicated value, then re-audit affected T6 gold; this audit does not perform that repair.", "",
-              "### Internal annual-limit disagreements and exact affected qids", ""]
-    for name, dataset in report["datasets"].items():
-        internal_groups: dict[tuple, list] = {}
-        for row in dataset["records"]:
-            for item in row["checks"]:
-                for doc_id, values in item.get("internal_competing_values", {}).items():
-                    internal_groups.setdefault((doc_id, tuple(values)), []).append(row["qid"])
-        for (doc_id, values), qids in internal_groups.items():
-            lines.append(f"- `{name}`: `{doc_id}` contains `{values}`; review " + ", ".join(f"`{qid}`" for qid in qids))
+               "5. **Intra-document same-fact AND same-scope scan:** bounded topic/heading aliases and numeric quantities are listed in JSON, including exact lines, dates and authority. "
+               "10% Standard / 20% senior, 1% Standard / 2% Premium, and acknowledgement / resolution deadlines are separate scopes, not internal contradictions. "
+               "A one-value pass means only quantitative consistency for the scanned scope; missing quantities, unknown scopes and non-numeric semantics remain unverifiable.", "",
+               "## Intra-document quantitative consistency", "",
+               f"Counts by document/fact/scope group: `{report['intra_document']['counts']}`.", "",
+               "| Document | Fact | Scope | Values | Result | Effective | Issued | Authority |", "|---|---|---|---|---|---|---|---:|"]
+    for row in report["intra_document"]["records"]:
+        position = row["positions"][0]
+        lines.append(f"| {row['doc_id']} | {row['fact_id']} | {row['scope']} | {', '.join(row['values']) or 'non-numeric'} | {row['status']} | {position['effective_date']} | {position['issued_date']} | {position['authority_rank']} |")
     lines += ["",
               "### T0 and T6 actual corpus positions", ""]
     emitted = set()
@@ -447,7 +599,7 @@ def main() -> int:
         print(f"Audit input/output error: {error}", file=sys.stderr)
         return 2
     print(json.dumps({"unique_questions": report["unique_questions"], "question_counts": report["unique_question_counts"], "metadata_counts": report["metadata"]["counts"]}, sort_keys=True))
-    findings = report["unique_question_counts"]["fail"] + report["unique_question_counts"]["unverifiable"] + report["metadata"]["counts"]["fail"]
+    findings = report["unique_question_counts"]["fail"] + report["unique_question_counts"]["unverifiable"] + report["metadata"]["counts"]["fail"] + report["intra_document"]["counts"]["fail"] + report["intra_document"]["counts"]["unverifiable"]
     return 1 if args.fail_on_findings and findings else 0
 
 

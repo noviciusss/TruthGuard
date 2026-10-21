@@ -1,9 +1,8 @@
 """Generate the deterministic synthetic Aurelia Health document corpus.
 
-The first version intentionally uses templates instead of live LLM calls. This
-gives the project a reproducible benchmark foundation; a later audit command
-can ask a provider to review the generated manifest without changing the gold
-facts.
+Templates and explicit owner adjudications produce a reproducible, offline
+corpus. The companion programmatic audit reads physical evidence without any
+provider calls; manifest annotations are never runtime metadata recovery cues.
 """
 
 from __future__ import annotations
@@ -53,7 +52,7 @@ def document_plans() -> list[DocumentPlan]:
     return [
         DocumentPlan("POL-2024-V1", "Aurelia Health Standard Policy Wording v1", "policy", "1.0", "2024-01-01", "2023-12-15", _fact_ids("waiting_period", "copay", "claim_deadline", "pre_existing_lookback", "preauthorization"), (("Eligibility", "The Standard plan covers eligible members and covered hospitalization."), ("Benefits", "The benefit schedule applies to covered services.")), authority_rank=4, special_statements=(("copay", "10% for standard plan members"), ("preauthorization", "All planned admissions require pre-authorization"))),
         DocumentPlan("POL-2025-V2", "Aurelia Health Standard Policy Wording v2", "policy", "2.0", "2025-06-01", "2025-05-01", _fact_ids("waiting_period", "copay", "claim_deadline", "pre_existing_lookback", "preauthorization"), (("Eligibility", "The Standard plan covers eligible members and covered hospitalization."), ("Benefits", "The revised benefit schedule applies from the effective date.")), supersedes=("POL-2024-V1",), authority_rank=4, special_statements=(("copay", "10% for standard plan members"), ("preauthorization", "All planned admissions require pre-authorization"))),
-        DocumentPlan("POL-2026-V3", "Aurelia Health Standard Policy Wording v3", "policy", "3.0", "2026-01-01", "2025-12-01", _fact_ids("renewal_grace", "grievance_timeline", "annual_limit", "telemedicine", "maternity"), (("Administration", "This consolidated wording applies to the Standard plan."), ("Benefits", "Benefits remain subject to eligibility and exclusions.")), supersedes=("POL-2025-V2",), authority_rank=4),
+        DocumentPlan("POL-2026-V3", "Aurelia Health Standard Policy Wording v3", "policy", "3.0", "2026-01-01", "2025-12-01", _fact_ids("renewal_grace", "grievance_timeline", "annual_limit", "telemedicine", "maternity"), (("Administration", "This consolidated wording applies to the Standard plan."), ("Benefits", "Benefits remain subject to eligibility and exclusions.")), supersedes=("POL-2025-V2",), authority_rank=4, special_statements=(("annual_limit", "600000 currency units per policy year"),)),
         DocumentPlan("AMD-2025-03", "Amendment AH/2025/03 — Hospitalization Waiting Period", "amendment", "2025-03", "2025-03-01", "2025-02-15", _fact_ids("waiting_period"), (("Section 4.1", "The non-accidental hospitalization waiting period is 45 days."),), supersedes=(), amends=(("POL-2024-V1", "Section 4.1"),), authority_rank=3),
         DocumentPlan("AMD-2025-04", "Amendment AH/2025/04 — Claim Submission", "amendment", "2025-04", "2025-04-15", "2025-04-01", _fact_ids("claim_deadline"), (("Section 8.2", "A reimbursement claim must be submitted within 60 days after discharge."),), amends=(("POL-2024-V1", "Section 8.2"),), authority_rank=3),
         DocumentPlan("AMD-2025-05", "Amendment AH/2025/05 — Pre-existing Conditions", "amendment", "2025-05", "2025-05-01", "2025-04-20", _fact_ids("pre_existing_lookback"), (("Section 3.2", "The lookback period for a pre-existing condition is 48 months."),), amends=(("POL-2024-V1", "Section 3.2"),), authority_rank=3),
@@ -84,7 +83,7 @@ def document_plans() -> list[DocumentPlan]:
         DocumentPlan("MAN-2026-GRIEVANCE", "Member Grievance Operations Manual", "manual", "2026", "2026-02-15", "2026-02-15", _fact_ids("grievance_timeline"), (("Grievances", "Acknowledge within 3 business days and resolve within 30 days."),), authority_rank=1),
         DocumentPlan("NOTICE-2024-01", "Regulatory Notice AH/2024/01 — Coverage Disclosures", "notice", "2024/01", "2024-05-01", "2024-05-01", _fact_ids("exclusions"), (("Disclosure", "Cosmetic treatment is not covered unless medically necessary after an accident."),), authority_rank=3),
         DocumentPlan("NOTICE-2025-02", "Regulatory Notice AH/2025/02 — Emergency Cashless", "notice", "2025/02", "2025-06-05", "2025-06-05", _fact_ids("preauthorization"), (("Emergency care", "Emergency admissions can proceed without prior approval, followed by notification within 24 hours."),), authority_rank=3),
-        DocumentPlan("NOTICE-2025-11", "Regulatory Notice AH/2025/11 — Annual Limit Filing", "notice", "2025/11", "2025-11-01", "2025-11-01", _fact_ids("annual_limit"), (("Filing", "The filed Standard plan annual limit is 500000 currency units."),), authority_rank=3),
+        DocumentPlan("NOTICE-2025-11", "Regulatory Notice AH/2025/11 — Annual Limit Filing", "notice", "2025/11", "2025-11-01", "2025-11-01", _fact_ids("annual_limit"), (("Filing", "The filed Standard plan annual limit is 500000 currency units."),), authority_rank=3, special_statements=(("annual_limit", "500000 currency units per policy year"),)),
         DocumentPlan("NOTICE-2026-01", "Regulatory Notice AH/2026/01 — Grievance Standard", "notice", "2026/01", "2026-01-05", "2026-01-05", _fact_ids("grievance_timeline"), (("Standard", "Grievances should be resolved within 30 days."),), authority_rank=3),
     ]
 
@@ -106,15 +105,17 @@ def _fact_map(factsheet: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 def _statement(fact: dict[str, Any], effective_date: str) -> str:
     target = date.fromisoformat(effective_date)
-    versions = sorted(fact["versions"], key=lambda item: item["effective_date"])
-    selected = versions[0]
-    for version in versions:
-        version_date = version["effective_date"]
-        if not isinstance(version_date, date):
-            version_date = date.fromisoformat(str(version_date))
-        if version_date <= target:
-            selected = version
-    return str(selected["value"])
+    eligible = [(date.fromisoformat(str(item["effective_date"])), str(item["value"]))
+                for item in fact["versions"] if date.fromisoformat(str(item["effective_date"])) <= target]
+    if not eligible:
+        raise ValueError(f"No in-force value for {fact['fact_id']} at {effective_date}")
+    latest = max(day for day, _ in eligible)
+    values = sorted({value for day, value in eligible if day == latest})
+    if len(values) > 1 and fact["fact_id"] not in {"copay", "room_rent"}:
+        raise ValueError(f"No unique in-force value for {fact['fact_id']} at {effective_date}: {values}; explicit adjudication required")
+    # These two schedules explicitly name distinct age/plan scopes. Preserve both,
+    # rather than using YAML list order as precedence between simultaneous entries.
+    return "; ".join(values)
 
 
 def _frontmatter(meta: DocMeta, *, corrupt_kind: str | None = None) -> str:
@@ -179,7 +180,7 @@ def render_document(plan: DocumentPlan, facts: dict[str, dict[str, Any]], index:
         overrides = dict(plan.special_statements)
         for fact_id in plan.facts:
             fact = facts[fact_id]
-            value = overrides.get(fact_id, _statement(fact, plan.effective_date))
+            value = overrides[fact_id] if fact_id in overrides else _statement(fact, plan.effective_date)
             lines.append(f"- **{fact['topic']}** ({fact['scope']}): {value}.")
         lines.append("")
     lines.extend(["## Contact", "Members may contact Aurelia Health support for clarification.", ""])
@@ -199,7 +200,7 @@ def conflict_manifest() -> list[dict[str, Any]]:
         {"conflict_id": "T3-claim-deadline", "type": "T3", "documents": ["POL-2024-V1", "AMD-2025-04"], "correct_mode": "supersession", "winner_doc_id": "AMD-2025-04", "gold_answer": "60 days after discharge"},
         {"conflict_id": "T4-lookback-definition", "type": "T4", "documents": ["FAQ-2024-02", "AMD-2025-05"], "correct_mode": "supersession", "winner_doc_id": "AMD-2025-05", "gold_answer": "48 months"},
         {"conflict_id": "T5-emergency-preauth", "type": "T5", "documents": ["POL-2025-V2", "CIR-2025-06"], "correct_mode": "contextual", "winner_doc_id": None, "gold_answer": "Planned admissions require prior approval; emergency admissions may proceed without it if notified within 24 hours"},
-        {"conflict_id": "T6-annual-limit", "type": "T6", "documents": ["CIR-2025-08-A", "CIR-2025-08-B"], "correct_mode": "abstain", "winner_doc_id": None, "gold_answer": None},
+        {"conflict_id": "T3-annual-limit", "original_conflict_id": "T6-annual-limit", "type": "T3", "documents": ["CIR-2025-08-A", "CIR-2025-08-B", "NOTICE-2025-11", "POL-2026-V3"], "correct_mode": "supersession", "winner_doc_id": "POL-2026-V3", "gold_answer": "600000 currency units per policy year"},
         {"conflict_id": "T0-renewal-grace", "type": "T0", "documents": ["CIR-2024-01", "CIR-2025-10"], "correct_mode": None, "winner_doc_id": None, "gold_answer": "30 days"},
         {"conflict_id": "T7-hearing-aid", "type": "T7", "documents": [], "correct_mode": "abstain", "winner_doc_id": None, "gold_answer": None},
     ]
@@ -259,7 +260,17 @@ def generate_corpus(
         "fact_use_counts": fact_use,
         "documents": documents,
         "conflicts": conflict_manifest(),
-        "audit": {"status": "deterministic-template-audit", "llm_audit_required": True},
+        "gold_adjudication": {
+            "annual_limit": {
+                "scope": "Aurelia Standard plan",
+                "history": "Simultaneous 500000/600000 entries effective 2025-08-01; no unique in-force value before the notice. List order is not precedence.",
+                "notice": {"doc_id": "NOTICE-2025-11", "value": "500000 currency units per policy year", "effective_date": "2025-11-01", "authority_rank": 3, "basis": "Explicit owner adjudication: both Filing and Operational rules use fallback 500000."},
+                "current": {"doc_id": "POL-2026-V3", "value": "600000 currency units per policy year", "effective_date": "2026-01-01", "authority_rank": 4, "type": "T3", "correct_mode": "supersession", "source_passage": "POL-2026-V3#Operational rules"},
+                "genuine_current_whole_corpus_t6": 0,
+                "t6_target_blocker": "Existing fact conflicts supply no 12 defensible current whole-corpus T6 examples; do not invent evidence or restrict queries to the August pair.",
+            },
+        },
+        "audit": {"status": "offline-owner-adjudicated-gold", "llm_audit_required": False},
     }
     (output / "corpus_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return manifest

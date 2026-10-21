@@ -48,6 +48,13 @@ def test_metadata_parser_uses_body_and_keeps_unknown_dates_unknown(tmp_path) -> 
     assert unknown.effective_date is None
 
 
+def test_corrupted_zero_version_is_unknown_with_zero_confidence(tmp_path) -> None:
+    text = "---\nDoc ID: DOC-CORRUPT\nTitle: Corrupted\nType: policy\nVersion: 0.0\nEffective: 2025-01-01\n---\n# Rules\n"
+    metadata = infer_metadata(text, tmp_path / "DOC-CORRUPT.md", known_doc_ids=["DOC-CORRUPT"])
+    assert metadata.version is None
+    assert metadata.metadata_confidence == 0.0
+
+
 def test_chunk_offsets_are_exact_and_section_aware() -> None:
     metadata = make_meta("DOC-1", date(2025, 1, 1))
     text = "# Intro\nOne two three.\n## Rules\n" + "word " * 20

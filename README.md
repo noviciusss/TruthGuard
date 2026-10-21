@@ -153,6 +153,11 @@ build, build-time tests, and container startup have not been run**.
   100 remained unverifiable. Seven documents failed version recovery. A notice
   has internally inconsistent annual limits, and whole-corpus T6 applicability
   needs adjudication. No corpus or question gold was silently changed.
+- The seven corrupted-version documents are explicitly retained as unknown
+  version with zero metadata confidence: `POL-2025-V2`, `AMD-2025-07`,
+  `AMD-2026-04`, `CIR-2025-08-A`, `FAQ-2024-01`, `FAQ-2026-02`, and
+  `NOTICE-2024-01`. Supersession can still use explicit dates/edges; version
+  identity is not fabricated from the manifest.
 - Human semantic label review, audit adjudication, a controlled LLM-critic
   comparison, and clean-install/container runtime validation remain evidence
   gaps. No live evaluations resume until the required offline gates are met.

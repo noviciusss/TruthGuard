@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from bench.generate_corpus import generate_corpus, validate_manifest
+import pytest
+
+from bench.generate_corpus import _statement, generate_corpus, load_facts, validate_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +26,6 @@ def test_corpus_has_manifested_docs_and_taxonomy(tmp_path) -> None:
         "T3",
         "T4",
         "T5",
-        "T6",
         "T7",
     }
     for document in manifest["documents"]:
@@ -49,3 +50,27 @@ def test_generation_is_reproducible(tmp_path) -> None:
     first_manifest = json.loads((tmp_path / "first/corpus_manifest.json").read_text())
     second_manifest = json.loads((tmp_path / "second/corpus_manifest.json").read_text())
     assert first_manifest == second_manifest
+
+
+def test_annual_limit_requires_explicit_owner_adjudication(tmp_path) -> None:
+    facts = {fact["fact_id"]: fact for fact in load_facts(FACTSHEET)["facts"]}
+    for target in ("2025-08-01", "2025-11-01", "2026-01-01"):
+        with pytest.raises(ValueError, match="No unique in-force value"):
+            _statement(facts["annual_limit"], target)
+    facts["annual_limit"]["versions"].reverse()
+    with pytest.raises(ValueError, match="No unique in-force value"):
+        _statement(facts["annual_limit"], "2025-11-01")
+    manifest = generate_corpus(FACTSHEET, tmp_path)
+    notice = (tmp_path / "NOTICE-2025-11.md").read_text()
+    assert notice.count("500000 currency units") == 2
+    assert "600000" not in notice
+    assert "600000 currency units" in (tmp_path / "POL-2026-V3.md").read_text()
+    decision = manifest["gold_adjudication"]["annual_limit"]
+    assert decision["current"]["authority_rank"] == 4
+    assert decision["genuine_current_whole_corpus_t6"] == 0
+
+
+def test_generated_corpus_matches_tracked_gold(tmp_path) -> None:
+    generate_corpus(FACTSHEET, tmp_path)
+    for path in tmp_path.iterdir():
+        assert path.read_bytes() == (ROOT / "data/corpus" / path.name).read_bytes(), path.name

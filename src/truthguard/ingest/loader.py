@@ -20,6 +20,7 @@ def load_documents(
     corpus_dir: str | Path,
     *,
     authority_ranks: dict[str, int] | None = None,
+    infer_metadata_fields: bool = True,
 ) -> list[LoadedDocument]:
     """Read all Markdown documents and infer metadata consistently."""
 
@@ -34,6 +35,7 @@ def load_documents(
             path,
             known_doc_ids=known_doc_ids,
             authority_ranks=authority_ranks,
+            infer_missing=infer_metadata_fields,
         )
         documents.append(LoadedDocument(path=path, text=text, meta=meta))
     return documents
