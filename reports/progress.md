@@ -1159,3 +1159,18 @@ HashEmbedder deterministic path. `reports/ablations_test.md` contains bootstrap
 | no_critic | 0.8082 | 0.7032 | 0.0000 | 0.0000 | 0.1233 | 0.1250 | 146 |
 | no_metadata_inference | 0.7123 | 0.8068 | 0.8557 | 0.6546 | 0.6438 | 0.7548 | 10 |
 | no_supersession_graph | 0.7123 | 0.8068 | 0.6782 | 0.4722 | 0.4589 | 0.5719 | 33 |
+
+## Step 3 — v2 human review sheet
+
+Updated `scripts/export_review_sheet.py` to accept v2 fact-key aliases and to
+reject a T6 row if an exact value-bearing supporting passage cannot be found in
+one of its cited documents. Generated:
+
+```text
+reports/review_sheet.csv
+```
+
+The sheet has exactly 30 rows: four each T1–T6, three T0, and three T7. All
+four T6 rows are new v2 ties and include exact value-bearing passages from both
+cited circulars, including the operational-rule lines used by the deterministic
+critic. Reviewer fields remain blank by design.

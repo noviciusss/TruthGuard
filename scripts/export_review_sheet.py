@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -46,6 +47,14 @@ TOPIC_TERMS = {
     "T6": ("annual limit", "annual hospitalization"),
     "T7": (),
 }
+FACT_TERMS = {
+    "t6_room_rent_cap": ("room rent cap",),
+    "t6_copay_rate": ("co-payment rate", "copay rate"),
+    "t6_grievance_response_window": ("grievance response window",),
+    "t6_claim_filing_deadline": ("claim filing deadline",),
+    "t6_cashless_preauth_window": ("cashless pre-authorization window", "cashless preauthorization window"),
+    "t6_renewal_grace_period": ("renewal reinstatement grace period",),
+}
 
 
 def _load_questions(path: Path) -> list[BenchmarkQuestion]:
@@ -68,13 +77,17 @@ def _chunk_map(corpus_dir: Path) -> tuple[dict[str, Any], dict[str, list[Any]]]:
 
 
 def _select_passages(question: BenchmarkQuestion, chunks_by_doc: dict[str, list[Any]]) -> list[dict[str, str]]:
-    terms = TOPIC_TERMS.get(question.type, ())
+    terms = FACT_TERMS.get(question.gold_fact_id, TOPIC_TERMS.get(question.type, ()))
     passages: list[dict[str, str]] = []
     for doc_id in question.gold_conflicting_docs:
         candidates = chunks_by_doc.get(doc_id, [])
         matching = [
-            chunk for chunk in candidates if any(term.lower() in chunk.text.lower() for term in terms)
+            chunk for chunk in candidates
+            if any(term.lower() in chunk.text.lower() for term in terms)
+            and (question.type != "T6" or re.search(r"\b\d+(?:\.\d+)?\s*(?:%|days?|hours?|months?|currency units?|visits?|sessions?|scans?)", chunk.text, re.I))
         ]
+        if question.type == "T6" and not matching:
+            raise ValueError(f"No exact supporting passage found for {question.qid} in cited document {doc_id}")
         selected = matching[:2] or candidates[:1]
         for chunk in selected:
             passages.append(
