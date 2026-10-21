@@ -1193,3 +1193,15 @@ T5 conditional
 T6 abstained
 T7 not_in_corpus
 ```
+
+## Step 5 — live evaluation gate
+
+Not started. The v2 fixed-40 file is already regenerated with seed `20261020`
+and the existing 2/6/6/6/6/6/6/2 stratification at
+`data/benchmark/eval_subset_v2_40.jsonl`. The fixed-40 live critic and B0/B1
+runs are intentionally waiting for the user’s Groq and Mistral console quota
+values. No live result is claimed for any component.
+
+The previous live evidence remains non-comparative: Qwen produced 7/40 answers
+before quota/failure interruption, Mistral returned HTTP 429, and the upstream
+contexts differ from v2. It is not being reused as a v2 result.
