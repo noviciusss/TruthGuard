@@ -97,9 +97,15 @@ setup and local/container deployment commands.
 
 ## Evaluation boundaries
 
-- The corpus is synthetic and the 180-question benchmark is generated from
-  shared facts and templates. It does not establish general real-world
-  robustness.
+- The v2 corpus is synthetic (47 fictional documents), and the 190-question
+  benchmark is templated from shared facts by the same team that built the
+  system. Human review agreement is pending. The factsheet has 20 distinct
+  keys; benchmark coverage is T0=`renewal_grace`, T1=`waiting_period`,
+  T2=`copay`, T3=`annual_limit`/`claim_deadline`, T4=`pre_existing_lookback`,
+  T5=`preauthorization`, six new T6 tie keys, and T7=`not_in_corpus`.
+  DEV, TEST, wild, and the fixed v2 subset each contain 8 distinct
+  benchmark keys/classes. TEST is T3-dominant (36/146), so both micro and macro
+  metrics are reported. This does not establish general real-world robustness.
 - The historical offline wild comparison records answer-proxy accuracy
   **0.35 → 0.45** after switching hash/BM25 to BGE/FAISS/BM25. Both runs used
   deterministic criticism and offline reformulations; it does not measure live
@@ -110,6 +116,16 @@ setup and local/container deployment commands.
 - The provenance metric measures document-ID overlap (or citation presence
   on non-conflict questions), **not semantic support** or supporting-span
   correctness. Answer and blended-answer scores also use proxies.
+- The v2 wild set has 22 questions and deterministic conflict F1 `0.5600`,
+  compared with TEST `0.8835`; it is a weak, small robustness check.
+- The frozen deterministic path is the measured path for offline retrieval,
+  drafting, criticism, conflict typing, trust scoring, metadata inference,
+  supersession graph behavior, and resolution. `no_self_critique` and
+  `no_conflict_seeking_expansion` are LLM-path-only and were not measured on
+  TEST.
+- Seven corrupted versions are retained as unknown with zero confidence. The
+  user-facing system does not support an as-of-date query, even though internal
+  effective-date reasoning exists.
 - The quota-limited fixed40 selection has a completed offline deterministic
   baseline but only 7/40 successful live answers. The partial live run is not
   comparative results: availability bias and different upstream drafts/contexts

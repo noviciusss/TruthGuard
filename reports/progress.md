@@ -1206,6 +1206,20 @@ The previous live evidence remains non-comparative: Qwen produced 7/40 answers
 before quota/failure interruption, Mistral returned HTTP 429, and the upstream
 contexts differ from v2. It is not being reused as a v2 result.
 
+## Final session — Step A docs first
+
+Updated `README.md`, `SUBMISSION.md`, and `docs/ARCHITECTURE.md` before
+diagnostic and live work. The docs now state the v2 synthetic/templated dataset
+size, same-team benchmark generation, pending human-review agreement, 20
+factsheet keys, benchmark key/class mapping by T0–T7, eight distinct
+benchmark keys/classes in DEV, TEST, wild, and the fixed subset, and TEST's
+T3 dominance (36/146). They also state the v2 wild weakness (22 questions,
+deterministic conflict F1 0.5600 versus TEST 0.8835), document-level rather than
+semantic provenance, the seven unknown corrupted versions, unsupported as-of
+queries, deterministic-only components, and that
+`no_self_critique`/`no_conflict_seeking_expansion` are LLM-path-only and were
+not measured on TEST.
+
 ## Regression verification after v2 integration
 
 The required system-Python command was attempted and cannot run because the
