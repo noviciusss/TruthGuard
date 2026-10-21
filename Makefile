@@ -10,8 +10,8 @@ help:
 		'make test     Run the offline test suite' \
 		'make compile  Compile-check Python sources' \
 		'make smoke    Run the configuration smoke check' \
-		'make demo     Generate the reproducible six-question judge demo' \
-		'make wild     Evaluate the 20-question wild robustness set offline' \
+		'make demo     Generate the reproducible six-question v2 judge demo' \
+		'make wild     Evaluate the 22-question v2 wild robustness set offline' \
 		'make retrieval Compare hash and BGE/FAISS retrieval on dev and wild sets' \
 		'make subset   Regenerate the committed fixed 40-question test subset' \
 		'make api      Start the FastAPI server' \

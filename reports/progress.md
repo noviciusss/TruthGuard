@@ -1288,6 +1288,41 @@ uses the required T1 → T2 → T3 → T5 → T6 → T7 order and documents the 
 offline B0/B1 compare-mode miss. `docs/JUDGE_QA.md` contains 15 honest judge
 questions and answers.
 
+## Final session — Step F final checks
+
+Pinned-environment checks passed after the final changes:
+
+```text
+TRUTHGUARD_OFFLINE=true make test: 143 passed, one existing Starlette/AnyIO warning
+make compile: passed
+make smoke: configuration loaded (offline=True)
+make demo + six-status verification: passed
+```
+
+Service smoke checks passed:
+
+```text
+FastAPI GET /health: {"status":"ok","offline":true}
+Streamlit GET /: HTTP 200; index response received
+```
+
+The README quickstart was verified from a fresh clone at
+`/tmp/omnirush/truthguard-final-clone`: `make install` completed with
+`pip check: No broken requirements found`, then offline `make test` passed 143
+tests and `make demo` completed. Docker is unavailable in this environment
+(`docker: unavailable`); `Dockerfile` installs `requirements.lock` and now
+copies `data/corpus_v2`, so the v2 demo inputs are included when the image is
+built elsewhere.
+
+System-Python fallback was also attempted and is unavailable in the container:
+
+```text
+python3 -m pytest -q
+/usr/bin/python3: No module named pytest
+```
+
+The pinned `.venv` command above is the authoritative project check.
+
 ## Regression verification after v2 integration
 
 The required system-Python command was attempted and cannot run because the

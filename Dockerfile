@@ -28,6 +28,7 @@ COPY scripts ./scripts
 # Explicit inputs avoid baking .env, virtualenvs, model caches, SQLite provider
 # state, or raw live-evaluation JSONL files into the image.
 COPY data/corpus ./data/corpus
+COPY data/corpus_v2 ./data/corpus_v2
 COPY data/factsheet ./data/factsheet
 COPY data/benchmark ./data/benchmark
 COPY reports/*.md reports/review_sheet.csv ./reports/
