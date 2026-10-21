@@ -10,11 +10,11 @@ This report was generated offline from the committed synthetic corpus. It demons
 
 ### Answer
 
-Resolved using the highest-trust current position: ## Section 4.1 The non-accidental hospitalization waiting period is 45 days. (AMD-2025-03)
+Resolved using the highest-trust current position: The non-accidental hospitalization waiting period is 45 days. (AMD-2025-03)
 
 ### Conflicts
 
-- `T1` `t1-waiting_period` — AMD-2025-03; Retrieved passages contain competing waiting_period positions.
+- `T1` `t1-waiting_period` — AMD-2025-03; Two documents state waiting_period: 45 (unspecified) versus 30 (unspecified); type evidence verified.
 
 ### Claims
 
@@ -25,11 +25,11 @@ Resolved using the highest-trust current position: ## Section 4.1 The non-accide
 - `supported` - **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization. (evidence: `POL-2024-V1:c004`)
 - `supported` ## Answer The Standard plan has a 30-day waiting period for non-accidental hospitalization. (evidence: `FAQ-2024-01:c003, FAQ-2024-01:c002, AMD-2025-03:c002, …`)
 - `supported` ## Operational rules - **hospitalization waiting period** (standard plan, non-accidental hospitalization): 45 days. (evidence: `FAQ-2024-01:c003, FAQ-2024-01:c002, AMD-2025-03:c002, …`)
-- `supported` ## Annual limit The Aurelia Standard plan annual hospitalization limit is 500000 currency units. (evidence: `FAQ-2024-01:c003, AMD-2025-03:c003, FAQ-2024-01:c004, …`)
+- `supported` ## Renewals The Standard plan renewal reinstatement grace period is 14 days after the renewal due date. (evidence: `FAQ-2024-01:c003, AMD-2025-03:c002, AMD-2025-03:c003, …`)
 
 ### Citations
 
-`AMD-2025-03:c002`, `AMD-2025-03:c003`, `CIR-2025-08-A:c002`, `CIR-2025-08-B:c002`, `FAQ-2024-01:c002`, `FAQ-2024-01:c003`, `FAQ-2024-01:c004`, `FAQ-2025-06:c002`, `POL-2024-V1:c002`, `POL-2024-V1:c004`
+`AMD-2025-03:c002`, `AMD-2025-03:c003`, `CIR-2026-T6-RENEW-A:c002`, `CIR-2026-T6-RENEW-B:c002`, `FAQ-2024-01:c002`, `FAQ-2024-01:c003`, `FAQ-2024-01:c004`, `FAQ-2025-06:c002`, `POL-2024-V1:c002`, `POL-2024-V1:c004`
 
 ---
 
@@ -41,27 +41,23 @@ Resolved using the highest-trust current position: ## Section 4.1 The non-accide
 
 ### Answer
 
-Conditional answer: The positions apply under different conditions: ## Operational rules - **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above. (CIR-2024-02) ## Operational rules - **room rent sub-limit** (plan tier): 2% of sum insured per day for premium plan. - **co-payment** (plan and age dependent): 20% for members aged 60 and above. (FAQ-2025-01) ## Operational rules - **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 d…
+Conditional answer: The positions apply under different conditions: - **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above. (CIR-2024-02) - **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above. (FAQ-2025-01)
 
 ### Conflicts
 
-- `T2` `t2-copay` — no single winner; Retrieved passages contain competing copay positions.
+- `T2` `t2-copay` — no single winner; Two documents state copay: 10 (standard) versus 20 (senior); type evidence verified.
 
 ### Claims
 
-- `supported` ## Operational rules - **hospitalization waiting period** (standard plan, non-accidental hospitalization): 30 days. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c004`)
-- `supported` - **co-payment** (plan and age dependent): 10% for standard plan members. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c004, FAQ-2025-01:c003`)
-- `unsupported` - **claim submission deadline** (reimbursement claims): 30 days after discharge. (evidence: `none`)
-- `unsupported` - **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 36 months. (evidence: `none`)
-- `unsupported` - **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization. (evidence: `none`)
-- `supported` ## Operational rules - **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c004, FAQ-2025-01:c003`)
-- `supported` ## Operational rules - **room rent sub-limit** (plan tier): 2% of sum insured per day for premium plan. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c004, FAQ-2025-01:c003`)
-- `supported` - **co-payment** (plan and age dependent): 20% for members aged 60 and above. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c004, FAQ-2025-01:c003`)
-- `unsupported` ## Section 3.2 The lookback period for a pre-existing condition is 48 months. (evidence: `none`)
+- `supported` ## Operational rules - **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c003, FAQ-2025-01:c004`)
+- `supported` ## Operational rules - **room rent sub-limit** (plan tier): 1% of sum insured per day for standard plan; 2% of sum insured per day for premium plan. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c003, FAQ-2025-01:c004`)
+- `supported` - **co-payment** (plan and age dependent): 10% for standard plan members; 20% for members aged 60 and above. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c003, FAQ-2025-01:c004`)
+- `supported` ## Co-payment The Standard plan co-payment rate is 15%. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c003, FAQ-2025-01:c004`)
+- `supported` ## Co-payment The Standard plan co-payment rate is 25%. (evidence: `CIR-2024-02:c003, FAQ-2025-01:c003, FAQ-2025-01:c004`)
 
 ### Citations
 
-`AMD-2025-05:c002`, `CIR-2024-02:c001`, `CIR-2024-02:c002`, `CIR-2024-02:c003`, `FAQ-2024-01:c003`, `FAQ-2025-01:c003`, `FAQ-2025-01:c004`, `FAQ-2025-06:c002`, `POL-2024-V1:c001`, `POL-2024-V1:c004`
+`AMD-2025-05:c002`, `CIR-2024-02:c002`, `CIR-2024-02:c003`, `CIR-2026-T6-COPAY-A:c001`, `CIR-2026-T6-COPAY-A:c002`, `CIR-2026-T6-COPAY-B:c002`, `FAQ-2025-01:c003`, `FAQ-2025-01:c004`
 
 ---
 
@@ -73,11 +69,11 @@ Conditional answer: The positions apply under different conditions: ## Operation
 
 ### Answer
 
-Resolved using the highest-trust current position: ## Operational rules - **claim submission deadline** (reimbursement claims): 60 days after discharge. (MAN-2025-CLAIMS)
+Resolved using the highest-trust current position: - **claim submission deadline** (reimbursement claims): 60 days after discharge. (AMD-2025-04)
 
 ### Conflicts
 
-- `T3` `t3-claim_deadline` — MAN-2025-CLAIMS; Retrieved passages contain competing claim_deadline positions.
+- `T3` `t3-claim_deadline` — AMD-2025-04; Two documents state claim_deadline: 60 (unspecified) versus 30 (unspecified); type evidence verified.
 
 ### Claims
 
@@ -93,7 +89,7 @@ Resolved using the highest-trust current position: ## Operational rules - **clai
 
 ### Citations
 
-`AMD-2025-04:c002`, `AMD-2025-04:c003`, `MAN-2024-CLAIMS:c002`, `MAN-2024-CLAIMS:c004`, `MAN-2025-CLAIMS:c002`, `MAN-2025-CLAIMS:c003`, `POL-2024-V1:c002`, `POL-2024-V1:c003`, `POL-2024-V1:c004`, `POL-2025-V2:c003`
+`AMD-2025-04:c002`, `AMD-2025-04:c003`, `CIR-2026-T6-CLAIM-A:c002`, `CIR-2026-T6-CLAIM-A:c003`, `CIR-2026-T6-CLAIM-B:c002`, `CIR-2026-T6-CLAIM-B:c003`, `MAN-2024-CLAIMS:c004`, `MAN-2025-CLAIMS:c003`, `POL-2024-V1:c002`, `POL-2024-V1:c004`
 
 ---
 
@@ -105,33 +101,33 @@ Resolved using the highest-trust current position: ## Operational rules - **clai
 
 ### Answer
 
-Conditional answer: The positions apply under different conditions: ## Emergency care Emergency admissions can proceed without prior approval, followed by notification within 24 hours. (NOTICE-2025-02) ## Emergency exception Emergency admissions may use cashless treatment without prior approval if Aurelia is notified within 24 hours. (CIR-2025-06) ## Operational rules - **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notificatio…
+Conditional answer: The positions apply under different conditions: Emergency admissions can proceed without prior approval, followed by notification within 24 hours. (NOTICE-2025-02) - **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization. (POL-2025-V2)
 
 ### Conflicts
 
-- `T5` `t5-preauthorization` — no single winner; Retrieved passages contain competing preauthorization positions.
+- `T5` `t5-preauthorization` — no single winner; Two documents state preauthorization: not-required-with-notification (emergency) versus required (planned); type evidence verified.
 
 ### Claims
 
-- `supported` ## Operational rules - **hospitalization waiting period** (standard plan, non-accidental hospitalization): 45 days. (evidence: `CIR-2025-06:c003, NOTICE-2025-02:c003, MAN-2025-CASHLESS:c003`)
+- `unsupported` ## Operational rules - **hospitalization waiting period** (standard plan, non-accidental hospitalization): 45 days. (evidence: `none`)
 - `unsupported` - **co-payment** (plan and age dependent): 10% for standard plan members. (evidence: `none`)
 - `unsupported` - **claim submission deadline** (reimbursement claims): 60 days after discharge. (evidence: `none`)
 - `unsupported` - **pre-existing condition lookback** (conditions diagnosed or treated before policy start): 48 months. (evidence: `none`)
-- `supported` - **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002, CIR-2025-06:c003, …`)
-- `supported` ## Emergency care Emergency admissions can proceed without prior approval, followed by notification within 24 hours. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002, CIR-2025-06:c003, …`)
-- `supported` ## Emergency exception Emergency admissions may use cashless treatment without prior approval if Aurelia is notified within 24 hours. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002, CIR-2025-06:c003, …`)
-- `supported` ## Operational rules - **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002, CIR-2025-06:c003, …`)
-- `supported` - **network hospital cashless eligibility** (planned treatment at an Aurelia network hospital): Cashless treatment is available when the hospital is in the active Aurelia network and approval is obtained. (evidence: `CIR-2025-06:c002, CIR-2025-06:c003, NOTICE-2025-02:c003, …`)
+- `supported` - **pre-authorization** (planned and emergency admissions): All planned admissions require pre-authorization. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002`)
+- `supported` ## Emergency care Emergency admissions can proceed without prior approval, followed by notification within 24 hours. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002`)
+- `supported` ## Emergency exception Emergency admissions may use cashless treatment without prior approval if Aurelia is notified within 24 hours. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002, CIR-2025-06:c001`)
+- `supported` ## Operational rules - **pre-authorization** (planned and emergency admissions): Emergency admissions may use cashless treatment without prior approval, with notification within 24 hours. (evidence: `NOTICE-2025-02:c002, CIR-2025-06:c002`)
+- `supported` - **network hospital cashless eligibility** (planned treatment at an Aurelia network hospital): Cashless treatment is available when the hospital is in the active Aurelia network and approval is obtained. (evidence: `CIR-2025-06:c002`)
 
 ### Citations
 
-`AMD-2025-09:c002`, `CIR-2025-06:c001`, `CIR-2025-06:c002`, `CIR-2025-06:c003`, `MAN-2025-CASHLESS:c003`, `NOTICE-2025-02:c001`, `NOTICE-2025-02:c002`, `NOTICE-2025-02:c003`, `POL-2025-V2:c000`, `POL-2025-V2:c004`
+`AMD-2025-09:c002`, `CIR-2025-06:c001`, `CIR-2025-06:c002`, `CIR-2025-06:c003`, `CIR-2026-T6-PREAUTH-B:c002`, `MAN-2025-CASHLESS:c003`, `NOTICE-2025-02:c002`, `NOTICE-2025-02:c003`, `POL-2025-V2:c000`, `POL-2025-V2:c004`
 
 ---
 
 ## T6 abstention
 
-**Question:** What is the annual hospitalization limit for the Aurelia Standard plan?
+**Question:** For a Standard inpatient room, the evidence gives two different caps effective on the same date. Is either cap authoritative?
 
 **Status:** `abstained`
 
@@ -141,18 +137,18 @@ I cannot safely resolve this conflict: The sources conflict and have no reliable
 
 ### Conflicts
 
-- `T6` `t6-annual_limit` — no single winner; Retrieved passages contain competing annual_limit positions.
+- `T6` `t6-t6_room_rent_cap` — no single winner; Two documents state t6_room_rent_cap: 1 (standard) versus 2 (standard); type evidence verified.
 
 ### Claims
 
-- `supported` ## Annual limit The Aurelia Standard plan annual hospitalization limit is 500000 currency units. (evidence: `CIR-2025-08-A:c002, CIR-2025-08-B:c002, NOTICE-2025-11:c002, …`)
-- `supported` ## Annual limit The Aurelia Standard plan annual hospitalization limit is 600000 currency units. (evidence: `CIR-2025-08-A:c002, CIR-2025-08-B:c002, NOTICE-2025-11:c002, …`)
-- `supported` ## Operational rules - **annual hospitalization limit** (Aurelia Standard plan): 600000 currency units per policy year. (evidence: `CIR-2025-08-A:c002, CIR-2025-08-B:c002, NOTICE-2025-11:c002, …`)
-- `supported` ## Answer The Standard plan has a 30-day waiting period for non-accidental hospitalization. (evidence: `CIR-2025-08-A:c002, CIR-2025-08-B:c002, NOTICE-2025-11:c002, …`)
+- `supported` ## Room rent The Standard plan inpatient room rent cap is 1% of sum insured per day. (evidence: `CIR-2026-T6-ROOM-A:c002, CIR-2026-T6-ROOM-B:c002, CIR-2026-T6-ROOM-A:c003, …`)
+- `supported` ## Room rent The Standard plan inpatient room rent cap is 2% of sum insured per day. (evidence: `CIR-2026-T6-ROOM-A:c002, CIR-2026-T6-ROOM-B:c002, CIR-2026-T6-ROOM-A:c003, …`)
+- `supported` ## Renewals The Standard plan renewal reinstatement grace period is 14 days after the renewal due date. (evidence: `CIR-2026-T6-ROOM-A:c002, CIR-2026-T6-ROOM-B:c002, CIR-2026-T6-ROOM-A:c003, …`)
+- `supported` ## Renewals The Standard plan renewal reinstatement grace period is 21 days after the renewal due date. (evidence: `CIR-2026-T6-ROOM-A:c002, CIR-2026-T6-ROOM-B:c002, CIR-2026-T6-ROOM-A:c003, …`)
 
 ### Citations
 
-`CIR-2025-08-A:c002`, `CIR-2025-08-A:c003`, `CIR-2025-08-B:c002`, `CIR-2025-08-B:c003`, `FAQ-2024-01:c003`, `NOTICE-2025-11:c002`, `NOTICE-2025-11:c003`, `POL-2024-V1:c002`
+`CIR-2026-T6-RENEW-A:c002`, `CIR-2026-T6-RENEW-B:c002`, `CIR-2026-T6-ROOM-A:c002`, `CIR-2026-T6-ROOM-A:c003`, `CIR-2026-T6-ROOM-B:c002`, `CIR-2026-T6-ROOM-B:c003`, `NOTICE-2025-11:c002`, `POL-2025-V2:c003`
 
 ---
 
@@ -178,6 +174,6 @@ This question is not answerable from the available corpus.
 
 ### Citations
 
-`AMD-2025-04:c002`, `AMD-2025-04:c003`, `AMD-2026-04:c002`, `CIR-2024-01:c002`, `FAQ-2024-01:c003`, `MAN-2024-CLAIMS:c003`, `MAN-2024-CLAIMS:c004`, `MAN-2025-CLAIMS:c003`, `POL-2024-V1:c000`, `POL-2024-V1:c001`
+`AMD-2025-04:c002`, `AMD-2025-04:c003`, `CIR-2024-01:c002`, `CIR-2026-T6-ROOM-A:c000`, `CIR-2026-T6-ROOM-A:c003`, `CIR-2026-T6-ROOM-B:c003`, `MAN-2024-CLAIMS:c003`, `MAN-2025-CLAIMS:c003`, `POL-2024-V1:c000`, `POL-2024-V1:c001`
 
 ---

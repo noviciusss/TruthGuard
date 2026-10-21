@@ -24,7 +24,7 @@ DEMO_CASES = (
     ("T2 scope", "Is the co-payment different for a member aged 60 or above?"),
     ("T3 numeric change", "When does the claim submission window close after discharge?"),
     ("T5 exception", "Can an emergency admission proceed without prior approval?"),
-    ("T6 abstention", "What is the annual hospitalization limit for the Aurelia Standard plan?"),
+    ("T6 abstention", "For a Standard inpatient room, the evidence gives two different caps effective on the same date. Is either cap authoritative?"),
     ("T7 unknown", "Does Aurelia cover hearing-aid batteries after a routine replacement?"),
 )
 
@@ -59,7 +59,7 @@ def _markdown_section(label: str, question: str, answer) -> str:
 
 
 def run_demo(output_path: str | Path) -> Path:
-    pipeline = build_default_pipeline(no_llm_critic=True)
+    pipeline = build_default_pipeline(corpus_dir=ROOT / "data/corpus_v2", no_llm_critic=True)
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     sections = [

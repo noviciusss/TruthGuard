@@ -18,7 +18,7 @@ EXAMPLES = {
     "T3 · Numeric conflict": "How long after discharge can a reimbursement claim be submitted?",
     "T4 · Definitional conflict": "How many months is the pre-existing condition lookback period?",
     "T5 · Implicit contradiction": "Can an emergency admission proceed without prior approval?",
-    "T6 · Unresolvable": "What is the annual hospitalization limit for the Aurelia Standard plan?",
+    "T6 · Same-date tie": "For a Standard inpatient room, the evidence gives two different caps effective on the same date. Is either cap authoritative?",
 }
 
 
@@ -158,7 +158,7 @@ def main() -> None:
         "<p>Adversarial verification for inconsistent document Q&amp;A — expose conflict, preserve provenance, abstain safely.</p></div>",
         unsafe_allow_html=True,
     )
-    pipeline: TruthGuardPipeline = build_default_pipeline()
+    pipeline: TruthGuardPipeline = build_default_pipeline(corpus_dir=ROOT / "data/corpus_v2")
 
     with st.sidebar:
         st.header("Control panel")

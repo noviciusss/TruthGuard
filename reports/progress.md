@@ -1174,3 +1174,22 @@ The sheet has exactly 30 rows: four each T1–T6, three T0, and three T7. All
 four T6 rows are new v2 ties and include exact value-bearing passages from both
 cited circulars, including the operational-rule lines used by the deterministic
 critic. Reviewer fields remain blank by design.
+
+## Step 4 — v2 demo update
+
+The annual-limit demo was removed as the abstention example because that fact now
+resolves to the current policy. The demo now uses the new room-rent-cap T6
+question and runs against `data/corpus_v2` in both `scripts/run_demo.py` and
+the Streamlit UI. `docs/DEMO_SCRIPT.md` explains the two exact same-date,
+same-authority passages and the absence of a third resolving document.
+
+End-to-end offline verification ran all six demo cases. Observed statuses:
+
+```text
+T1 resolved
+T2 conditional
+T3 resolved
+T5 conditional
+T6 abstained
+T7 not_in_corpus
+```

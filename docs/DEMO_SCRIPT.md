@@ -57,15 +57,16 @@ classification, and 24-hour notification condition.
 
 ## 4. Abstention
 
-Question: `What is the annual hospitalization limit for the Aurelia Standard plan?`
+Question: `For a Standard inpatient room, the evidence gives two different caps effective on the same date. Is either cap authoritative?`
 
-Inspect the conflicting same-authority circulars, T6 classification, and
-abstained answer.
+Inspect the two new same-authority circulars, their identical effective date,
+the 1% versus 2% room-rent-cap passages, T6 classification, and abstained
+answer. This is a genuine whole-corpus T6: no third document or later
+amendment settles the fact.
 
-> The two circulars demonstrate a local tie, but the whole-corpus gold answer
-> remains under audit: a later notice contradicts itself and later policy
-> material may change applicability. Do not describe this as a validated
-> whole-corpus abstention result until the audit is adjudicated.
+> Both cited circulars are equally authoritative and effective on the same date.
+> Since no other document resolves the room-rent-cap fact, TruthGuard abstains
+> instead of selecting 1% or 2%.
 
 ## 5. Not in corpus
 
