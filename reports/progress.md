@@ -1241,6 +1241,19 @@ path also measured 0.0000 conflict F1 and 0.1233 mode accuracy. This confirms
 the old proxy can reward value-containing output while failing to credit correct
 conditional/abstained behavior. No TEST detector or gold labels were tuned.
 
+## Final session — Step C per-type TEST pitch metrics
+
+Generated `reports/per_type_test.md` from the same frozen v2 TEST predictions.
+The report includes T0–T7 conflict precision/recall/F1, mode accuracy, strict
+T6 abstention precision/recall, strict non-T6 false-abstention rate, T0
+false-conflict rate, and T7 not-in-corpus recall. All numbers are explicitly
+deterministic/offline HashEmbedder results; no provider answered these rows.
+
+Measured focus values: T6 abstention precision `0.2069` (`6/(6+23)` when the
+23 strict false-abstentions on non-T6 are included), T6 recall `1.0000`,
+non-T6 false-abstention rate `0.1643` (`23/140`), T0 false-conflict rate
+`0.0000` (`0/18`), and T7 not-in-corpus recall `1.0000` (`13/13`).
+
 ## Regression verification after v2 integration
 
 The required system-Python command was attempted and cannot run because the
